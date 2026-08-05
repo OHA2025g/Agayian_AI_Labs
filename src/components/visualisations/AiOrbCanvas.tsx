@@ -109,9 +109,9 @@ function AiOrbSwarm({
       mat.size = THREE.MathUtils.lerp(mat.size, particleSize * volume, 0.1);
     }
 
-    const tilt = formation === "logo" ? 0.18 : 0.28;
-    const nod = formation === "logo" ? 0.1 : 0.16;
-    const spin = formation === "logo" ? 0.028 : 0.04;
+    const tilt = formation === "logo" ? 0.14 : 0.28;
+    const nod = formation === "logo" ? 0.08 : 0.16;
+    const spin = formation === "logo" ? 0.014 : 0.04;
     group.rotation.y = THREE.MathUtils.lerp(
       group.rotation.y,
       pointer.x * tilt + time * spin,
@@ -125,8 +125,8 @@ function AiOrbSwarm({
     if (formation === "logo") {
       group.rotation.z = THREE.MathUtils.lerp(
         group.rotation.z,
-        Math.sin(time * 0.35) * 0.05,
-        0.05,
+        Math.sin(time * 0.18) * 0.04,
+        0.04,
       );
     }
   });
@@ -173,7 +173,7 @@ export function AiOrbCanvas({
 
   const defaultOffset = useMemo<AiOrbOffset>(() => {
     if (mode === "page") {
-      return { x: 1.05, y: 0.0, scale: 1.35, intensity: 0.95, volume: 1.2 };
+      return { x: 1.05, y: 0.0, scale: 1.08, intensity: 0.95, volume: 1.05 };
     }
     if (mode === "hero") {
       return { x: 0.85, y: 0.05, scale: 1, intensity: 0.85, volume: 1 };
@@ -187,8 +187,8 @@ export function AiOrbCanvas({
     () => ({
       ...AI_ORB_DEFAULTS,
       radius: mode === "page" ? 78 : mode === "hero" ? 72 : AI_ORB_DEFAULTS.radius,
-      flow: mode === "page" ? 0.8 : mode === "hero" ? 0.55 : AI_ORB_DEFAULTS.flow,
-      turb: mode === "page" ? 0.32 : mode === "hero" ? 0.38 : AI_ORB_DEFAULTS.turb,
+      flow: mode === "page" ? 0.4 : mode === "hero" ? 0.55 : AI_ORB_DEFAULTS.flow,
+      turb: mode === "page" ? 0.28 : mode === "hero" ? 0.38 : AI_ORB_DEFAULTS.turb,
       shell: mode === "page" ? 0.18 : AI_ORB_DEFAULTS.shell,
       hueShift: mode === "page" ? 0.36 : AI_ORB_DEFAULTS.hueShift,
     }),
@@ -196,7 +196,7 @@ export function AiOrbCanvas({
   );
 
   const worldScale =
-    mode === "page" ? 0.062 : mode === "hero" ? 0.048 : AI_ORB_WORLD_SCALE;
+    mode === "page" ? 0.048 : mode === "hero" ? 0.048 : AI_ORB_WORLD_SCALE;
   const particleSize = mode === "page" ? 0.058 : 0.055;
   const camZ = mode === "hero" || mode === "page" ? 6.4 : 5.2;
   const fov = mode === "hero" || mode === "page" ? 48 : 42;

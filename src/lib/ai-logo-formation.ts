@@ -36,9 +36,9 @@ export function sampleAiLogoParticle(
 
   // Brand proportions: two clear linked rings with visible hollows
   const loopR = radius * 0.38;
-  // Wider center gap so loops read as the logo, not one blob
-  const leftCx = -radius * 0.48;
-  const rightCx = radius * 0.48;
+  // Slightly tighter spacing — still reads as two loops
+  const leftCx = -radius * 0.42;
+  const rightCx = radius * 0.42;
   // Stroke weight like logo.png — hollow stays open
   const tubeR = loopR * 0.34;
 
@@ -151,8 +151,8 @@ export function sampleAiLogoParticle(
     breath * (1.0 - shellMix * (0.5 + 0.32 * Math.sin(h0 * 5 + t)));
   const dist = turb * 0.16;
 
-  // Gentle revolve — enough life, silhouette still reads as two loops
-  const rotA = t * 0.14;
+  // Slow-motion revolve — calm premium drift
+  const rotA = t * 0.08;
   const cA = Math.cos(rotA);
   const sA = Math.sin(rotA);
   const xr = x * cA - z * sA;
