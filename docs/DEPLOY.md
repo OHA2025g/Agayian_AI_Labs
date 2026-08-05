@@ -42,6 +42,15 @@ Or run seed from your laptop against the remote Mongo URI if the network allows.
 
 8. Open `https://your-domain.com/admin` and sign in.
 
+### Faster rebuilds
+
+The `Dockerfile` uses BuildKit cache mounts for `npm` and `.next/cache`. First deploy is still slow (full install + compile). Later deploys that only change app code are much faster when EasyPanel keeps the builder cache.
+
+Tips:
+- Don’t clear the service build cache unless you must
+- Prefer small commits after the first successful image
+- Keep `package-lock.json` committed so `npm ci` layers cache cleanly
+
 ### Optional: MongoDB with auth
 
 In EasyPanel, set Mongo init credentials, then use:

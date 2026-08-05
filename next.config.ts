@@ -51,6 +51,10 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   // Required for production Docker / EasyPanel images
   output: "standalone",
+  // Run `npm run lint` in CI/local; skip ESLint during `next build` for faster deploys
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   async redirects() {
     return products.map((product) => ({
       source: `/products/${product.slug}`,
