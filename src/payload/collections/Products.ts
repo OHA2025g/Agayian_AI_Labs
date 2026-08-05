@@ -1,0 +1,61 @@
+import type { CollectionConfig } from "payload";
+import {
+  contentCreate,
+  contentDelete,
+  contentRead,
+  contentUpdate,
+} from "../access";
+import { editorialStatusFields, slugField } from "../fields/editorial";
+import { seoFields } from "../fields/seo";
+
+export const Products: CollectionConfig = {
+  slug: "products",
+  admin: { useAsTitle: "name", defaultColumns: ["name", "status", "featured"] },
+  versions: { drafts: true, maxPerDoc: 25 },
+  access: {
+    read: contentRead,
+    create: contentCreate,
+    update: contentUpdate,
+    delete: contentDelete,
+  },
+  fields: [
+    slugField(),
+    { name: "name", type: "text", required: true },
+    { name: "category", type: "text", required: true },
+    { name: "shortDescription", type: "textarea", required: true },
+    { name: "valueProposition", type: "textarea" },
+    { name: "businessProblem", type: "textarea" },
+    { name: "solutionOverview", type: "textarea" },
+    { name: "industries", type: "text", hasMany: true },
+    { name: "technologies", type: "text", hasMany: true },
+    { name: "targetUsers", type: "text", hasMany: true },
+    { name: "capabilities", type: "text", hasMany: true },
+    { name: "outcomes", type: "text", hasMany: true },
+    { name: "dataSources", type: "text", hasMany: true },
+    { name: "aiCapabilities", type: "text", hasMany: true },
+    { name: "governance", type: "text", hasMany: true },
+    { name: "architecture", type: "text", hasMany: true },
+    { name: "deploymentOptions", type: "text", hasMany: true },
+    { name: "relatedCapabilities", type: "text", hasMany: true },
+    {
+      name: "modules",
+      type: "array",
+      fields: [
+        { name: "title", type: "text", required: true },
+        { name: "description", type: "textarea" },
+      ],
+    },
+    {
+      name: "workflow",
+      type: "array",
+      fields: [
+        { name: "title", type: "text", required: true },
+        { name: "description", type: "textarea" },
+      ],
+    },
+    { name: "featured", type: "checkbox", defaultValue: false },
+    { name: "productStatus", type: "text", label: "Availability status" },
+    ...editorialStatusFields,
+    seoFields,
+  ],
+};
