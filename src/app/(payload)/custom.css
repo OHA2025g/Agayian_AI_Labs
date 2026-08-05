@@ -178,19 +178,26 @@
   .agrayian-admin-logo__mark {
     display: grid;
     place-items: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    background: var(--ag-navy-800);
-    box-shadow: 0 0 0 1px rgba(25, 195, 211, 0.15);
+    width: auto;
+    min-width: 48px;
+    height: 40px;
+    padding: 0 2px;
+    border-radius: 10px;
+    overflow: visible;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .agrayian-admin-logo__mark--svg {
+    background: transparent;
   }
 
   .agrayian-admin-logo__mark img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    padding: 0;
   }
 
   .agrayian-admin-logo__copy {
@@ -216,18 +223,19 @@
   .agrayian-admin-icon {
     display: grid;
     place-items: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 9px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: var(--ag-navy-800);
+    width: 36px;
+    height: 28px;
+    border-radius: 8px;
+    overflow: visible;
+    border: none;
+    background: transparent;
   }
 
   .agrayian-admin-icon img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    padding: 0;
   }
 
   /* ——— Dashboard welcome ——— */

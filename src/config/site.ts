@@ -34,12 +34,10 @@ export const siteConfig: SiteConfig = {
 export const brandCopy = {
   positioning:
     "Agrayian AI Labs helps enterprises and governments establish AI capabilities, govern intelligent systems and build products that transform complex data into decisions and action.",
+  tagline: "Growth reimagined with AI",
   eyebrow: "ENTERPRISE AI · GOVERNMENT AI · RESPONSIBLE INTELLIGENCE",
-  headline: "Build Governed Intelligence.\nCreate Measurable Impact.",
-  headlineLines: [
-    "Build Governed Intelligence.",
-    "Create Measurable Impact.",
-  ] as const,
+  headline: "Growth reimagined with AI",
+  headlineLines: ["Growth reimagined with AI"] as const,
   supporting:
     "Agrayian AI Labs helps enterprises and governments establish AI capabilities, govern intelligent systems and build products that transform complex data into decisions and action.",
   primaryCta: "Book a Consultation",

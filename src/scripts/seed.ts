@@ -274,7 +274,7 @@ async function run() {
       hero: {
         eyebrow: brandCopy.eyebrow,
         headlineLine1: brandCopy.headlineLines[0],
-        headlineLine2: brandCopy.headlineLines[1],
+        headlineLine2: brandCopy.headlineLines[1] ?? "",
         supporting: brandCopy.supporting,
         primaryCtaLabel: brandCopy.primaryCta,
         primaryCtaHref: "/contact?interest=consultation",

@@ -9,6 +9,7 @@ import {
   sampleAiOrbParticle,
   type AiOrbControls,
 } from "@/lib/ai-orb-formation";
+import { sampleAiLogoParticle } from "@/lib/ai-logo-formation";
 
 type Mode = "hero" | "card" | "page";
 
@@ -16,18 +17,16 @@ type Mode = "hero" | "card" | "page";
 export type AiOrbOffset = {
   x: number;
   y: number;
-  /** Overall formation size */
   scale?: number;
-  /** Visual brightness / material opacity (0–1) */
   intensity?: number;
-  /** Particle “volume” — point size density feel */
   volume?: number;
 };
 
 const COUNTS: Record<Mode, { coarse: number; fine: number }> = {
   hero: { coarse: 5500, fine: 12000 },
   card: { coarse: 4500, fine: 10000 },
-  page: { coarse: 5000, fine: 11000 },
+  // Volumetric logo-orb — fill space like the original AI orb
+  page: { coarse: 5200, fine: 9800 },
 };
 
 function AiOrbSwarm({
@@ -39,6 +38,7 @@ function AiOrbSwarm({
   offset,
   offsetRef,
   particleSize,
+  formation,
 }: {
   pointer: { x: number; y: number };
   count: number;
@@ -48,6 +48,7 @@ function AiOrbSwarm({
   offset: AiOrbOffset;
   offsetRef?: MutableRefObject<AiOrbOffset>;
   particleSize: number;
+  formation: "orb" | "logo";
 }) {
   const pointsRef = useRef<THREE.Points>(null);
   const groupRef = useRef<THREE.Group>(null);
@@ -77,16 +78,11 @@ function AiOrbSwarm({
     const time = state.clock.elapsedTime;
     const pos = posAttr.array as Float32Array;
     const col = colAttr.array as Float32Array;
+    const sample =
+      formation === "logo" ? sampleAiLogoParticle : sampleAiOrbParticle;
 
     for (let i = 0; i < count; i++) {
-      sampleAiOrbParticle(
-        i,
-        count,
-        time,
-        controls,
-        scratchPos,
-        scratchColor,
-      );
+      sample(i, count, time, controls, scratchPos, scratchColor);
       const o = i * 3;
       pos[o] = scratchPos.x * worldScale;
       pos[o + 1] = scratchPos.y * worldScale;
@@ -110,23 +106,29 @@ function AiOrbSwarm({
     const mat = materialRef.current;
     if (mat) {
       mat.opacity = THREE.MathUtils.lerp(mat.opacity, intensity, 0.1);
-      mat.size = THREE.MathUtils.lerp(
-        mat.size,
-        particleSize * volume,
-        0.1,
-      );
+      mat.size = THREE.MathUtils.lerp(mat.size, particleSize * volume, 0.1);
     }
 
+    const tilt = formation === "logo" ? 0.18 : 0.28;
+    const nod = formation === "logo" ? 0.1 : 0.16;
+    const spin = formation === "logo" ? 0.028 : 0.04;
     group.rotation.y = THREE.MathUtils.lerp(
       group.rotation.y,
-      pointer.x * 0.28 + time * 0.04,
+      pointer.x * tilt + time * spin,
       0.04,
     );
     group.rotation.x = THREE.MathUtils.lerp(
       group.rotation.x,
-      pointer.y * 0.16,
+      pointer.y * nod,
       0.04,
     );
+    if (formation === "logo") {
+      group.rotation.z = THREE.MathUtils.lerp(
+        group.rotation.z,
+        Math.sin(time * 0.35) * 0.05,
+        0.05,
+      );
+    }
   });
 
   return (
@@ -160,6 +162,8 @@ export function AiOrbCanvas({
   offset?: AiOrbOffset;
   offsetRef?: MutableRefObject<AiOrbOffset>;
 }) {
+  const formation: "orb" | "logo" = mode === "page" ? "logo" : "orb";
+
   const [count] = useState(() => {
     const coarse =
       typeof window !== "undefined" &&
@@ -169,7 +173,7 @@ export function AiOrbCanvas({
 
   const defaultOffset = useMemo<AiOrbOffset>(() => {
     if (mode === "page") {
-      return { x: 1.05, y: 0.08, scale: 1.2, intensity: 0.95, volume: 1.1 };
+      return { x: 1.05, y: 0.0, scale: 1.35, intensity: 0.95, volume: 1.2 };
     }
     if (mode === "hero") {
       return { x: 0.85, y: 0.05, scale: 1, intensity: 0.85, volume: 1 };
@@ -182,17 +186,18 @@ export function AiOrbCanvas({
   const controls = useMemo<AiOrbControls>(
     () => ({
       ...AI_ORB_DEFAULTS,
-      radius:
-        mode === "hero" || mode === "page" ? 72 : AI_ORB_DEFAULTS.radius,
-      flow: mode === "hero" || mode === "page" ? 0.55 : AI_ORB_DEFAULTS.flow,
-      turb: mode === "hero" || mode === "page" ? 0.38 : AI_ORB_DEFAULTS.turb,
+      radius: mode === "page" ? 78 : mode === "hero" ? 72 : AI_ORB_DEFAULTS.radius,
+      flow: mode === "page" ? 0.8 : mode === "hero" ? 0.55 : AI_ORB_DEFAULTS.flow,
+      turb: mode === "page" ? 0.32 : mode === "hero" ? 0.38 : AI_ORB_DEFAULTS.turb,
+      shell: mode === "page" ? 0.18 : AI_ORB_DEFAULTS.shell,
+      hueShift: mode === "page" ? 0.36 : AI_ORB_DEFAULTS.hueShift,
     }),
     [mode],
   );
 
   const worldScale =
-    mode === "hero" || mode === "page" ? 0.048 : AI_ORB_WORLD_SCALE;
-  const particleSize = mode === "page" ? 0.048 : 0.055;
+    mode === "page" ? 0.062 : mode === "hero" ? 0.048 : AI_ORB_WORLD_SCALE;
+  const particleSize = mode === "page" ? 0.058 : 0.055;
   const camZ = mode === "hero" || mode === "page" ? 6.4 : 5.2;
   const fov = mode === "hero" || mode === "page" ? 48 : 42;
 
@@ -224,6 +229,7 @@ export function AiOrbCanvas({
         offset={resolvedOffset}
         offsetRef={offsetRef}
         particleSize={particleSize}
+        formation={formation}
       />
     </Canvas>
   );
