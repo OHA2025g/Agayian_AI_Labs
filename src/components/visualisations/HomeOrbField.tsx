@@ -172,7 +172,7 @@ function findEmptyPocket(
   const topEdge = Math.min(...usable.map((r) => r.top));
   const bottomEdge = Math.max(...usable.map((r) => r.bottom));
 
-  const pockets: Pocket[] = [
+  const candidates: Pocket[] = [
     {
       x: leftEdge / 2,
       y: vh / 2,
@@ -201,7 +201,8 @@ function findEmptyPocket(
       h: Math.max(0, vh - bottomEdge - pad),
       side: "auto",
     },
-  ].filter((p) => p.w >= 72 && p.h >= 100);
+  ];
+  const pockets = candidates.filter((p) => p.w >= 72 && p.h >= 100);
 
   if (pockets.length === 0) {
     // Content fills most of the viewport — retreat to the far preferred gutter
