@@ -1,13 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useMemo, useRef, type KeyboardEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  type KeyboardEvent,
+} from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   AlertTriangle,
-  ArrowLeft,
-  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
   BarChart3,
   Bot,
   Boxes,
@@ -48,6 +54,17 @@ const industryIcons: Record<string, LucideIcon> = {
   education: GraduationCap,
   manufacturing: Factory,
   enterprise: Briefcase,
+};
+
+/** Short selector labels only — CMS names stay on the detail panel. */
+const selectorLabels: Record<string, readonly [string, string?]> = {
+  government: ["Government &", "Public Sector"],
+  banking: ["Banking &", "Financial Services"],
+  hr: ["Human", "Capital"],
+  "healthcare-social": ["Healthcare &", "Social"],
+  education: ["Education"],
+  manufacturing: ["Manufacturing"],
+  enterprise: ["Enterprise", "Functions"],
 };
 
 const capabilityIcons: Record<string, LucideIcon> = {
@@ -104,20 +121,39 @@ export function IndustriesExplorer({
   const reduce = useReducedMotion();
   const scrollerRef = useRef<HTMLDivElement>(null);
 
+  const orderedItems = useMemo(() => {
+    const rank = new Map(
+      staticIndustries.map((industry, index) => [industry.slug, index]),
+    );
+    return [...items].sort(
+      (a, b) => (rank.get(a.slug) ?? 99) - (rank.get(b.slug) ?? 99),
+    );
+  }, [items]);
+
   const paramSlug = searchParams.get("industry") ?? "";
   const active =
-    items.find((item) => item.slug === paramSlug)?.slug ?? items[0]?.slug ?? "";
+    orderedItems.find((item) => item.slug === paramSlug)?.slug ??
+    orderedItems[0]?.slug ??
+    "";
 
   const selected =
-    items.find((industry) => industry.slug === active) ?? items[0];
+    orderedItems.find((industry) => industry.slug === active) ??
+    orderedItems[0];
 
-  const selectIndustry = useCallback(
+  const industryHref = useCallback(
     (slug: string) => {
       const params = new URLSearchParams(searchParams.toString());
       params.set("industry", slug);
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      return `${pathname}?${params.toString()}`;
     },
-    [pathname, router, searchParams],
+    [pathname, searchParams],
+  );
+
+  const selectIndustry = useCallback(
+    (slug: string) => {
+      router.replace(industryHref(slug), { scroll: false });
+    },
+    [industryHref, router],
   );
 
   const focusTab = useCallback(
@@ -131,19 +167,19 @@ export function IndustriesExplorer({
   );
 
   const onTabKeyDown = useCallback(
-    (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-      if (items.length === 0) return;
+    (event: KeyboardEvent<HTMLAnchorElement>, index: number) => {
+      if (orderedItems.length === 0) return;
       let nextIndex = index;
       switch (event.key) {
         case "ArrowRight":
         case "ArrowDown":
           event.preventDefault();
-          nextIndex = (index + 1) % items.length;
+          nextIndex = (index + 1) % orderedItems.length;
           break;
         case "ArrowLeft":
         case "ArrowUp":
           event.preventDefault();
-          nextIndex = (index - 1 + items.length) % items.length;
+          nextIndex = (index - 1 + orderedItems.length) % orderedItems.length;
           break;
         case "Home":
           event.preventDefault();
@@ -151,23 +187,29 @@ export function IndustriesExplorer({
           break;
         case "End":
           event.preventDefault();
-          nextIndex = items.length - 1;
+          nextIndex = orderedItems.length - 1;
           break;
         default:
           return;
       }
-      const next = items[nextIndex];
+      const next = orderedItems[nextIndex];
       if (next) focusTab(next.slug);
     },
-    [focusTab, items],
+    [focusTab, orderedItems],
   );
 
   const scrollSelector = (direction: -1 | 1) => {
-    scrollerRef.current?.scrollBy({
-      left: direction * 240,
-      behavior: "smooth",
-    });
+    const node = scrollerRef.current;
+    if (!node) return;
+    const step = Math.min(280, Math.round(node.clientWidth * 0.55));
+    node.scrollBy({ left: direction * step, behavior: "smooth" });
   };
+
+  useEffect(() => {
+    document
+      .getElementById(`industry-tab-${active}`)
+      ?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }, [active]);
 
   const relatedCapabilities = useMemo(() => {
     if (!selected) return [];
@@ -189,87 +231,83 @@ export function IndustriesExplorer({
 
   return (
     <div className="relative">
-      <section className="border-b border-[var(--border-soft)] bg-bg-secondary/30 py-10 md:py-12">
+      <section className="relative z-10 -mt-2 pb-6 md:-mt-4 md:pb-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-5 flex items-end justify-between gap-4">
-            <div>
-              <p className="font-tech text-[0.65rem] uppercase tracking-[0.2em] text-cyan">
-                Select industry
-              </p>
-              <h2 className="mt-2 font-heading text-xl font-semibold text-navy md:text-2xl">
-                Sector expertise
-              </h2>
-            </div>
-            <div className="hidden items-center gap-2 sm:flex">
-              <button
-                type="button"
-                aria-label="Previous industries"
-                onClick={() => scrollSelector(-1)}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-light)] bg-white text-navy transition hover:border-tech-blue/40"
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                aria-label="Next industries"
-                onClick={() => scrollSelector(1)}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-light)] bg-white text-navy transition hover:border-tech-blue/40"
-              >
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
+          <div className="flex items-center gap-1 rounded-[28px] border border-[#e4edf4] bg-white px-2 py-3 shadow-[0_16px_40px_rgba(20,45,75,0.06)] sm:gap-2 sm:px-3 sm:py-4">
+            <button
+              type="button"
+              aria-label="Previous industries"
+              onClick={() => scrollSelector(-1)}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#dce6ef] bg-white text-[#071b40] transition hover:border-tech-blue/40"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
 
-          <div
-            ref={scrollerRef}
-            role="tablist"
-            aria-label="Industries"
-            aria-orientation="horizontal"
-            className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:thin]"
-          >
-            {items.map((industry, index) => {
-              const isActive = industry.slug === active;
-              const Icon = industryIcons[industry.slug] ?? Landmark;
-              return (
-                <button
-                  key={industry.id}
-                  type="button"
-                  role="tab"
-                  id={`industry-tab-${industry.slug}`}
-                  aria-controls={`industry-panel-${industry.slug}`}
-                  aria-selected={isActive}
-                  tabIndex={isActive ? 0 : -1}
-                  onClick={() => selectIndustry(industry.slug)}
-                  onKeyDown={(event) => onTabKeyDown(event, index)}
-                  className={cn(
-                    "relative min-w-[11.5rem] shrink-0 rounded-2xl border px-4 py-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tech-blue",
-                    isActive
-                      ? "border-tech-blue/35 bg-white shadow-[0_14px_36px_rgba(20,159,230,0.12)]"
-                      : "border-white/80 bg-white/75 hover:border-tech-blue/25",
-                  )}
-                >
-                  <span
+            <div
+              ref={scrollerRef}
+              role="tablist"
+              aria-label="Select industry"
+              aria-orientation="horizontal"
+              className="flex min-w-0 flex-1 items-stretch gap-1 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {orderedItems.map((industry, index) => {
+                const isActive = industry.slug === active;
+                const Icon = industryIcons[industry.slug] ?? Landmark;
+                const lines = selectorLabels[industry.slug] ?? [industry.name];
+                return (
+                  <Link
+                    key={industry.id}
+                    href={industryHref(industry.slug)}
+                    replace
+                    scroll={false}
+                    role="tab"
+                    id={`industry-tab-${industry.slug}`}
+                    aria-controls={`industry-panel-${industry.slug}`}
+                    aria-selected={isActive}
+                    aria-label={industry.name}
+                    tabIndex={isActive ? 0 : -1}
+                    onKeyDown={(event) => onTabKeyDown(event, index)}
                     className={cn(
-                      "flex h-10 w-10 items-center justify-center rounded-full border",
+                      "relative flex min-h-[6.75rem] min-w-[9.75rem] shrink-0 flex-col items-center justify-center rounded-xl px-2.5 py-3 text-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tech-blue lg:min-w-0 lg:flex-1",
                       isActive
-                        ? "border-tech-blue/25 bg-sky/20 text-tech-blue"
-                        : "border-[var(--border-soft)] bg-white text-tech-blue/80",
+                        ? "border border-[#27b9ec]/55 bg-[#f4fbfe] text-[#0b6aa8]"
+                        : "border border-transparent text-[#071b40] hover:bg-[#f7fafc]",
                     )}
                   >
-                    <Icon className="h-5 w-5" aria-hidden />
-                  </span>
-                  <span className="mt-3 block font-heading text-sm font-semibold leading-snug text-navy">
-                    {industry.name}
-                  </span>
-                  {isActive ? (
-                    <span
+                    <Icon
+                      className={cn(
+                        "h-7 w-7 shrink-0",
+                        isActive ? "text-[#149fe6]" : "text-[#166bb5]",
+                      )}
+                      strokeWidth={1.5}
                       aria-hidden
-                      className="absolute inset-x-4 bottom-0 h-0.5 rounded-full bg-tech-blue"
                     />
-                  ) : null}
-                </button>
-              );
-            })}
+                    <span className="mt-2.5 font-heading text-[0.8rem] font-semibold leading-[1.25] sm:text-[0.84rem]">
+                      {lines.map((line) => (
+                        <span key={line} className="block">
+                          {line}
+                        </span>
+                      ))}
+                    </span>
+                    {isActive ? (
+                      <span
+                        aria-hidden
+                        className="absolute bottom-1.5 left-1/2 h-1 w-6 -translate-x-1/2 rounded-full bg-[#27b9ec]"
+                      />
+                    ) : null}
+                  </Link>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              aria-label="Next industries"
+              onClick={() => scrollSelector(1)}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#dce6ef] bg-white text-[#071b40] transition hover:border-tech-blue/40"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </section>

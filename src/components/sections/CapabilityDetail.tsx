@@ -136,7 +136,7 @@ const cards: Record<string, JourneyCopy> = {
 export function CapabilityJourney({ layers }: { layers: Capability[] }) {
   return (
     <ol className="capabilities-journey capabilities-rows relative space-y-10 min-[1200px]:space-y-0">
-      <JourneyConnectors count={layers.length} />
+      <JourneyFrame count={layers.length} />
       {layers.map((capability, index) => (
         <CapabilityRow
           key={capability.id}
@@ -220,48 +220,100 @@ function CopyCol({
   );
 }
 
-function JourneyConnectors({ count }: { count: number }) {
-  const rowH = 232;
-  const gap = 18;
-  const stride = rowH + gap;
-  const height = count * rowH + Math.max(0, count - 1) * gap;
-  const startX = 8;
-  const endX = 118;
+const JOURNEY_ROW = 232;
+const JOURNEY_GAP = 18;
+const JOURNEY_WIDTH = 1105;
+const WAVE_PEAK_X = 124;
+const WAVE_VALLEY_X = 92;
+const FRAME_RADIUS = 22;
+const FRAME_INSET = 3;
+const DOT_OFFSET_Y = 28;
 
-  let path = `M ${startX} 4`;
-  for (let i = 0; i < count; i += 1) {
-    const yDot = i * stride + 28;
-    path += ` C 42 ${yDot}, 78 ${yDot}, ${endX} ${yDot}`;
-    if (i < count - 1) {
-      const yBack = (i + 1) * stride - gap / 2;
-      path += ` C 78 ${yDot + 46}, 28 ${yBack - 20}, ${startX} ${yBack}`;
+function journeyHeight(count: number) {
+  return count * JOURNEY_ROW + Math.max(0, count - 1) * JOURNEY_GAP;
+}
+
+function waveX(t: number) {
+  return (
+    WAVE_PEAK_X +
+    (WAVE_VALLEY_X - WAVE_PEAK_X) * 0.5 * (1 - Math.cos(t * Math.PI * 2))
+  );
+}
+
+function peakY(index: number) {
+  return index * (JOURNEY_ROW + JOURNEY_GAP) + DOT_OFFSET_Y;
+}
+
+/** Dotted frame: wavy left spine, rounded turns at 01 and 07, box around all rows. */
+function journeyFramePath(count: number) {
+  const height = journeyHeight(count);
+  const top = FRAME_INSET;
+  const bottom = height - FRAME_INSET;
+  const right = JOURNEY_WIDTH - FRAME_INSET;
+  const r = FRAME_RADIUS;
+  const firstY = peakY(0);
+  const steps = 24;
+
+  const pts: string[] = [];
+  pts.push(`M ${WAVE_PEAK_X + r} ${top}`);
+  pts.push(
+    `C ${WAVE_PEAK_X} ${top}, ${WAVE_PEAK_X} ${top + r}, ${WAVE_PEAK_X} ${firstY}`,
+  );
+
+  for (let i = 0; i < count - 1; i += 1) {
+    const y0 = peakY(i);
+    const y1 = peakY(i + 1);
+    for (let s = 1; s <= steps; s += 1) {
+      const t = s / steps;
+      pts.push(`L ${waveX(t).toFixed(2)} ${(y0 + (y1 - y0) * t).toFixed(2)}`);
     }
   }
+
+  pts.push(
+    `C ${WAVE_PEAK_X} ${bottom - r}, ${WAVE_PEAK_X} ${bottom}, ${WAVE_PEAK_X + r} ${bottom}`,
+  );
+  pts.push(`L ${right - r} ${bottom}`);
+  pts.push(`Q ${right} ${bottom} ${right} ${bottom - r}`);
+  pts.push(`L ${right} ${top + r}`);
+  pts.push(`Q ${right} ${top} ${right - r} ${top}`);
+  pts.push("Z");
+  return pts.join(" ");
+}
+
+function JourneyFrame({ count }: { count: number }) {
+  const height = journeyHeight(count);
+  const path = journeyFramePath(count);
+  const dots = Array.from({ length: count }, (_, index) => ({
+    cx: WAVE_PEAK_X,
+    cy: peakY(index),
+  }));
 
   return (
     <svg
       aria-hidden
-      viewBox={`0 0 128 ${height}`}
+      viewBox={`0 0 ${JOURNEY_WIDTH} ${height}`}
       preserveAspectRatio="none"
-      className="capabilities-connectors pointer-events-none absolute left-0 top-0 hidden h-full w-[128px] min-[1200px]:block"
+      className="capabilities-frame pointer-events-none absolute inset-0 hidden min-[1200px]:block"
     >
-      <line
-        x1={startX}
-        y1="0"
-        x2={startX}
-        y2={height}
-        stroke="#6ecff5"
-        strokeWidth="1"
-        strokeDasharray="1.4 5"
-        opacity="0.85"
-      />
       <path
         d={path}
-        fill="none"
-        stroke="#6dcef3"
-        strokeWidth="1"
-        opacity="0.65"
+        fill="#fff"
+        stroke="#7ad2f2"
+        strokeWidth="1.15"
+        strokeDasharray="1.7 5.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        vectorEffect="non-scaling-stroke"
       />
+      {dots.map((dot) => (
+        <circle
+          key={dot.cy}
+          cx={dot.cx}
+          cy={dot.cy}
+          r="4.5"
+          fill="#ff4f5e"
+        />
+      ))}
     </svg>
   );
 }

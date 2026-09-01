@@ -136,6 +136,7 @@ function mapIndustry(doc: CmsDoc): Industry {
     challenges: asStringArray(doc.challenges),
     opportunities: asStringArray(doc.opportunities),
     capabilities: asStringArray(doc.capabilities),
+    relevantCapabilities: [],
     products: asStringArray(doc.products),
     workflows: Array.isArray(doc.workflows)
       ? (doc.workflows as Industry["workflows"])

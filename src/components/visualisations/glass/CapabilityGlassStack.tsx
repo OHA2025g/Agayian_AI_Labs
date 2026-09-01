@@ -155,7 +155,7 @@ function LeftFlow() {
 }
 
 function RightConnectors() {
-  const sculpture = 52;
+  const sculpture = 62;
   const iconX = 552;
 
   return (

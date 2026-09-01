@@ -18,17 +18,17 @@ export function RelatedProductsRow({
   if (products.length === 0) return null;
 
   return (
-    <section id="capabilities-related" className="capabilities-related bg-white">
+    <section id="capabilities-related" className="capabilities-related">
       <div className="capabilities-main">
         <div className="capabilities-related-head">
           <div>
             <h2 className="capabilities-related-title">Related products</h2>
             <div
               aria-hidden
-              className="capabilities-related-rule mt-3 flex h-[2px] w-36 overflow-hidden rounded-full"
+              className="capabilities-related-rule mt-3 flex h-[2px] overflow-hidden"
             >
-              <span className="w-10 bg-[#ff4f5e]" />
-              <span className="flex-1 bg-[#e4eaf1]" />
+              <span />
+              <span />
             </div>
           </div>
           <Link href="/products" className="capabilities-related-link">

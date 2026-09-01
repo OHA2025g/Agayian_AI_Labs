@@ -1,4 +1,16 @@
-import type { Industry } from "@/types";
+import type { Industry, IndustryCapabilityItem } from "@/types";
+
+const governmentRelevant: IndustryCapabilityItem[] = [
+  { title: "Data Unification & Entity Resolution", icon: "unification" },
+  { title: "Intelligent Automation & Orchestration", icon: "automation" },
+  { title: "AI/ML for Insight & Prediction", icon: "insight" },
+  { title: "Document AI & Knowledge Graphs", icon: "document" },
+  { title: "Geospatial Intelligence & Planning", icon: "geospatial" },
+  { title: "Natural Language Interfaces", icon: "language" },
+  { title: "Fraud, Risk & Anomaly Detection", icon: "fraud" },
+  { title: "Monitoring & Impact Analytics", icon: "monitoring" },
+  { title: "Interoperability & Open Ecosystems", icon: "interop" },
+];
 
 export const industries: Industry[] = [
   {
@@ -8,59 +20,101 @@ export const industries: Industry[] = [
     summary:
       "Decision-intelligence, programme monitoring and responsible AI systems that strengthen public service delivery while remaining auditable and accountable.",
     challenges: [
-      "Fragmented programme data across departments, schemes and districts limits timely oversight.",
-      "Policy decisions often rely on delayed reports rather than continuous indicator monitoring.",
-      "Citizen-facing services need automation without weakening transparency or due process.",
-      "AI initiatives stall without clear ownership, procurement pathways and risk controls.",
+      "Siloed data and fragmented systems: limit a unified view of citizens and programs.",
+      "Manual, paper-heavy workflows: slow service delivery and increase leakage.",
+      "Limited real-time visibility: into program performance and ground realities.",
+      "Compliance, transparency and auditability: across multiple regulations.",
+      "Digital adoption gaps: across geographies and stakeholder groups.",
     ],
     opportunities: [
-      "Unify administrative and scheme data into governed decision-intelligence platforms.",
-      "Detect emerging service gaps and intervention priorities earlier in the delivery cycle.",
-      "Equip leadership with explainable dashboards linked to accountable operating workflows.",
-      "Establish department-level AI CoE and governance patterns that scale across programmes.",
+      "Smart service delivery: Improve last-mile reach and experience",
+      "Resource optimisation: Allocate funds and assets where impact is highest",
+      "Data-driven policy: Track trends and course-correct with evidence",
+      "Trust & accountability: Build transparency across programs and spending",
     ],
     capabilities: [
       "strategy",
-      "ai-coe",
-      "governance",
       "data",
       "generative-ai",
+      "agentic-ai",
+      "governance",
       "product-engineering",
+      "ai-coe",
+      "managed-services",
     ],
+    relevantCapabilities: governmentRelevant,
     products: [
       "wcd-intelligence",
       "ai-governance-command-centre",
       "enterprise-decision-intelligence",
       "document-intelligence-copilot",
     ],
+    productCards: [
+      {
+        slug: "wcd-intelligence",
+        title: "Women & Child Development Intelligence",
+        description:
+          "Data-driven programs that enable targeted interventions and measurable impact.",
+      },
+      {
+        slug: "ai-governance-command-centre",
+        title: "AI Governance Command Centre",
+        description:
+          "Real-time visibility, policy enforcement and risk oversight at enterprise scale.",
+      },
+      {
+        slug: "enterprise-decision-intelligence",
+        title: "Enterprise Decision Intelligence",
+        description:
+          "Unify data, models and context to deliver smarter decisions and better outcomes.",
+      },
+      {
+        slug: "document-intelligence-copilot",
+        title: "Document Intelligence Copilot",
+        description:
+          "Extract, classify and summarize unstructured documents with speed and accuracy.",
+      },
+    ],
     workflows: [
       {
-        title: "Programme indicator intelligence",
-        description:
-          "Ingest scheme and administrative data, validate indicator quality, surface risk signals and route exceptions to designated programme owners.",
+        title: "Intake & Registration",
+        description: "Capture requests across channels and touchpoints.",
       },
       {
-        title: "Policy briefing support",
-        description:
-          "Assemble governed evidence packs from approved data sources so leadership can review options with clear assumptions and audit trails.",
+        title: "Verification & Eligibility",
+        description: "Validate identity, documents and entitlements.",
       },
       {
-        title: "Citizen service knowledge assistance",
+        title: "Case Processing & Orchestration",
+        description: "Route cases, trigger tasks and manage approvals.",
+      },
+      {
+        title: "Service Delivery",
+        description: "Disburse benefits or services and communicate.",
+      },
+      {
+        title: "Monitoring & Analytics",
         description:
-          "Provide staff with retrieval-grounded answers from official circulars and process manuals, with human review for sensitive actions.",
+          "Track outcomes, detect anomalies and measure program impact.",
+      },
+      {
+        title: "Feedback & Continuous Improvement",
+        description: "Incorporate feedback and refine programs continuously.",
       },
     ],
     governance: [
-      "Public-purpose use-case classification and proportionate oversight.",
-      "Data minimisation, access control and retention aligned to government policy.",
-      "Explainability for decisions that affect citizens or programme entitlements.",
-      "Human accountability for exceptions, escalations and final determinations.",
+      "Policy & legal compliance: Align with applicable laws, rules and policy frameworks.",
+      "Data privacy & security: Protect citizen data with privacy-by-design controls and encryption.",
+      "Ethics & fairness: Ensure unbiased outcomes and inclusive access.",
+      "Transparency & explainability: Make decisions traceable and explainable to stakeholders.",
+      "Auditability & accountability: Maintain end-to-end audit trails and role-based accountability.",
     ],
     outcomes: [
-      "Clearer visibility of programme performance across geographies and schemes.",
-      "Faster, better-supported leadership decisions with governed evidence.",
-      "Stronger coordination between analytics teams, programme owners and IT.",
-      "A reusable pattern for responsible AI adoption across departments.",
+      "Improved service reach and citizen experience",
+      "Higher program efficiency and lower leakage",
+      "Better targeting and allocation of resources",
+      "Real-time visibility and faster decisions",
+      "Stronger trust, compliance and accountability",
     ],
   },
   {
@@ -89,6 +143,17 @@ export const industries: Industry[] = [
       "data",
       "managed-services",
     ],
+    relevantCapabilities: [
+      { title: "Risk Data Unification", icon: "unification" },
+      { title: "Exception Orchestration", icon: "automation" },
+      { title: "Credit & Risk Prediction", icon: "insight" },
+      { title: "Document AI & Evidence Graphs", icon: "document" },
+      { title: "Regulatory Intelligence", icon: "geospatial" },
+      { title: "Analyst Assistants", icon: "language" },
+      { title: "Fraud & Anomaly Detection", icon: "fraud" },
+      { title: "Assurance Analytics", icon: "monitoring" },
+      { title: "Control Interoperability", icon: "interop" },
+    ],
     products: [
       "onetouch-audit",
       "ai-governance-command-centre",
@@ -97,19 +162,28 @@ export const industries: Industry[] = [
     ],
     workflows: [
       {
-        title: "Assurance exception management",
-        description:
-          "Capture findings, link supporting evidence, prioritise exceptions and track remediation ownership through to closure.",
+        title: "Exception Intake",
+        description: "Capture findings across engagements, systems and reviews.",
       },
       {
-        title: "Controlled document review",
-        description:
-          "Extract and summarise relevant clauses from policies, contracts and working papers for analyst validation before action.",
+        title: "Evidence Verification",
+        description: "Link documents and validate the control trail.",
       },
       {
-        title: "AI use-case lifecycle control",
-        description:
-          "Inventory proposed AI systems, classify risk, route approvals and monitor production status with governance reporting.",
+        title: "Case Orchestration",
+        description: "Prioritise exceptions and assign remediation owners.",
+      },
+      {
+        title: "Remediation Delivery",
+        description: "Close findings with reviewed actions and evidence packs.",
+      },
+      {
+        title: "Monitoring & Analytics",
+        description: "Track overdue items, risk concentration and cycle time.",
+      },
+      {
+        title: "Feedback & Improvement",
+        description: "Feed closure patterns back into control design.",
       },
     ],
     governance: [
@@ -150,22 +224,42 @@ export const industries: Industry[] = [
       "data",
       "product-engineering",
     ],
+    relevantCapabilities: [
+      { title: "Talent Data Unification", icon: "unification" },
+      { title: "Hiring Workflow Orchestration", icon: "automation" },
+      { title: "Fit Scoring & Prediction", icon: "insight" },
+      { title: "CV & Document Intelligence", icon: "document" },
+      { title: "Workforce Planning", icon: "geospatial" },
+      { title: "Recruiter Assistants", icon: "language" },
+      { title: "Fairness & Bias Detection", icon: "fraud" },
+      { title: "Funnel Analytics", icon: "monitoring" },
+      { title: "ATS Interoperability", icon: "interop" },
+    ],
     products: ["smart-hiring", "document-intelligence-copilot", "ai-governance-command-centre"],
     workflows: [
       {
-        title: "Role-aligned candidate matching",
-        description:
-          "Parse role criteria, score candidate fit against structured attributes and present explainable shortlists for recruiter review.",
+        title: "Role Intake",
+        description: "Capture role criteria and hiring requirements.",
       },
       {
-        title: "Interview intelligence support",
-        description:
-          "Assist interview panels with competency-linked prompts and structured note capture while keeping final decisions with humans.",
+        title: "Candidate Verification",
+        description: "Check attributes, consent and eligibility evidence.",
       },
       {
-        title: "Hiring funnel analytics",
-        description:
-          "Monitor stage conversion, time-to-decision and quality indicators so talent leaders can improve process design.",
+        title: "Matching & Shortlist",
+        description: "Score fit and present explainable shortlists.",
+      },
+      {
+        title: "Interview Support",
+        description: "Assist panels while humans keep the decision.",
+      },
+      {
+        title: "Funnel Analytics",
+        description: "Track conversion, time-to-decision and quality.",
+      },
+      {
+        title: "Feedback & Improvement",
+        description: "Refine criteria and process from hiring outcomes.",
       },
     ],
     governance: [
@@ -207,6 +301,17 @@ export const industries: Industry[] = [
       "product-engineering",
       "ai-coe",
     ],
+    relevantCapabilities: [
+      { title: "Beneficiary Data Unification", icon: "unification" },
+      { title: "Intervention Orchestration", icon: "automation" },
+      { title: "Risk Prediction", icon: "insight" },
+      { title: "Case Document Intelligence", icon: "document" },
+      { title: "Geospatial Coverage Planning", icon: "geospatial" },
+      { title: "Programme Assistants", icon: "language" },
+      { title: "Leakage & Anomaly Detection", icon: "fraud" },
+      { title: "Impact Analytics", icon: "monitoring" },
+      { title: "Scheme Interoperability", icon: "interop" },
+    ],
     products: [
       "wcd-intelligence",
       "enterprise-decision-intelligence",
@@ -214,19 +319,28 @@ export const industries: Industry[] = [
     ],
     workflows: [
       {
-        title: "District performance monitoring",
-        description:
-          "Consolidate approved indicators, highlight outliers and support review meetings with consistent, governed views.",
+        title: "Indicator Intake",
+        description: "Capture approved programme and field indicators.",
       },
       {
-        title: "Intervention prioritisation",
-        description:
-          "Combine risk signals and coverage gaps so programme teams can focus field action where it is most needed.",
+        title: "Risk Verification",
+        description: "Validate signals against coverage and quality rules.",
       },
       {
-        title: "Evidence-backed programme briefing",
-        description:
-          "Generate structured briefings from validated data for leadership, with source lineage and review checkpoints.",
+        title: "Intervention Orchestration",
+        description: "Route priority cases to owners and review forums.",
+      },
+      {
+        title: "Programme Delivery",
+        description: "Support coordinated field and administrative action.",
+      },
+      {
+        title: "Monitoring & Analytics",
+        description: "Track outcomes, outliers and intervention progress.",
+      },
+      {
+        title: "Feedback & Improvement",
+        description: "Feed results back into targeting and briefing cycles.",
       },
     ],
     governance: [
@@ -268,6 +382,17 @@ export const industries: Industry[] = [
       "data",
       "product-engineering",
     ],
+    relevantCapabilities: [
+      { title: "Student Data Unification", icon: "unification" },
+      { title: "Service Orchestration", icon: "automation" },
+      { title: "Progression Prediction", icon: "insight" },
+      { title: "Policy Document Intelligence", icon: "document" },
+      { title: "Campus Planning", icon: "geospatial" },
+      { title: "Staff & Student Assistants", icon: "language" },
+      { title: "Integrity Monitoring", icon: "fraud" },
+      { title: "Outcomes Analytics", icon: "monitoring" },
+      { title: "Systems Interoperability", icon: "interop" },
+    ],
     products: [
       "enterprise-decision-intelligence",
       "document-intelligence-copilot",
@@ -275,14 +400,28 @@ export const industries: Industry[] = [
     ],
     workflows: [
       {
-        title: "Academic operations intelligence",
-        description:
-          "Bring enrolment, capacity and service indicators into leadership dashboards with clear ownership for follow-up.",
+        title: "Request Intake",
+        description: "Capture academic, service and policy requests.",
       },
       {
-        title: "Policy and process assistance",
-        description:
-          "Help staff retrieve answers from approved handbooks and circulars, with citations and escalation paths for exceptions.",
+        title: "Source Verification",
+        description: "Ground answers in approved handbooks and circulars.",
+      },
+      {
+        title: "Operations Orchestration",
+        description: "Route follow-up to academic and service owners.",
+      },
+      {
+        title: "Service Delivery",
+        description: "Complete staff and learner support with citations.",
+      },
+      {
+        title: "Monitoring & Analytics",
+        description: "Track enrolment, capacity and service quality.",
+      },
+      {
+        title: "Feedback & Improvement",
+        description: "Refine institutional knowledge from recurring questions.",
       },
     ],
     governance: [
@@ -324,6 +463,17 @@ export const industries: Industry[] = [
       "product-engineering",
       "managed-services",
     ],
+    relevantCapabilities: [
+      { title: "Plant Data Unification", icon: "unification" },
+      { title: "Exception Orchestration", icon: "automation" },
+      { title: "Quality Prediction", icon: "insight" },
+      { title: "SOP Document Intelligence", icon: "document" },
+      { title: "Site & Line Planning", icon: "geospatial" },
+      { title: "Operator Assistants", icon: "language" },
+      { title: "Defect & Anomaly Detection", icon: "fraud" },
+      { title: "Throughput Analytics", icon: "monitoring" },
+      { title: "MES/ERP Interoperability", icon: "interop" },
+    ],
     products: [
       "enterprise-decision-intelligence",
       "document-intelligence-copilot",
@@ -332,19 +482,28 @@ export const industries: Industry[] = [
     ],
     workflows: [
       {
-        title: "Operations exception command view",
-        description:
-          "Aggregate plant and quality signals, prioritise exceptions and assign ownership for investigation and closure.",
+        title: "Signal Intake",
+        description: "Capture plant, quality and supply exceptions.",
       },
       {
-        title: "Controlled SOP and quality retrieval",
-        description:
-          "Enable authorised staff to retrieve procedure and quality documentation with citations for operational use.",
+        title: "Exception Verification",
+        description: "Confirm signals against SOP and quality records.",
       },
       {
-        title: "Supplier and compliance evidence support",
-        description:
-          "Assist assurance teams in assembling document evidence packs for audits and corrective-action reviews.",
+        title: "Investigation Orchestration",
+        description: "Assign ownership and coordinate closure tasks.",
+      },
+      {
+        title: "Corrective Delivery",
+        description: "Complete approved actions with procedure evidence.",
+      },
+      {
+        title: "Monitoring & Analytics",
+        description: "Track throughput, quality and recurring exceptions.",
+      },
+      {
+        title: "Feedback & Improvement",
+        description: "Feed findings back into operating procedures.",
       },
     ],
     governance: [
@@ -388,6 +547,17 @@ export const industries: Industry[] = [
       "product-engineering",
       "managed-services",
     ],
+    relevantCapabilities: [
+      { title: "Function Data Unification", icon: "unification" },
+      { title: "Intake Orchestration", icon: "automation" },
+      { title: "Value & Risk Scoring", icon: "insight" },
+      { title: "Knowledge Graphs", icon: "document" },
+      { title: "Portfolio Planning", icon: "geospatial" },
+      { title: "Shared-services Assistants", icon: "language" },
+      { title: "Control Monitoring", icon: "fraud" },
+      { title: "Operating Analytics", icon: "monitoring" },
+      { title: "Platform Interoperability", icon: "interop" },
+    ],
     products: [
       "ai-governance-command-centre",
       "onetouch-audit",
@@ -397,19 +567,28 @@ export const industries: Industry[] = [
     ],
     workflows: [
       {
-        title: "Enterprise AI intake and prioritisation",
-        description:
-          "Capture proposed use cases, score value and risk, and route them through CoE and governance checkpoints before build.",
+        title: "Intake & Prioritisation",
+        description: "Capture proposed use cases and score value and risk.",
       },
       {
-        title: "Assurance and control evidence flow",
-        description:
-          "Link findings, documents and remediation tasks so audit and risk teams work from a single governed command view.",
+        title: "Governance Review",
+        description: "Route them through CoE and control checkpoints.",
       },
       {
-        title: "Shared-services knowledge assistance",
-        description:
-          "Support finance, legal and HR operations with retrieval-grounded answers from approved enterprise knowledge bases.",
+        title: "Delivery Orchestration",
+        description: "Coordinate build tasks, owners and stage gates.",
+      },
+      {
+        title: "Service Delivery",
+        description: "Release the governed capability to operating teams.",
+      },
+      {
+        title: "Monitoring & Analytics",
+        description: "Track adoption, control evidence and operating impact.",
+      },
+      {
+        title: "Feedback & Improvement",
+        description: "Feed outcomes back into intake and reuse standards.",
       },
     ],
     governance: [

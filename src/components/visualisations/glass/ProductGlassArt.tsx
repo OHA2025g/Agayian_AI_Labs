@@ -21,6 +21,12 @@ function resolveOriginalPng(slug: string): string | null {
   if (slug.includes("governance") || slug.includes("command")) {
     return mockupAssets.flagshipOriginalGovernance;
   }
+  if (slug.includes("decision") || slug.includes("enterprise-decision")) {
+    return mockupAssets.productDecisionRing;
+  }
+  if (slug.includes("document") || slug.includes("copilot")) {
+    return mockupAssets.productDocumentStack;
+  }
   return null;
 }
 

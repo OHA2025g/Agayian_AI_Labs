@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export type OnThisPageItem = {
@@ -13,7 +13,7 @@ type OnThisPageNavProps = {
   title?: string;
   items: OnThisPageItem[];
   className?: string;
-  footer?: React.ReactNode;
+  footer?: ReactNode;
   variant?: "toc" | "layers" | "capabilities";
 };
 

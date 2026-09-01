@@ -59,6 +59,28 @@ export type Capability = {
   topics: string[];
 };
 
+export type IndustryCapabilityIcon =
+  | "unification"
+  | "automation"
+  | "insight"
+  | "document"
+  | "geospatial"
+  | "language"
+  | "fraud"
+  | "monitoring"
+  | "interop";
+
+export type IndustryCapabilityItem = {
+  title: string;
+  icon: IndustryCapabilityIcon;
+};
+
+export type IndustryProductCard = {
+  slug: string;
+  title: string;
+  description: string;
+};
+
 export type Industry = {
   id: string;
   slug: string;
@@ -67,7 +89,9 @@ export type Industry = {
   challenges: string[];
   opportunities: string[];
   capabilities: string[];
+  relevantCapabilities: IndustryCapabilityItem[];
   products: string[];
+  productCards?: IndustryProductCard[];
   workflows: { title: string; description: string }[];
   governance: string[];
   outcomes: string[];

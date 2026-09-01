@@ -49,6 +49,7 @@ const metrics = await page.evaluate(() => {
   };
   return {
     documentHeight: document.documentElement.scrollHeight,
+    documentWidth: document.documentElement.scrollWidth,
     header: box("header"),
     hero: box(".capabilities-hero"),
     copy: box(".capabilities-hero-copy"),

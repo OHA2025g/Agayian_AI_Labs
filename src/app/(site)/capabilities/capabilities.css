@@ -1,8 +1,18 @@
 /* Scoped to /capabilities only */
 
+html:has(.capabilities-page-shell),
+html.capabilities-page {
+  overflow-x: hidden;
+}
+
+html:has(.capabilities-page-shell) body,
+html.capabilities-page body {
+  background: #fbfdfd;
+}
+
 .capabilities-page-shell {
   width: 100%;
-  background: #fff;
+  background: transparent;
   color: #071b40;
 }
 
@@ -10,6 +20,15 @@
   width: calc(100% - 160px);
   max-width: 1288px;
   margin-inline: auto;
+}
+
+@media (min-width: 1440px) {
+  .capabilities-main {
+    width: 1288px;
+    max-width: 1288px;
+    margin-left: 80px;
+    margin-right: 72px;
+  }
 }
 
 @media (max-width: 1199px) {
@@ -232,6 +251,16 @@
 .capabilities-product-art {
   height: 155px !important;
   aspect-ratio: auto !important;
+  overflow: hidden;
+  background: #f4f7fa !important;
+}
+
+.capabilities-product-art img {
+  height: 155px !important;
+  width: 100% !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  transform: none !important;
 }
 
 .capabilities-product-name {
@@ -301,7 +330,7 @@
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 540px;
+    grid-template-columns: 535px 540px;
     height: 590px;
     align-items: start;
   }
@@ -394,6 +423,11 @@
     align-items: start;
   }
 
+  .capabilities-stage > * {
+    position: relative;
+    z-index: 1;
+  }
+
   .capabilities-toc {
     width: 168px;
     height: 675px;
@@ -410,8 +444,15 @@
   .capabilities-journey {
     width: 1105px;
     max-width: 100%;
-    padding-top: 40px;
+    margin-top: 40px;
+    padding-top: 0;
     padding-bottom: 0;
+  }
+
+  .capabilities-frame {
+    z-index: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .capabilities-rows {
@@ -450,21 +491,13 @@
   }
 
   .capabilities-rail-title {
-    width: 120px;
-    max-width: 120px;
+    width: 96px;
+    max-width: 96px;
     margin-top: 14px;
   }
 
   .capabilities-anchor {
-    display: block;
-    position: absolute;
-    top: 24px;
-    left: 123px;
-    z-index: 3;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #ff4f5e;
+    display: none;
   }
 
   .capabilities-card {
@@ -478,6 +511,16 @@
     max-height: 232px;
     padding: 34px 36px 28px 44px;
     overflow: hidden;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    position: relative;
+    z-index: 1;
+  }
+
+  .capabilities-row:not(:last-child) .capabilities-card {
+    border-bottom: 1px solid #e7eef4;
   }
 
   .capabilities-col-title {
@@ -487,6 +530,21 @@
   .capabilities-related {
     padding-top: 64px;
     padding-bottom: 24px;
+    background: #fbfdfd;
+  }
+
+  .capabilities-related-rule {
+    gap: 4px;
+    width: auto;
+  }
+
+  .capabilities-related-rule span {
+    width: 16px;
+    background: #ff4f5e;
+  }
+
+  .capabilities-related-rule span + span {
+    width: 14px;
   }
 
   .capabilities-related-head {
