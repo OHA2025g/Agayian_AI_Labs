@@ -1,9 +1,9 @@
-import { MockupCard } from "@/components/ui/MockupCard";
 import { CapabilityMark } from "@/components/visualisations/glass/CapabilityMarks";
 import type { Capability } from "@/types";
 
 type JourneyCopy = {
   title: string;
+  railTitle: string;
   challenge: string;
   deliver: string;
   typical: readonly string[];
@@ -14,6 +14,7 @@ type JourneyCopy = {
 const cards: Record<string, JourneyCopy> = {
   strategy: {
     title: "AI Strategy & Consulting",
+    railTitle: "AI Strategy &\nConsulting",
     challenge:
       "Unclear AI direction, fragmented initiatives and uncertain ROI.",
     deliver:
@@ -30,6 +31,7 @@ const cards: Record<string, JourneyCopy> = {
   },
   data: {
     title: "Data & Analytics",
+    railTitle: "Data &\nAnalytics",
     challenge:
       "Siloed, inconsistent and low-quality data limits trusted AI.",
     deliver:
@@ -46,6 +48,7 @@ const cards: Record<string, JourneyCopy> = {
   },
   "generative-ai": {
     title: "Generative AI",
+    railTitle: "Generative AI",
     challenge:
       "Manual content workflows and knowledge silos slow productivity.",
     deliver:
@@ -62,6 +65,7 @@ const cards: Record<string, JourneyCopy> = {
   },
   "agentic-ai": {
     title: "Agentic AI",
+    railTitle: "Agentic AI",
     challenge:
       "Complex processes need autonomy and coordination across systems.",
     deliver:
@@ -78,6 +82,7 @@ const cards: Record<string, JourneyCopy> = {
   },
   governance: {
     title: "AI Governance",
+    railTitle: "AI\nGovernance",
     challenge:
       "AI risks, compliance and uncontrolled use create exposure.",
     deliver:
@@ -94,6 +99,7 @@ const cards: Record<string, JourneyCopy> = {
   },
   "product-engineering": {
     title: "AI Product Engineering",
+    railTitle: "AI Product\nEngineering",
     challenge:
       "Prototypes don't transition to scalable, secure production products.",
     deliver:
@@ -110,6 +116,7 @@ const cards: Record<string, JourneyCopy> = {
   },
   "managed-services": {
     title: "AI Managed Services",
+    railTitle: "AI Managed\nServices",
     challenge:
       "Systems need continuous support, monitoring and optimisation.",
     deliver:
@@ -128,8 +135,8 @@ const cards: Record<string, JourneyCopy> = {
 
 export function CapabilityJourney({ layers }: { layers: Capability[] }) {
   return (
-    <ol className="relative space-y-12 md:space-y-16">
-      <JourneyWave />
+    <ol className="capabilities-journey capabilities-rows relative space-y-10 min-[1200px]:space-y-0">
+      <JourneyConnectors count={layers.length} />
       {layers.map((capability, index) => (
         <CapabilityRow
           key={capability.id}
@@ -150,36 +157,35 @@ function CapabilityRow({
 }) {
   const copy = cards[capability.slug];
   const title = copy?.title ?? capability.name;
+  const railTitle = copy?.railTitle ?? title;
 
   return (
-    <li id={capability.slug} className="relative scroll-mt-36">
-      <div className="grid items-center gap-5 md:grid-cols-[10.5rem_minmax(0,1fr)] md:gap-7 xl:grid-cols-[11.5rem_minmax(0,1fr)] xl:gap-10">
-        <div className="relative z-10 flex items-center gap-3 md:flex-col md:items-center md:gap-3 md:text-center">
-          <span className="relative font-heading text-[2.35rem] font-semibold leading-none text-[#8fd4ee] md:text-[2.85rem]">
-            <span
-              aria-hidden
-              className="absolute -left-3.5 top-1/2 hidden h-2 w-2 -translate-y-1/2 rounded-full bg-[#ff4d5e] md:block"
-            />
-            {String(index + 1).padStart(2, "0")}
-          </span>
-          <span className="flex h-[3.6rem] w-[3.6rem] shrink-0 items-center justify-center rounded-full border border-[#c5e4f5] bg-white text-navy shadow-[0_8px_20px_rgba(20,159,230,0.12)]">
-            <CapabilityMark name={capability.slug} className="h-7 w-7" />
-          </span>
-          <h2 className="font-heading text-[1.05rem] font-semibold leading-snug text-navy md:max-w-[11rem] md:text-[1.12rem]">
-            {title}
-          </h2>
-        </div>
-
-        <MockupCard className="px-5 py-6 shadow-[0_12px_34px_rgba(11,31,58,0.06)] hover:translate-y-0 hover:shadow-[0_12px_34px_rgba(11,31,58,0.06)] sm:px-7 sm:py-8 xl:px-8">
-          <div className="grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-5">
-            <CopyCol title="Business challenge" body={copy?.challenge} />
-            <CopyCol title="What we deliver" body={copy?.deliver} />
-            <CopyCol title="Typical deliverables" items={copy?.typical} />
-            <CopyCol title="Use cases" body={copy?.uses} />
-            <CopyCol title="Outcomes" body={copy?.outcomes} />
-          </div>
-        </MockupCard>
+    <li id={capability.slug} className="capabilities-row relative scroll-mt-28">
+      <div className="capabilities-rail relative z-10">
+        <span className="capabilities-index">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <span className="capabilities-icon">
+          <CapabilityMark name={capability.slug} className="h-6 w-6" />
+        </span>
+        <h2 className="capabilities-rail-title">
+          {railTitle.split("\n").map((line) => (
+            <span key={line} className="block">
+              {line}
+            </span>
+          ))}
+        </h2>
       </div>
+
+      <span aria-hidden className="capabilities-anchor" />
+
+      <article className="capabilities-card">
+        <CopyCol title={["Business", "challenge"]} body={copy?.challenge} />
+        <CopyCol title={["What we", "deliver"]} body={copy?.deliver} />
+        <CopyCol title={["Typical", "deliverables"]} items={copy?.typical} />
+        <CopyCol title={["Use cases"]} body={copy?.uses} />
+        <CopyCol title={["Outcomes"]} body={copy?.outcomes} />
+      </article>
     </li>
   );
 }
@@ -189,33 +195,24 @@ function CopyCol({
   body,
   items,
 }: {
-  title: string;
+  title: readonly string[];
   body?: string;
   items?: readonly string[];
 }) {
   return (
-    <div className="min-w-0">
-      <h3 className="font-heading text-[0.98rem] font-semibold leading-snug text-navy">
-        {title}
+    <div className="capabilities-col min-w-0">
+      <h3 className="capabilities-col-title">
+        {title.map((line) => (
+          <span key={line} className="block">
+            {line}
+          </span>
+        ))}
       </h3>
-      {body ? (
-        <p className="mt-3 text-[0.9rem] leading-[1.65] text-navy/60">
-          {body}
-        </p>
-      ) : null}
+      {body ? <p className="capabilities-col-body">{body}</p> : null}
       {items ? (
-        <ul className="mt-3 space-y-2.5">
+        <ul className="capabilities-col-list">
           {items.map((item) => (
-            <li
-              key={item}
-              className="flex gap-2.5 text-[0.9rem] leading-[1.55] text-navy/60"
-            >
-              <span
-                aria-hidden
-                className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-tech-blue"
-              />
-              <span>{item}</span>
-            </li>
+            <li key={item}>{item}</li>
           ))}
         </ul>
       ) : null}
@@ -223,36 +220,47 @@ function CopyCol({
   );
 }
 
-function JourneyWave() {
-  const height = 840;
-  const mid = 22;
-  const amp = 9;
-  const samples = 96;
-  const points: string[] = [];
+function JourneyConnectors({ count }: { count: number }) {
+  const rowH = 232;
+  const gap = 18;
+  const stride = rowH + gap;
+  const height = count * rowH + Math.max(0, count - 1) * gap;
+  const startX = 8;
+  const endX = 118;
 
-  for (let i = 0; i <= samples; i += 1) {
-    const t = i / samples;
-    const x = mid + Math.sin(t * Math.PI * 6) * amp;
-    const y = 8 + t * (height - 16);
-    points.push(`${x.toFixed(2)},${y.toFixed(2)}`);
+  let path = `M ${startX} 4`;
+  for (let i = 0; i < count; i += 1) {
+    const yDot = i * stride + 28;
+    path += ` C 42 ${yDot}, 78 ${yDot}, ${endX} ${yDot}`;
+    if (i < count - 1) {
+      const yBack = (i + 1) * stride - gap / 2;
+      path += ` C 78 ${yDot + 46}, 28 ${yBack - 20}, ${startX} ${yBack}`;
+    }
   }
 
   return (
     <svg
       aria-hidden
-      viewBox={`0 0 44 ${height}`}
+      viewBox={`0 0 128 ${height}`}
       preserveAspectRatio="none"
-      className="pointer-events-none absolute -left-1 top-4 hidden h-[calc(100%-1.5rem)] w-11 md:block"
+      className="capabilities-connectors pointer-events-none absolute left-0 top-0 hidden h-full w-[128px] min-[1200px]:block"
     >
+      <line
+        x1={startX}
+        y1="0"
+        x2={startX}
+        y2={height}
+        stroke="#6ecff5"
+        strokeWidth="1"
+        strokeDasharray="1.4 5"
+        opacity="0.85"
+      />
       <path
-        d={`M ${points.join(" L ")}`}
+        d={path}
         fill="none"
-        stroke="#149fe6"
-        strokeOpacity="0.55"
-        strokeWidth="1.5"
-        strokeDasharray="1.6 6.4"
-        strokeLinecap="round"
-        vectorEffect="non-scaling-stroke"
+        stroke="#6dcef3"
+        strokeWidth="1"
+        opacity="0.65"
       />
     </svg>
   );

@@ -1,7 +1,6 @@
 import { CapabilitiesHero } from "@/components/sections/CapabilitiesHero";
 import { CapabilityJourney } from "@/components/sections/CapabilityDetail";
 import { RelatedProductsRow } from "@/components/sections/RelatedProductsRow";
-import { Reveal } from "@/components/motion/Reveal";
 import { OnThisPageNav } from "@/components/ui/OnThisPageNav";
 import { flagshipProducts } from "@/config/flagship-products";
 import { getCapabilities, getProducts } from "@/lib/cms/catalog";
@@ -82,21 +81,24 @@ export default async function CapabilitiesPage() {
         }}
       />
 
-      <div className="relative bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_12.25rem] lg:items-start lg:gap-x-6 xl:grid-cols-[minmax(0,1fr)_12.5rem] xl:gap-x-8">
-            <CapabilitiesHero />
+      <div className="capabilities-page-shell">
+        <div className="capabilities-main">
+          <div className="capabilities-stage">
+            <div>
+              <CapabilitiesHero />
+              <CapabilityJourney layers={journeyLayers} />
+            </div>
 
-            <aside className="relative z-20 row-span-2 mt-12 hidden lg:mt-14 lg:block">
+            <aside className="relative z-20 hidden min-[1200px]:block">
               <OnThisPageNav
                 items={onThisPageItems}
-                variant="layers"
-                className="top-28 flex min-h-[50rem] flex-col"
+                variant="capabilities"
+                className="capabilities-toc sticky top-[118px]"
                 footer={
-                  <p className="flex gap-2 text-[0.78rem] leading-snug text-muted-light">
+                  <p className="flex gap-2 text-[12px] leading-[1.45] text-[#5d7394]">
                     <span
                       aria-hidden
-                      className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand"
+                      className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#ff4f5e]"
                     />
                     Sequence your AI investment into a governed delivery
                     agenda.
@@ -104,21 +106,11 @@ export default async function CapabilitiesPage() {
                 }
               />
             </aside>
-
-            <section className="relative pt-8 pb-14 md:pt-10 md:pb-20">
-              <div
-                aria-hidden
-                className="absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 bg-[#f5f8fb]"
-              />
-              <Reveal>
-                <CapabilityJourney layers={journeyLayers} />
-              </Reveal>
-            </section>
           </div>
         </div>
-      </div>
 
-      <RelatedProductsRow products={relatedProducts} />
+        <RelatedProductsRow products={relatedProducts} />
+      </div>
     </>
   );
 }

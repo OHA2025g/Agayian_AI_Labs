@@ -49,3 +49,6 @@ next-env.d.ts
 # local agent / Aikido MCP scratch files (never commit)
 _aikido_*
 _mcp_*
+
+# local design-parity captures — do not commit
+/docs/parity-screenshots/

@@ -87,10 +87,10 @@ export function CapabilityGlassStack({
               className="absolute left-[56%] flex -translate-y-1/2 items-center gap-2 sm:left-[55%] sm:gap-2.5"
               style={{ top: `${node.y}%` }}
             >
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#d2e8f4] bg-white text-tech-blue shadow-[0_4px_12px_rgba(20,159,230,0.08)] sm:h-8 sm:w-8">
+              <span className="capabilities-stack-icon flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full border border-[#d2e8f4] bg-white text-[#166bb5] shadow-[0_8px_22px_rgba(20,70,110,0.09)]">
                 <CapabilityMark name={item.mark} className="h-3.5 w-3.5" />
               </span>
-              <span className="text-[0.74rem] font-medium leading-snug text-navy sm:text-[0.86rem]">
+              <span className="capabilities-stack-label text-[13px] font-medium leading-snug text-[#071b40]">
                 {item.label}
               </span>
             </li>
@@ -135,8 +135,8 @@ function LeftFlow() {
             d={`M ${startX} ${startY} C ${midX} ${startY}, ${midX + 40} ${endY}, ${endX} ${endY}`}
             fill="none"
             stroke="#7ec8e8"
-            strokeWidth="0.9"
-            opacity="0.42"
+            strokeWidth="1"
+            opacity="0.32"
             vectorEffect="non-scaling-stroke"
           />
         );
