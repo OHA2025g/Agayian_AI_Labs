@@ -1,0 +1,62 @@
+/**
+ * Central mockup asset paths for page illustrations.
+ * Prefer page-specific crops; fall back to home infinity where needed.
+ */
+export const mockupAssets = {
+  homeHero: "/mockups/home-hero.png",
+  homePage: "/mockups/home-page.png",
+  capabilities: "/mockups/capabilities-page.png",
+  products: "/mockups/products-page.png",
+  industries: "/mockups/industries-page.png",
+  contact: "/mockups/contact-page.png",
+  insights: "/mockups/insights-page.png",
+  article: "/mockups/article-page.png",
+  company: "/mockups/company-page.png",
+  coe: "/mockups/coe-page.png",
+  governance: "/mockups/governance-page.png",
+  impact: "/mockups/impact-page.png",
+  /** Cropped glass illustrations from mockups */
+  capabilitiesGlassStack: "/mockups/capabilities-glass-stack.png",
+  capabilitiesJourneyOrbs: "/mockups/capabilities-journey-orbs.png",
+  relatedProductsGlass: "/mockups/related-products-glass.png",
+  processFlowGlass: "/mockups/process-flow-glass.png",
+  coeStack: "/mockups/coe-stack.png",
+  productsHeroInfinity: "/mockups/products-hero-infinity.png",
+  industriesHeroMap: "/mockups/industries-hero-map.png",
+  governanceHeroLoop: "/mockups/governance-hero-loop.png",
+  impactHeroPrism: "/mockups/impact-hero-prism.png",
+  insightsHeroBook: "/mockups/insights-hero-book.png",
+  companyHeroHub: "/mockups/company-hero-hub.png",
+  homeProduct0: "/mockups/home-product-0.png",
+  homeProduct1: "/mockups/home-product-1.png",
+  homeProduct2: "/mockups/home-product-2.png",
+  homeProduct3: "/mockups/home-product-3.png",
+  flagshipArt0: "/mockups/flagship-art-0@2x.png",
+  flagshipArt1: "/mockups/flagship-art-1@2x.png",
+  flagshipArt2: "/mockups/flagship-art-2@2x.png",
+  flagshipArt3: "/mockups/flagship-art-3@2x.png",
+  flagshipOriginalAudit: "/mockups/flagship-original-audit.png",
+  flagshipOriginalVedhire: "/mockups/flagship-original-vedhire.png",
+  flagshipOriginalGovernance: "/mockups/flagship-original-governance.png",
+  flagshipOriginalWcd: "/mockups/flagship-original-wcd.png",
+  originalInfinityHero: "/mockups/original-infinity-hero.png",
+  originalCapabilityStack: "/mockups/original-capability-stack.png",
+  originalCoeStack: "/mockups/original-coe-stack.png",
+  originalGovernanceLoop: "/mockups/original-governance-loop.png",
+  originalImpactPrism: "/mockups/original-impact-prism.png",
+  originalInsightsBook: "/mockups/original-insights-book.png",
+  originalCompanyHub: "/mockups/original-company-hub.png",
+  originalContactNetwork: "/mockups/original-contact-network.png",
+  originalInsightThumbs: [
+    "/mockups/original-insight-ring.png",
+    "/mockups/original-insight-cube.png",
+    "/mockups/original-insight-bars.png",
+    "/mockups/original-insight-shield.png",
+  ],
+  homeExact: "/mockups/home-exact.png",
+} as const;
+
+export const originalSculptureSize = {
+  landscape: { width: 1536, height: 1024 },
+  portrait: { width: 1024, height: 1536 },
+} as const;

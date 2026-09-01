@@ -2,33 +2,84 @@
 
 import { useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Search, X } from "lucide-react";
-import { ProductCard } from "@/components/cards/ProductCard";
+import {
+  ArrowRight,
+  Building2,
+  Landmark,
+  Scale,
+  Search,
+  Sparkles,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { EmptyState } from "@/components/states/EmptyState";
 import { AccessibleModal } from "@/components/ui/AccessibleModal";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { MockupCard } from "@/components/ui/MockupCard";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { DashboardPreview } from "@/components/visualisations/DashboardPreview";
+import { OneTouchSpotlight } from "@/components/visualisations/OneTouchSpotlight";
+import { OriginalSculpture } from "@/components/visualisations/glass/OriginalSculpture";
+import { ProductGlassArt } from "@/components/visualisations/glass/ProductGlassArt";
+import { mockupAssets } from "@/config/mockup-assets";
 import { laboratoryProductSlugs } from "@/config/site";
-import {
-  industryFilters,
-  productTypeFilters,
-  technologyFilters,
-} from "@/data/products";
+import { industryFilters, productTypeFilters } from "@/data/products";
 import type { Product } from "@/types";
 import { cn } from "@/lib/utils";
 
-type ProductTypeFilter = (typeof productTypeFilters)[number];
+type PillId =
+  | "all"
+  | "government"
+  | "financial"
+  | "talent"
+  | "governance"
+  | "decision";
+
+type FilterPill = {
+  id: PillId;
+  label: string;
+  icon: LucideIcon;
+  /** Map mockup labels onto existing industryFilters / productTypeFilters. */
+  industry?: (typeof industryFilters)[number];
+  productType?: (typeof productTypeFilters)[number];
+  slugIncludes?: string;
+};
+
+const filterPills: FilterPill[] = [
+  { id: "all", label: "All", icon: Sparkles },
+  {
+    id: "government",
+    label: "Government",
+    icon: Landmark,
+    industry: "Government",
+  },
+  {
+    id: "financial",
+    label: "Financial Services",
+    icon: Building2,
+    industry: "Finance",
+  },
+  {
+    id: "talent",
+    label: "Talent",
+    icon: Users,
+    industry: "Human Resources",
+  },
+  {
+    id: "governance",
+    label: "Governance",
+    icon: Scale,
+    productType: "Governance",
+  },
+  {
+    id: "decision",
+    label: "Decision Intelligence",
+    icon: Sparkles,
+    productType: "Analytics",
+    slugIncludes: "decision",
+  },
+];
 
 function matchesSearch(product: Product, query: string): boolean {
   if (!query) return true;
@@ -40,10 +91,44 @@ function matchesSearch(product: Product, query: string): boolean {
     ...product.industries,
     ...product.technologies,
     ...product.capabilities,
+    ...product.modules.map((module) => `${module.title} ${module.description}`),
   ]
     .join(" ")
     .toLowerCase();
   return haystack.includes(query);
+}
+
+function matchesPill(product: Product, pill: FilterPill): boolean {
+  if (pill.id === "all") return true;
+  if (pill.industry && product.industries.includes(pill.industry)) return true;
+  if (pill.productType && product.category === pill.productType) return true;
+  if (pill.slugIncludes && product.slug.includes(pill.slugIncludes)) return true;
+  if (pill.id === "governance") {
+    return (
+      product.category === "Governance" ||
+      product.slug.includes("governance") ||
+      product.capabilities.some((c) => c.toLowerCase().includes("governance"))
+    );
+  }
+  if (pill.id === "decision") {
+    return (
+      product.slug.includes("decision") ||
+      product.name.toLowerCase().includes("decision") ||
+      product.category === "Analytics"
+    );
+  }
+  return false;
+}
+
+function resolveSpotlight(items: Product[]): Product | undefined {
+  const bySlug = (slug: string) => items.find((item) => item.slug === slug);
+  return (
+    bySlug("onetouch-audit") ||
+    items.find((item) => item.slug.includes("audit")) ||
+    bySlug(laboratoryProductSlugs[2]) ||
+    bySlug(laboratoryProductSlugs[0]) ||
+    items[0]
+  );
 }
 
 export function ProductsLaboratory({ items }: { items: Product[] }) {
@@ -51,61 +136,25 @@ export function ProductsLaboratory({ items }: { items: Product[] }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState("");
-  const [productType, setProductType] = useState<ProductTypeFilter>("All");
-  const [industry, setIndustry] = useState("All");
-  const [technology, setTechnology] = useState("All");
-  const queryProduct = searchParams.get("product");
-  const [labSlug, setLabSlug] = useState(
-    () =>
-      queryProduct ||
-      laboratoryProductSlugs[0] ||
-      items[0]?.slug ||
-      "",
-  );
+  const [activePill, setActivePill] = useState<PillId>("all");
   const [scrollY, setScrollY] = useState(0);
 
-  const labProducts = useMemo(
-    () =>
-      laboratoryProductSlugs
-        .map((slug) => items.find((item) => item.slug === slug))
-        .filter(Boolean) as Product[],
-    [items],
-  );
-
-  const resolvedLabSlug =
-    queryProduct &&
-    laboratoryProductSlugs.includes(
-      queryProduct as (typeof laboratoryProductSlugs)[number],
-    )
-      ? queryProduct
-      : labSlug;
-
-  const activeLab =
-    labProducts.find((item) => item.slug === resolvedLabSlug) ||
-    labProducts[0];
+  const queryProduct = searchParams.get("product");
   const modalProduct = items.find((item) => item.slug === queryProduct) ?? null;
+  const spotlight = useMemo(() => resolveSpotlight(items), [items]);
+  const activeFilter =
+    filterPills.find((pill) => pill.id === activePill) ?? filterPills[0];
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return items.filter((product) => {
-      if (productType !== "All" && product.category !== productType) return false;
-      if (industry !== "All" && !product.industries.includes(industry))
-        return false;
-      if (technology !== "All" && !product.technologies.includes(technology))
-        return false;
+      if (!matchesPill(product, activeFilter)) return false;
       return matchesSearch(product, q);
     });
-  }, [items, query, productType, industry, technology]);
+  }, [items, query, activeFilter]);
 
   function openModal(slug: string) {
     setScrollY(window.scrollY);
-    if (
-      laboratoryProductSlugs.includes(
-        slug as (typeof laboratoryProductSlugs)[number],
-      )
-    ) {
-      setLabSlug(slug);
-    }
     const params = new URLSearchParams(searchParams.toString());
     params.set("product", slug);
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
@@ -119,179 +168,202 @@ export function ProductsLaboratory({ items }: { items: Product[] }) {
     requestAnimationFrame(() => window.scrollTo(0, scrollY));
   }
 
-  const hasFilters =
-    query.trim() ||
-    productType !== "All" ||
-    industry !== "All" ||
-    technology !== "All";
+  const spotlightFeatures = (spotlight?.modules ?? []).slice(0, 4);
+  const spotlightTags = (spotlight?.capabilities ?? []).slice(0, 5);
 
   return (
-    <div className="space-y-12">
-      {activeLab ? (
-        <section className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-bg-secondary via-bg-elevated to-bg-primary">
-          <div className="grid gap-6 p-5 lg:grid-cols-[1.1fr_0.9fr] lg:p-8">
-            <div>
-              <p className="font-tech text-[0.65rem] uppercase tracking-[0.18em] text-cyan">
-                Featured laboratory
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {labProducts.map((product) => (
-                  <button
-                    key={product.id}
-                    type="button"
-                    onClick={() => setLabSlug(product.slug)}
-                    className={cn(
-                      "rounded-md border px-3 py-1.5 text-xs font-medium transition",
-                      product.slug === activeLab.slug
-                        ? "border-cyan/40 bg-cyan/10 text-white"
-                        : "border-white/10 text-muted-dark hover:text-white",
-                    )}
-                  >
-                    {product.name}
-                  </button>
-                ))}
-              </div>
-              <h2 className="mt-5 font-heading text-2xl font-semibold md:text-3xl">
-                {activeLab.name}
-              </h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-dark md:text-base">
-                {activeLab.valueProposition || activeLab.shortDescription}
-              </p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {activeLab.technologies.slice(0, 5).map((tech) => (
-                  <Badge key={tech} variant="cyan">
-                    {tech}
-                  </Badge>
-                ))}
-              </div>
-              <dl className="mt-6 grid gap-4 sm:grid-cols-2">
-                <div>
-                  <dt className="font-tech text-[0.6rem] uppercase tracking-[0.16em] text-muted-dark">
-                    Industry
-                  </dt>
-                  <dd className="mt-1 text-sm">{activeLab.industries.join(", ")}</dd>
-                </div>
-                <div>
-                  <dt className="font-tech text-[0.6rem] uppercase tracking-[0.16em] text-muted-dark">
-                    Outcome
-                  </dt>
-                  <dd className="mt-1 text-sm">
-                    {activeLab.outcomes[0] || activeLab.status}
-                  </dd>
-                </div>
-              </dl>
-              <ul className="mt-5 space-y-2 text-sm text-muted-dark">
-                {activeLab.modules.slice(0, 4).map((module) => (
-                  <li key={module.title} className="flex gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan" />
-                    <span>
-                      <span className="font-medium text-white">{module.title}</span>
-                      {module.description ? ` — ${module.description}` : ""}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <PrimaryButton
-                  type="button"
-                  onClick={() => openModal(activeLab.slug)}
-                  showArrow={false}
-                >
-                  Open full detail
-                </PrimaryButton>
-                <SecondaryButton href="/contact?interest=demo">
-                  Request a demo
-                </SecondaryButton>
-              </div>
-              {activeLab.governance?.length ? (
-                <p className="mt-5 text-xs text-muted-dark">
-                  Governance: {activeLab.governance.slice(0, 3).join(" · ")}
-                </p>
-              ) : null}
-            </div>
-            <div className="relative min-h-[16rem] rounded-xl border border-white/10 bg-bg-primary/50 p-4">
-              <div className="absolute inset-0 grid-texture opacity-40" />
-              <DashboardPreview
-                variant={activeLab.slug}
-                className="relative"
+    <>
+      {/* Hero */}
+      <section className="scene-hero relative overflow-hidden border-b border-[var(--border-soft)]">
+        <div className="pointer-events-none absolute inset-0 grid-texture opacity-40" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-0 top-0 h-full w-1/2 bg-[radial-gradient(ellipse_at_70%_40%,rgba(59,130,246,0.12),transparent_65%)]"
+        />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:px-8 lg:py-20">
+          <div>
+            <p className="flex items-center gap-2 font-tech text-[0.65rem] uppercase tracking-[0.22em] text-cyan">
+              <span aria-hidden className="h-[2px] w-4 rounded-full bg-brand" />
+              Products
+            </p>
+            <h1 className="mt-3 font-heading text-[clamp(2.1rem,4.2vw,3.4rem)] font-semibold tracking-tight text-navy text-balance">
+              AI products built for real-world decisions
+            </h1>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-light md:text-lg">
+              Governed intelligence systems designed for complex operating
+              environments.
+            </p>
+            <label className="relative mt-8 block max-w-xl">
+              <span className="sr-only">Search products</span>
+              <Search
+                className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-light"
+                aria-hidden
               />
-              <p className="relative mt-3 font-tech text-[0.55rem] uppercase tracking-[0.18em] text-muted-dark">
-                Demonstration interface preview
-              </p>
-            </div>
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search products, capabilities, modules..."
+                className="h-12 w-full rounded-full border border-[var(--border-soft)] bg-white/80 pl-11 pr-4 text-sm text-navy shadow-[0_10px_30px_rgba(11,31,58,0.06)] backdrop-blur-md placeholder:text-muted-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tech-blue"
+              />
+            </label>
+          </div>
+          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-[10%] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.16),transparent_70%)] blur-2xl"
+            />
+            <OriginalSculpture
+              src={mockupAssets.originalInfinityHero}
+              alt="Glass infinity with product capability tiles"
+              priority
+              className="relative z-10"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Filter pills */}
+      <section className="border-b border-[var(--border-soft)] bg-bg-secondary/40">
+        <div className="mx-auto flex max-w-7xl flex-wrap gap-2 px-4 py-5 sm:px-6 lg:px-8">
+          {filterPills.map((pill) => {
+            const Icon = pill.icon;
+            const active = pill.id === activePill;
+            return (
+              <button
+                key={pill.id}
+                type="button"
+                onClick={() => setActivePill(pill.id)}
+                className={cn(
+                  "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition",
+                  active
+                    ? "border-brand bg-brand text-white shadow-[0_8px_20px_rgba(255,77,94,0.28)]"
+                    : "border-[var(--border-soft)] bg-white/70 text-navy hover:border-tech-blue/40 hover:bg-white",
+                )}
+              >
+                <Icon className="h-3.5 w-3.5" aria-hidden />
+                {pill.label}
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Spotlight */}
+      {spotlight ? (
+        <section className="border-b border-[var(--border-soft)] py-14 md:py-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <MockupCard className="overflow-hidden p-5 md:p-8 lg:p-10">
+              <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+                <div>
+                  <p className="font-tech text-[0.65rem] uppercase tracking-[0.2em] text-brand">
+                    Spotlight
+                  </p>
+                  <h2 className="mt-3 font-heading text-2xl font-semibold tracking-tight text-navy md:text-3xl">
+                    {spotlight.name}
+                  </h2>
+                  <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-light md:text-base">
+                    {spotlight.shortDescription}
+                  </p>
+
+                  {spotlightFeatures.length > 0 ? (
+                    <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                      {spotlightFeatures.map((feature) => (
+                        <div key={feature.title}>
+                          <h3 className="font-heading text-sm font-semibold text-navy">
+                            {feature.title}
+                          </h3>
+                          <p className="mt-1 text-xs leading-relaxed text-muted-light md:text-sm">
+                            {feature.description}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+
+                  {spotlightTags.length > 0 ? (
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {spotlightTags.map((tag) => (
+                        <Badge key={tag} variant="light">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  ) : null}
+
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <PrimaryButton
+                      type="button"
+                      onClick={() => openModal(spotlight.slug)}
+                      showArrow={false}
+                    >
+                      Explore Product
+                    </PrimaryButton>
+                    <SecondaryButton href="/capabilities">
+                      View Documentation
+                    </SecondaryButton>
+                  </div>
+                </div>
+
+                <div className="relative flex flex-col justify-center">
+                  <OneTouchSpotlight />
+                </div>
+              </div>
+            </MockupCard>
           </div>
         </section>
       ) : null}
 
-      <Reveal className="rounded-xl border border-white/10 bg-bg-elevated/40 p-4 md:p-6">
-        <div className="grid gap-4 lg:grid-cols-[1.4fr_repeat(3,minmax(0,1fr))]">
-          <label className="relative block">
-            <span className="sr-only">Search products</span>
-            <Search
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-dark"
-              aria-hidden
-            />
-            <Input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search products"
-              className="pl-9"
-            />
-          </label>
-          <FilterSelect
-            label="Product type"
-            value={productType}
-            onValueChange={(value) =>
-              setProductType(value as ProductTypeFilter)
-            }
-            options={productTypeFilters}
-          />
-          <FilterSelect
-            label="Industry"
-            value={industry}
-            onValueChange={setIndustry}
-            options={industryFilters}
-          />
-          <FilterSelect
-            label="Technology"
-            value={technology}
-            onValueChange={setTechnology}
-            options={technologyFilters}
-          />
-        </div>
-        {hasFilters ? (
-          <button
-            type="button"
-            onClick={() => {
-              setQuery("");
-              setProductType("All");
-              setIndustry("All");
-              setTechnology("All");
-            }}
-            className="mt-3 inline-flex items-center gap-1 text-xs text-muted-dark hover:text-white"
-          >
-            <X className="h-3.5 w-3.5" /> Clear filters
-          </button>
-        ) : null}
-      </Reveal>
+      {/* Explore grid */}
+      <section className="py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <h2 className="font-heading text-[clamp(1.75rem,3.2vw,2.5rem)] font-semibold tracking-tight text-navy">
+              Explore our products
+            </h2>
+          </Reveal>
 
-      {filtered.length === 0 ? (
-        <EmptyState
-          title="No products match your filters"
-          description="Adjust search or clear filters to browse the portfolio."
-        />
-      ) : (
-        <RevealGroup className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((product) => (
-            <RevealItem key={product.id}>
-              <ProductCard
-                product={product}
-                onOpen={() => openModal(product.slug)}
+          {filtered.length === 0 ? (
+            <div className="mt-10">
+              <EmptyState
+                className="border-[var(--border-soft)] bg-white/60 text-navy [&_h3]:text-navy [&_p]:text-muted-light"
+                title="No products match your filters"
+                description="Adjust search or choose another category to browse the portfolio."
               />
-            </RevealItem>
-          ))}
-        </RevealGroup>
-      )}
+            </div>
+          ) : (
+            <RevealGroup className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              {filtered.map((product) => (
+                <RevealItem key={product.id}>
+                  <MockupCard className="flex h-full flex-col overflow-hidden p-4">
+                    <ProductGlassArt
+                      slug={product.slug}
+                      variant="products"
+                      className="h-36"
+                    />
+                    <p className="mt-4 px-1 text-xs font-medium uppercase tracking-wider text-muted-light">
+                      {product.category}
+                    </p>
+                    <h3 className="mt-1 px-1 font-heading text-lg font-semibold text-navy">
+                      {product.name}
+                    </h3>
+                    <p className="mt-2 flex-1 px-1 text-sm leading-relaxed text-muted-light">
+                      {product.shortDescription}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => openModal(product.slug)}
+                      className="mt-5 inline-flex items-center gap-1.5 px-1 text-sm font-semibold text-tech-blue transition hover:text-navy"
+                    >
+                      Learn more
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
+                  </MockupCard>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          )}
+        </div>
+      </section>
 
       <AccessibleModal
         open={Boolean(modalProduct)}
@@ -303,11 +375,15 @@ export function ProductsLaboratory({ items }: { items: Product[] }) {
             <div className="flex flex-wrap gap-2">
               <Badge variant="cyan">{modalProduct.category}</Badge>
               {modalProduct.industries.map((item) => (
-                <Badge key={item}>{item}</Badge>
+                <Badge key={item} variant="light">
+                  {item}
+                </Badge>
               ))}
             </div>
             <p className="text-muted-dark">{modalProduct.valueProposition}</p>
-            <DashboardPreview variant={modalProduct.slug} />
+            <div>
+              <OneTouchSpotlight />
+            </div>
             <section>
               <h3 className="font-heading text-lg font-semibold">Problem</h3>
               <p className="mt-2 text-sm text-muted-dark">
@@ -325,7 +401,9 @@ export function ProductsLaboratory({ items }: { items: Product[] }) {
               <ul className="mt-3 space-y-2 text-sm text-muted-dark">
                 {modalProduct.modules.map((module) => (
                   <li key={module.title}>
-                    <span className="font-medium text-white">{module.title}</span>
+                    <span className="font-medium text-white">
+                      {module.title}
+                    </span>
                     {module.description ? ` — ${module.description}` : ""}
                   </li>
                 ))}
@@ -357,38 +435,6 @@ export function ProductsLaboratory({ items }: { items: Product[] }) {
           </div>
         ) : null}
       </AccessibleModal>
-    </div>
-  );
-}
-
-function FilterSelect({
-  label,
-  value,
-  onValueChange,
-  options,
-}: {
-  label: string;
-  value: string;
-  onValueChange: (value: string) => void;
-  options: readonly string[] | string[];
-}) {
-  return (
-    <div>
-      <p className="mb-1.5 text-xs font-medium uppercase tracking-wider text-muted-dark">
-        {label}
-      </p>
-      <Select value={value} onValueChange={onValueChange}>
-        <SelectTrigger aria-label={label}>
-          <SelectValue placeholder={label} />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((option) => (
-            <SelectItem key={option} value={option}>
-              {option}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+    </>
   );
 }

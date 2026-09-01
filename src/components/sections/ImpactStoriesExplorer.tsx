@@ -64,7 +64,7 @@ export function ImpactStoriesExplorer({
 
   return (
     <div>
-      <div className="grid gap-4 rounded-xl border border-white/10 bg-bg-elevated/40 p-5 md:grid-cols-2 xl:grid-cols-4">
+      <div className="glass grid gap-4 rounded-xl p-5 md:grid-cols-2 xl:grid-cols-4">
         <FilterBar
           label="Industry"
           options={["All", ...industryOptions.map(industryLabel)]}

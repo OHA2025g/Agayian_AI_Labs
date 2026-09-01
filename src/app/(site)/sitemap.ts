@@ -17,6 +17,7 @@ const routes = [
   "/insights",
   "/company",
   "/contact",
+  "/trust",
   "/privacy-policy",
   "/terms-of-use",
   "/responsible-ai",

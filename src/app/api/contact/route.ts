@@ -91,7 +91,9 @@ export async function POST(request: Request) {
     designation: data.designation,
     country: data.country,
     areaOfInterest: data.areaOfInterest,
-    projectSummary: data.projectSummary,
+    projectSummary: data.industry
+      ? `Industry: ${data.industry}\n\n${data.projectSummary}`
+      : data.projectSummary,
     preferredContactMethod: data.preferredContactMethod,
     product: data.product,
     capability,
@@ -122,6 +124,7 @@ export async function POST(request: Request) {
     `Designation: ${data.designation}`,
     `Country: ${data.country}`,
     `Area of interest: ${data.areaOfInterest}`,
+    `Industry: ${data.industry || "—"}`,
     `Preferred contact: ${data.preferredContactMethod}`,
     `Product: ${data.product || "—"}`,
     `Capability: ${capability || "—"}`,

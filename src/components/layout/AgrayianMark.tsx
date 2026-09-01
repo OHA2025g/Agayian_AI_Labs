@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -8,22 +9,45 @@ type Props = {
 };
 
 /**
- * Agrayian mark for UI: linked loops + red play accent.
- * Dark variant uses light loops so it reads on navy without a white plate.
+ * Official Agrayian mark: two linked loops with a flat gap in the left
+ * loop and a red play seated in that opening. Light UI uses the source
+ * PNG so the geometry matches logo.png exactly.
  */
 export function AgrayianMark({
   className,
-  variant = "dark",
+  variant = "light",
   title = "Agrayian AI Labs",
 }: Props) {
-  const loop = variant === "dark" ? "#F1F5F9" : "#111111";
-  const playTop = "#FF4D5A";
-  const playBot = "#E63946";
-  const gradId = `ag-play-${variant}`;
+  if (variant === "light") {
+    return (
+      <Image
+        src="/logo.png"
+        alt=""
+        width={1024}
+        height={576}
+        className={cn("h-full w-full object-contain object-left", className)}
+        quality={100}
+      />
+    );
+  }
+
+  return <AgrayianMarkSvg className={className} title={title} loop="#F1F5F9" />;
+}
+
+function AgrayianMarkSvg({
+  className,
+  title,
+  loop,
+}: {
+  className?: string;
+  title: string;
+  loop: string;
+}) {
+  const playId = "ag-play-dark";
 
   return (
     <svg
-      viewBox="0 0 140 80"
+      viewBox="170 90 690 420"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={cn("h-full w-full", className)}
@@ -31,35 +55,33 @@ export function AgrayianMark({
       aria-label={title}
     >
       <title>{title}</title>
-      {/* Continuous infinity-style body */}
-      <path
-        d="M72 40
-           C72 22 86 12 100 12
-           C118 12 130 24 130 40
-           C130 56 118 68 100 68
-           C86 68 72 58 72 40
-           C72 58 58 68 44 68
-           C26 68 14 56 14 40
-           C14 24 26 12 44 12
-           C52 12 59 15 64 20"
+      {/* Right loop — complete */}
+      <circle
+        cx="654"
+        cy="297"
+        r="144"
         stroke={loop}
-        strokeWidth="14"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        strokeWidth="70"
       />
-      {/* Red play in the open top of the left loop */}
-      <path d="M58 8 L76 20 L58 32 Z" fill={`url(#${gradId})`} />
+      {/* Left loop — flat-cut gap at 12–2 o'clock for the play */}
+      <path
+        d="M494.7 225 A144 144 0 1 1 370 153"
+        stroke={loop}
+        strokeWidth="70"
+        strokeLinecap="butt"
+      />
+      <path d="M412 118 L506 153 L412 188 Z" fill={`url(#${playId})`} />
       <defs>
         <linearGradient
-          id={gradId}
-          x1="58"
-          y1="8"
-          x2="76"
-          y2="32"
+          id={playId}
+          x1="412"
+          y1="118"
+          x2="506"
+          y2="188"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor={playTop} />
-          <stop offset="1" stopColor={playBot} />
+          <stop stopColor="#FF4D5A" />
+          <stop offset="1" stopColor="#E63946" />
         </linearGradient>
       </defs>
     </svg>

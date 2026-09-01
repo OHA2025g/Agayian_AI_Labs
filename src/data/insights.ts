@@ -7,6 +7,79 @@ function readingTimeFromBody(body: string[]): string {
 
 const insightBodies: Omit<Insight, "readingTime">[] = [
   {
+    id: "insight-operationalizing-rai",
+    slug: "operationalizing-responsible-ai-in-the-enterprise",
+    title: "Operationalizing responsible AI in the enterprise",
+    excerpt:
+      "How to move responsible AI from policy language into intake, approvals, monitoring and evidence that operating teams can actually run.",
+    category: "Responsible AI",
+    type: "Articles",
+    author: "Agrayian AI Labs",
+    publishedAt: "2026-07-08",
+    featured: true,
+    body: [
+      "Responsible AI fails when it stays a principle statement. It becomes useful when it is translated into the same operating routines that already govern intake, delivery, risk and assurance.",
+      "Operationalising responsible AI starts with a living inventory: which systems exist, which decisions they influence, what data they touch, and who owns the outcome. Without that inventory, every later control is guesswork.",
+      "The next step is proportionate gates. Advisory assistants should not carry the same approval burden as systems that affect credit, hiring, benefits or public services. Clear risk tiers keep high-impact work under review without turning every experiment into theatre.",
+      "Evidence is the operating product. Teams need to produce reviewable artefacts — approval records, evaluation summaries, exception queues and change history — on a predictable cadence. If leadership cannot inspect those artefacts, the programme is not yet operational.",
+      "Human accountability must be named. Someone owns allowed use, someone owns evaluation, and someone owns incident response. Responsible AI is not a model property; it is an institutional practice that survives vendor changes and staff turnover.",
+    ],
+  },
+  {
+    id: "insight-data-to-decisions",
+    slug: "from-data-to-decisions-the-enterprise-ai-playbook",
+    title: "From data to decisions: The enterprise AI playbook",
+    excerpt:
+      "A practical path from fragmented data to governed decision support — portfolio choices, shared platforms and the evidence leaders actually use.",
+    category: "AI Strategy",
+    type: "Articles",
+    author: "Agrayian AI Labs",
+    publishedAt: "2026-05-21",
+    body: [
+      "Enterprise AI programmes stall when they treat data platforms and decision outcomes as separate projects. The playbook that works connects approved data, decision ownership and operating evidence in one design.",
+      "Start with the decision, not the model. Name the choice that should improve, the owner of that choice, the indicators that would change a meeting, and the residual risk if the signal is wrong.",
+      "Shared data products then become purposeful. Access rules, quality limits and refresh cadence belong with the decision they support. Unowned lakes and one-off extracts recreate the same briefing delay the programme was meant to remove.",
+      "Portfolio balance matters. Near-term operating improvements prove value; platform investments stop every use case from reinventing access, evaluation and hosting. Either extreme — only pilots, or only platforms — produces stall.",
+      "Leaders should judge progress by decisions taken with better evidence, not by the number of models in a catalogue. The playbook is complete only when operating reviews consume the system on a fixed cadence.",
+    ],
+  },
+  {
+    id: "insight-agentic-accountability",
+    slug: "agentic-ai-building-systems-that-act-with-accountability",
+    title: "Agentic AI: building systems that act with accountability",
+    excerpt:
+      "How to design agentic systems as constrained actors — with allowed goals, authorised tools, human escalation and evidence for every consequential step.",
+    category: "Agentic AI",
+    type: "Articles",
+    author: "Agrayian AI Labs",
+    publishedAt: "2026-06-18",
+    body: [
+      "Agentic AI is useful when it can plan, call tools and complete multi-step work. It is safe only when those actions sit inside a control environment with named owners and reversible defaults.",
+      "Treat every tool call as a privileged action. Catalogue tools, define who may add new ones, log arguments and outcomes, and require human confirmation for irreversible or externally visible steps until residual risk is accepted.",
+      "Separate intent, planning, execution and verification. Humans remain accountable for consequential outcomes. The agent can accelerate retrieval, drafting and routine orchestration within pre-approved limits.",
+      "Publish an autonomy ladder: which tasks stay human-led, which need approval, and which may run unattended. Without that ladder, privileges expand quietly under delivery pressure.",
+      "Evaluation is continuous. Monitor task success, tool misuse, cost and exceptions with the same change control applied to application releases. An agent without operating ownership is a demonstration, not a service.",
+    ],
+  },
+  {
+    id: "insight-governance-frameworks",
+    slug: "governance-frameworks-for-the-age-of-ai",
+    title: "Governance frameworks for the age of AI",
+    excerpt:
+      "A framework for inventory, risk tiers, approvals, monitoring and evidence that covers both traditional machine learning and generative or agentic systems.",
+    category: "AI Governance",
+    type: "Guides",
+    author: "Agrayian AI Labs",
+    publishedAt: "2026-04-09",
+    body: [
+      "AI governance fails as a document and succeeds as a framework teams can run: inventory, classification, approval, monitoring and evidence under one institutional rhythm.",
+      "Generative and agentic systems add failure modes — over-reliance, prompt injection, uncontrolled tool use and opaque reasoning — but they should not sit in a parallel committee. One framework should cover classical machine learning and newer interaction patterns.",
+      "Risk tiers keep the framework usable. Low-impact advisory work should move quickly. Systems that influence rights, entitlements, credit, employment or public services need stronger documentation, human review and a path to pause.",
+      "Roles must stay distinct. Business owners accept outcome accountability, technology teams own platform and evaluation hygiene, and risk teams challenge residual exposure. When those roles blur, issues surface late.",
+      "The framework is real only when evidence can be produced on schedule: inventory completeness, approval status, monitoring coverage and exception handling. If assurance cannot test those artefacts, the model is still aspirational.",
+    ],
+  },
+  {
     id: "insight-agentic-perspective",
     slug: "agentic-ai-from-demos-to-governed-operating-systems",
     title: "Agentic AI: From Demos to Governed Operating Systems",
@@ -16,7 +89,6 @@ const insightBodies: Omit<Insight, "readingTime">[] = [
     type: "Articles",
     author: "Agrayian AI Labs",
     publishedAt: "2026-06-18",
-    featured: true,
     body: [
       "Many organisations first encounter agentic AI as a compelling demonstration: a system that plans steps, calls tools and completes a multi-stage task with limited supervision. The leap from demonstration to production is rarely a model problem. It is an operating-model problem.",
       "In enterprise and government settings, an agent is not simply an autonomous assistant. It is a constrained actor inside a control environment. That means the organisation must define allowable goals, authorised tools, data boundaries, escalation rules and evidence expectations before autonomy is expanded.",

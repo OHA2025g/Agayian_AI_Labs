@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState, type MutableRefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import {
@@ -56,7 +56,9 @@ function AiOrbSwarm({
   const scratchPos = useMemo(() => new THREE.Vector3(), []);
   const scratchColor = useMemo(() => new THREE.Color(), []);
   const fallbackOffsetRef = useRef(offset);
-  fallbackOffsetRef.current = offset;
+  useEffect(() => {
+    fallbackOffsetRef.current = offset;
+  }, [offset]);
 
   const geometry = useMemo(() => {
     const positions = new Float32Array(count * 3);
@@ -142,7 +144,11 @@ function AiOrbSwarm({
           transparent
           opacity={offset.intensity ?? 0.85}
           depthWrite={false}
-          blending={THREE.AdditiveBlending}
+          blending={
+            formation === "logo"
+              ? THREE.NormalBlending
+              : THREE.AdditiveBlending
+          }
         />
       </points>
     </group>

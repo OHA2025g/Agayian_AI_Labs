@@ -26,8 +26,10 @@ const SCRIPT_ID = "cf-turnstile-script";
 
 export function TurnstileField({
   onToken,
+  theme = "light",
 }: {
   onToken: (token: string | null) => void;
+  theme?: "dark" | "light" | "auto";
 }) {
   const siteKey = getTurnstileSiteKey();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -47,7 +49,7 @@ export function TurnstileField({
       }
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: siteKey,
-        theme: "dark",
+        theme,
         callback: (token) => onToken(token),
         "expired-callback": () => onToken(null),
         "error-callback": () => onToken(null),
@@ -75,7 +77,7 @@ export function TurnstileField({
         widgetIdRef.current = null;
       }
     };
-  }, [siteKey, onToken, reactId]);
+  }, [siteKey, onToken, reactId, theme]);
 
   if (!siteKey) {
     return null;
@@ -84,7 +86,7 @@ export function TurnstileField({
   return (
     <div className="space-y-2">
       <div ref={containerRef} />
-      <p className="text-xs text-muted-dark">Protected by Cloudflare Turnstile.</p>
+      <p className="text-xs text-muted-light">Protected by Cloudflare Turnstile.</p>
     </div>
   );
 }

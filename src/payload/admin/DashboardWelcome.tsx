@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const shortcuts = [
   {
@@ -44,15 +45,15 @@ export default function DashboardWelcome() {
           standards as the public site — no invented metrics or clients.
         </p>
         <div className="agrayian-dash__actions">
-          <a className="agrayian-dash__btn agrayian-dash__btn--primary" href="/">
+          <Link className="agrayian-dash__btn agrayian-dash__btn--primary" href="/">
             View live site
-          </a>
-          <a
+          </Link>
+          <Link
             className="agrayian-dash__btn agrayian-dash__btn--ghost"
             href="/admin/collections/enquiries"
           >
             Review enquiries
-          </a>
+          </Link>
         </div>
       </div>
 

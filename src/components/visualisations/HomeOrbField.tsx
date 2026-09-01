@@ -276,7 +276,13 @@ export function HomeOrbField({ className }: { className?: string }) {
     intensity: DESKTOP_SECTIONS[0].intensity,
     volume: DESKTOP_SECTIONS[0].volume,
   });
-  const offsetRef = useRef<AiOrbOffset>({ ...poseRef.current });
+  const offsetRef = useRef<AiOrbOffset>({
+    x: DESKTOP_SECTIONS[0].fallback.x,
+    y: DESKTOP_SECTIONS[0].fallback.y,
+    scale: DESKTOP_SECTIONS[0].size,
+    intensity: DESKTOP_SECTIONS[0].intensity,
+    volume: DESKTOP_SECTIONS[0].volume,
+  });
   const veilRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef(true);
   const rafRef = useRef(0);

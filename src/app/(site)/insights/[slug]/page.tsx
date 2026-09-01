@@ -1,12 +1,9 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Section } from "@/components/layout/Section";
-import { Badge } from "@/components/ui/badge";
-import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { InsightArticleView } from "@/components/insights/InsightArticleView";
 import { siteConfig } from "@/config/site";
 import { insights } from "@/data/insights";
 import { getInsight, getInsights } from "@/lib/cms/catalog";
-import { buildMetadata } from "@/lib/seo";
+import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -42,6 +39,20 @@ export default async function InsightArticlePage({ params }: PageProps) {
   const insight = await getInsight(slug);
   if (!insight) notFound();
 
+  const all = await getInsights();
+  const related = all
+    .filter(
+      (item) =>
+        item.slug !== insight.slug &&
+        (item.category === insight.category || item.type === insight.type),
+    )
+    .slice(0, 4);
+
+  const relatedFallback =
+    related.length >= 2
+      ? related
+      : all.filter((item) => item.slug !== insight.slug).slice(0, 4);
+
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -63,38 +74,22 @@ export default async function InsightArticlePage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
-      <Section className="pt-10 md:pt-16" tone="dark">
-        <Link
-          href="/insights"
-          className="text-sm font-medium text-cyan hover:text-white"
-        >
-          ← Back to insights
-        </Link>
-        <div className="mt-6 flex flex-wrap gap-2">
-          <Badge variant="cyan">{insight.type}</Badge>
-          <Badge variant="violet">{insight.category}</Badge>
-          {insight.featured && <Badge>Featured</Badge>}
-        </div>
-        <h1 className="mt-4 max-w-4xl font-heading text-[clamp(1.8rem,3.5vw,3rem)] font-semibold text-balance">
-          {insight.title}
-        </h1>
-        <p className="mt-4 max-w-3xl text-lg text-muted-dark">{insight.excerpt}</p>
-        <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted-dark">
-          <span>{insight.author}</span>
-          <span>{insight.readingTime}</span>
-          <span>{insight.publishedAt}</span>
-        </div>
-        <article className="mt-10 max-w-3xl space-y-5 text-base leading-relaxed text-muted-dark">
-          {insight.body.map((paragraph) => (
-            <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-          ))}
-        </article>
-        <div className="mt-10">
-          <PrimaryButton href="/contact?interest=consultation">
-            Discuss this topic with us
-          </PrimaryButton>
-        </div>
-      </Section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbSchema([
+              { name: "Home", path: "/" },
+              { name: "Insights", path: "/insights" },
+              {
+                name: insight.title,
+                path: `/insights/${insight.slug}`,
+              },
+            ]),
+          ),
+        }}
+      />
+      <InsightArticleView insight={insight} related={relatedFallback} />
     </>
   );
 }

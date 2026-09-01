@@ -29,7 +29,7 @@ export function PrimaryButton({
   const reduce = useReducedMotion();
 
   const classes = cn(
-    "group relative inline-flex h-12 items-center justify-center gap-2 rounded-md bg-brand px-6 text-sm font-semibold text-white shadow-lg shadow-brand/25 transition will-change-transform hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary disabled:opacity-50",
+    "group relative inline-flex h-12 items-center justify-center gap-2 rounded-full bg-brand px-7 text-sm font-semibold text-white shadow-[0_10px_28px_rgba(255,77,94,0.32)] transition will-change-transform hover:bg-brand-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-tech-blue focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:opacity-50",
     className,
   );
 

@@ -46,6 +46,28 @@ export const footerCapabilities: NavItem[] = [
   { label: "Data and Analytics", href: "/capabilities#data" },
 ];
 
+export const footerProducts: NavItem[] = [
+  { label: "OneTouch Audit", href: "/products?product=onetouch-audit" },
+  { label: "vedhire.ai", href: "/products?product=smart-hiring" },
+  { label: "Governance Command Centre", href: "/products?product=ai-governance-command-centre" },
+  { label: "All products", href: "/products" },
+];
+
+export const footerIndustries: NavItem[] = [
+  { label: "Government", href: "/industries?industry=government" },
+  { label: "Financial Services", href: "/industries?industry=banking" },
+  { label: "Healthcare", href: "/industries?industry=healthcare-social" },
+  { label: "All industries", href: "/industries" },
+];
+
+export const footerCompany: NavItem[] = [
+  { label: "Company", href: "/company" },
+  { label: "Impact Stories", href: "/impact-stories" },
+  { label: "Insights", href: "/insights" },
+  { label: "Contact", href: "/contact" },
+];
+
+/** @deprecated Prefer footerProducts / footerIndustries / footerCompany */
 export const footerExplore: NavItem[] = [
   { label: "Products", href: "/products" },
   { label: "Industries", href: "/industries" },
@@ -61,6 +83,7 @@ export const footerContact: NavItem[] = [
 ];
 
 export const footerLegal: NavItem[] = [
+  { label: "Trust Centre", href: "/trust" },
   { label: "Privacy Policy", href: "/privacy-policy" },
   { label: "Terms of Use", href: "/terms-of-use" },
   { label: "Responsible AI", href: "/responsible-ai" },

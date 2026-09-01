@@ -36,12 +36,12 @@ export const brandCopy = {
     "Agrayian AI Labs helps enterprises and governments establish AI capabilities, govern intelligent systems and build products that transform complex data into decisions and action.",
   tagline: "Growth reimagined with AI",
   eyebrow: "ENTERPRISE AI · GOVERNMENT AI · RESPONSIBLE INTELLIGENCE",
-  headline: "Growth reimagined with AI",
-  headlineLines: ["Growth reimagined with AI"] as const,
+  headline: "Enterprise intelligence, governed by design.",
+  headlineLines: ["Enterprise intelligence,", "governed by design."] as const,
   supporting:
     "Agrayian AI Labs helps enterprises and governments establish AI capabilities, govern intelligent systems and build products that transform complex data into decisions and action.",
   primaryCta: "Book a Consultation",
-  secondaryCta: "Explore Our Capabilities",
+  secondaryCta: "Explore Capabilities",
   productsCta: "Explore Our AI Portfolio",
   trustStatement:
     "Strategy to scale. Governance by design. Human accountability throughout.",

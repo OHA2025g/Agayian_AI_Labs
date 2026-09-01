@@ -66,7 +66,10 @@ export function mapInterestToEnquiryType(
   if (
     areaOfInterest === "AI consultation" ||
     areaOfInterest === "AI CoE" ||
-    areaOfInterest === "AI governance"
+    areaOfInterest === "AI governance" ||
+    areaOfInterest === "Generative AI" ||
+    areaOfInterest === "Agentic AI" ||
+    areaOfInterest === "Data & Analytics"
   ) {
     return "consultation";
   }

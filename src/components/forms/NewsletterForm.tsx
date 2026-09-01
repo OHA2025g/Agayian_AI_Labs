@@ -79,6 +79,7 @@ export function NewsletterForm() {
         <div className="hidden" aria-hidden="true">
           <label htmlFor={honeypotId}>Website</label>
           <input
+            suppressHydrationWarning
             id={honeypotId}
             type="text"
             name="website"

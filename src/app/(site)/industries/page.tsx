@@ -1,8 +1,9 @@
-import { Section } from "@/components/layout/Section";
-import { CTASection } from "@/components/sections/CTASection";
+import { Suspense } from "react";
+import { PageHero } from "@/components/layout/PageHero";
 import { IndustriesExplorer } from "@/components/sections/IndustriesExplorer";
-import { PrimaryButton } from "@/components/ui/PrimaryButton";
-import { SecondaryButton } from "@/components/ui/SecondaryButton";
+import { LoadingState } from "@/components/states/LoadingState";
+import { LightCtaBar } from "@/components/ui/DarkCtaBand";
+import { IndiaNetworkMap } from "@/components/visualisations/IndiaNetworkMap";
 import {
   getCapabilities,
   getIndustries,
@@ -38,18 +39,25 @@ export default async function IndustriesPage() {
         }}
       />
 
-      <Section
-        tone="light"
+      <PageHero
         eyebrow="Industries"
         title="Domain-aware AI for complex operating environments"
-        description="Select an industry to explore the challenges, opportunities, capabilities, products, workflows, governance considerations and outcomes that shape Agrayian engagements."
-        className="scene-light on-light-surface pt-10 md:pt-16"
-        cta={
-          <div className="flex flex-wrap gap-3">
-            <PrimaryButton href="/contact">Book a Consultation</PrimaryButton>
-            <SecondaryButton href="/ai-centre-of-excellence">
-              Explore AI CoE
-            </SecondaryButton>
+        description="Explore the challenges, workflows, governance considerations and outcomes that shape each engagement."
+        primaryCta={{
+          href: "/contact?interest=consultation",
+          label: "Book a Consultation",
+        }}
+        secondaryCta={{
+          href: "/capabilities",
+          label: "Explore Capabilities",
+        }}
+        visual={<IndiaNetworkMap className="aspect-[4/3] min-h-0" />}
+      />
+
+      <Suspense
+        fallback={
+          <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+            <LoadingState label="Loading industries…" />
           </div>
         }
       >
@@ -58,13 +66,9 @@ export default async function IndustriesPage() {
           capabilities={capabilities}
           products={products}
         />
-      </Section>
+      </Suspense>
 
-      <CTASection
-        title="Shape an industry-ready AI programme with Agrayian"
-        secondaryHref="/capabilities"
-        secondaryLabel="Explore Capabilities"
-      />
+      <LightCtaBar title="Shape an industry-ready AI programme with Agrayian." />
     </>
   );
 }

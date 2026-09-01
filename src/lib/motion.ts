@@ -6,12 +6,14 @@ export const easeOutExpo: Transition = {
 };
 
 export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 24 },
+  /* Transform-only: opacity:0 initials have stranded content invisible when
+     Framer enter animations fail to commit (Chromium/Next). */
+  hidden: { opacity: 1, y: 24 },
   visible: { opacity: 1, y: 0, transition: easeOutExpo },
 };
 
 export const fadeIn: Variants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 1 },
   visible: { opacity: 1, transition: { duration: 0.5 } },
 };
 
@@ -36,17 +38,17 @@ export const staggerFast: Variants = {
 };
 
 export const scaleIn: Variants = {
-  hidden: { opacity: 0, scale: 0.96 },
+  hidden: { opacity: 1, scale: 0.96 },
   visible: { opacity: 1, scale: 1, transition: easeOutExpo },
 };
 
 export const slideInRight: Variants = {
-  hidden: { opacity: 0, x: 32 },
+  hidden: { opacity: 1, x: 32 },
   visible: { opacity: 1, x: 0, transition: easeOutExpo },
 };
 
 export const slideInLeft: Variants = {
-  hidden: { opacity: 0, x: -32 },
+  hidden: { opacity: 1, x: -32 },
   visible: { opacity: 1, x: 0, transition: easeOutExpo },
 };
 

@@ -84,14 +84,13 @@ export function GovernanceDashboard({ className }: { className?: string }) {
     >
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 bg-warning/10 px-4 py-3 sm:px-6">
         <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="violet">Demonstration data</Badge>
+          <Badge variant="violet">Illustrative preview</Badge>
           <p className="text-sm text-warning">
-            Mock governance dashboard preview — illustrative metrics only, not
-            live client data.
+            Sample interface only — metrics are not live client data.
           </p>
         </div>
-        <p className="text-xs uppercase tracking-[0.16em] text-muted-dark">
-          Preview UI
+        <p className="font-tech text-[0.55rem] uppercase tracking-[0.18em] text-muted-dark">
+          Illustrative preview
         </p>
       </div>
 

@@ -51,6 +51,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   // Required for production Docker / EasyPanel images
   output: "standalone",
+  images: {
+    qualities: [100, 75],
+  },
   async redirects() {
     return products.map((product) => ({
       source: `/products/${product.slug}`,

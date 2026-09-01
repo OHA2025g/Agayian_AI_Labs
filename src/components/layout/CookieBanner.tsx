@@ -124,15 +124,15 @@ export function CookieBanner() {
       aria-modal="true"
       aria-labelledby="cookie-banner-title"
       aria-describedby="cookie-banner-desc"
-      className="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-3xl rounded-xl border border-white/15 bg-bg-elevated/95 p-4 shadow-2xl backdrop-blur md:p-5"
+      className="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-3xl rounded-2xl border border-[var(--border-light)] bg-white p-4 shadow-[0_20px_60px_rgba(11,31,58,0.15)] md:p-5"
     >
       <h2
         id="cookie-banner-title"
-        className="font-heading text-base font-semibold text-text-on-dark"
+        className="font-heading text-base font-semibold text-navy"
       >
         Cookie preferences
       </h2>
-      <p id="cookie-banner-desc" className="mt-2 text-sm text-muted-dark">
+      <p id="cookie-banner-desc" className="mt-2 text-sm text-muted-light">
         Essential cookies keep the site working. If you accept all, we also load
         privacy-friendly Vercel Analytics and Speed Insights for aggregate usage
         and performance. See our{" "}

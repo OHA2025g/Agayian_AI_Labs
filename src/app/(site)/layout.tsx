@@ -51,7 +51,7 @@ export default async function SiteLayout({
       lang="en"
       className={`${inter.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-bg-primary text-text-on-dark">
+      <body className="flex min-h-full flex-col bg-bg-primary text-text-light">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

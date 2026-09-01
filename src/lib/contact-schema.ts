@@ -5,11 +5,57 @@ export const interestOptions = [
   "AI CoE",
   "AI governance",
   "Product demonstration",
+  "Generative AI",
+  "Agentic AI",
+  "Data & Analytics",
   "Government project",
   "Enterprise solution",
   "Partnership",
   "General enquiry",
 ] as const;
+
+/** Primary selectable cards on the Contact form (labels may differ from enum values). */
+export const interestCardOptions = [
+  {
+    value: "AI consultation",
+    label: "AI Strategy",
+    description: "Roadmaps and investment sequencing",
+  },
+  {
+    value: "AI CoE",
+    label: "AI CoE",
+    description: "Operating models that scale",
+  },
+  {
+    value: "AI governance",
+    label: "AI Governance",
+    description: "Risk, lifecycle and assurance",
+  },
+  {
+    value: "Product demonstration",
+    label: "Product Demonstration",
+    description: "See platforms in context",
+  },
+  {
+    value: "Generative AI",
+    label: "Generative AI",
+    description: "Assistive systems with controls",
+  },
+  {
+    value: "Agentic AI",
+    label: "Agentic AI",
+    description: "Bounded agents with accountability",
+  },
+  {
+    value: "Data & Analytics",
+    label: "Data & Analytics",
+    description: "Trusted decision foundations",
+  },
+] as const satisfies ReadonlyArray<{
+  value: (typeof interestOptions)[number];
+  label: string;
+  description: string;
+}>;
 
 export const contactMethodOptions = ["Email", "Phone", "Either"] as const;
 
@@ -61,6 +107,7 @@ export const contactSchema = z.object({
   /** Honeypot field — ignored when empty; non-empty values trigger a silent success. */
   website: z.string().optional(),
   product: z.string().trim().max(120).optional(),
+  industry: z.string().trim().max(160).optional(),
 });
 
 export type ContactFormValues = z.infer<typeof contactSchema>;
@@ -69,6 +116,8 @@ export type ContactInterest = (typeof interestOptions)[number];
 const interestQueryMap: Record<string, ContactInterest> = {
   consultation: "AI consultation",
   "ai-consultation": "AI consultation",
+  strategy: "AI consultation",
+  "ai-strategy": "AI consultation",
   coe: "AI CoE",
   "ai-coe": "AI CoE",
   governance: "AI governance",
@@ -76,6 +125,13 @@ const interestQueryMap: Record<string, ContactInterest> = {
   demo: "Product demonstration",
   demonstration: "Product demonstration",
   "product-demonstration": "Product demonstration",
+  "generative-ai": "Generative AI",
+  genai: "Generative AI",
+  "agentic-ai": "Agentic AI",
+  agentic: "Agentic AI",
+  data: "Data & Analytics",
+  analytics: "Data & Analytics",
+  "data-analytics": "Data & Analytics",
   government: "Government project",
   "government-project": "Government project",
   enterprise: "Enterprise solution",
@@ -100,21 +156,21 @@ export const consultationFlow = [
   {
     title: "Share Requirement",
     description:
-      "Tell us about your organisation, decision context and the outcome you want to improve.",
+      "You tell us about your goals, challenges and interests.",
   },
   {
     title: "Internal Review",
     description:
-      "Our team reviews fit across strategy, governance, product and delivery capabilities.",
+      "Our team reviews and aligns the right experts for your needs.",
   },
   {
     title: "Discovery Discussion",
     description:
-      "A focused conversation to clarify scope, readiness, constraints and success criteria.",
+      "We connect for a focused discussion to understand and explore.",
   },
   {
     title: "Recommended Engagement",
     description:
-      "We propose a proportionate next step — consultation, CoE design, governance or product demo.",
+      "We share relevant options and next steps tailored to you.",
   },
 ] as const;

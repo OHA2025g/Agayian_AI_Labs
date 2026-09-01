@@ -3,9 +3,10 @@ import { LogoMark } from "@/components/layout/LogoMark";
 import { siteConfig } from "@/config/site";
 import {
   footerCapabilities,
-  footerContact,
-  footerExplore,
+  footerCompany,
+  footerIndustries,
   footerLegal,
+  footerProducts,
 } from "@/data/navigation";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
 
@@ -15,10 +16,10 @@ const socialEntries = Object.entries(siteConfig.socialLinks).filter(
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-white/10 bg-bg-secondary">
+    <footer className="on-dark-surface bg-navy-deep text-text-on-dark">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-12 lg:px-8">
         <div className="lg:col-span-4">
-          <LogoMark />
+          <LogoMark tone="dark" />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-dark">
             {siteConfig.description}
           </p>
@@ -32,7 +33,7 @@ export function SiteFooter() {
             {siteConfig.contactEmail && (
               <a
                 href={`mailto:${siteConfig.contactEmail}`}
-                className="hover:text-cyan"
+                className="transition hover:text-cyan"
               >
                 {siteConfig.contactEmail}
               </a>
@@ -40,7 +41,7 @@ export function SiteFooter() {
             {siteConfig.contactPhone && (
               <a
                 href={`tel:${siteConfig.contactPhone.replace(/\s+/g, "")}`}
-                className="hover:text-cyan"
+                className="transition hover:text-cyan"
               >
                 {siteConfig.contactPhone}
               </a>
@@ -64,17 +65,25 @@ export function SiteFooter() {
         </div>
 
         <FooterColumn title="Capabilities" links={footerCapabilities} />
-        <FooterColumn title="Explore" links={footerExplore} />
-        <FooterColumn title="Contact" links={footerContact} />
-        <FooterColumn title="Legal" links={footerLegal} />
+        <FooterColumn title="Products" links={footerProducts} />
+        <FooterColumn title="Industries" links={footerIndustries} />
+        <FooterColumn title="Company" links={footerCompany} />
       </div>
 
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 text-xs text-muted-dark sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-5 text-xs text-muted-dark sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <p>
             © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>
-          <p>Responsible AI for enterprise and government transformation.</p>
+          <ul className="flex flex-wrap gap-x-4 gap-y-1">
+            {footerLegal.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="transition hover:text-cyan">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </footer>
@@ -90,15 +99,15 @@ function FooterColumn({
 }) {
   return (
     <div className="lg:col-span-2">
-      <p className="font-heading text-sm font-semibold text-text-on-dark">
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-dark">
         {title}
       </p>
       <ul className="mt-4 space-y-2.5">
         {links.map((link) => (
-          <li key={link.href + link.label}>
+          <li key={link.href}>
             <Link
               href={link.href}
-              className="text-sm text-muted-dark transition hover:text-cyan"
+              className="text-sm text-text-on-dark/80 transition hover:text-cyan"
             >
               {link.label}
             </Link>

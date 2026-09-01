@@ -58,16 +58,16 @@ export function SiteHeader({ items = mainNavigation }: Props) {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-[height,background-color,backdrop-filter,border-color] duration-300",
+        "sticky top-0 z-50 w-full transition-[height,background-color,backdrop-filter,border-color,box-shadow] duration-300",
         scrolled || open
-          ? "border-b border-white/10 bg-bg-primary/80 shadow-[0_8px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent",
+          ? "border-b border-[var(--border-soft)] bg-white shadow-[0_8px_40px_rgba(11,31,58,0.06)]"
+          : "border-b border-transparent bg-white",
       )}
     >
       <div
         className={cn(
-          "mx-auto flex max-w-[90rem] items-center justify-between gap-3 px-4 transition-[height] duration-300 sm:px-6 lg:px-8",
-          scrolled ? "h-14 lg:h-14" : "h-16 lg:h-[4.5rem]",
+          "mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 transition-[height] duration-300 sm:px-6 lg:px-8",
+          scrolled || open ? "h-14" : "h-16 lg:h-[4.25rem]",
         )}
       >
         <LogoMark className={cn(scrolled && "scale-[0.96]")} />
@@ -84,7 +84,9 @@ export function SiteHeader({ items = mainNavigation }: Props) {
                 href={item.href}
                 className={cn(
                   "relative rounded-md px-2 py-2 text-[0.72rem] font-medium transition-colors xl:px-2.5 xl:text-[0.78rem]",
-                  active ? "text-white" : "text-muted-dark hover:text-white",
+                  active
+                    ? "text-navy"
+                    : "text-muted-light hover:text-navy",
                 )}
               >
                 <span className="xl:hidden">{item.shortLabel ?? item.label}</span>
@@ -92,7 +94,7 @@ export function SiteHeader({ items = mainNavigation }: Props) {
                 {active ? (
                   <motion.span
                     layoutId={reduce ? undefined : "nav-active"}
-                    className="absolute inset-x-2 -bottom-0.5 h-px bg-gradient-to-r from-brand via-cyan to-transparent"
+                    className="absolute inset-x-2 bottom-0.5 h-[2px] rounded-full bg-brand"
                     transition={{ type: "spring", stiffness: 380, damping: 32 }}
                   />
                 ) : null}
@@ -104,14 +106,14 @@ export function SiteHeader({ items = mainNavigation }: Props) {
         <div className="flex items-center gap-2 sm:gap-3">
           <PrimaryButton
             href="/contact?interest=consultation"
-            className="hidden h-10 px-4 text-xs md:inline-flex"
+            className="hidden h-10 rounded-full px-5 text-xs md:inline-flex"
             showArrow={false}
           >
             {brandCopy.primaryCta}
           </PrimaryButton>
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/15 text-text-on-dark lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border-soft)] bg-white text-navy lg:hidden"
             aria-expanded={open}
             aria-controls={drawerId}
             onClick={() => setOpen((v) => !v)}
@@ -131,31 +133,29 @@ export function SiteHeader({ items = mainNavigation }: Props) {
             initial={reduce ? false : { opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={reduce ? undefined : { opacity: 0, y: -8 }}
-            className="border-t border-white/10 bg-bg-primary/95 backdrop-blur-xl lg:hidden"
+            className="border-t border-[var(--border-soft)] bg-white lg:hidden"
           >
             <nav
               aria-label="Mobile primary"
-              className="mx-auto flex max-w-[90rem] flex-col gap-1 px-4 py-4 sm:px-6"
+              className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6"
             >
               {items.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "rounded-lg px-3 py-3 text-base font-medium transition-colors",
+                    "rounded-xl px-3 py-3 text-base font-medium transition-colors",
                     isActive(item.href)
-                      ? "bg-white/5 text-white"
-                      : "text-muted-dark hover:bg-white/5 hover:text-white",
+                      ? "bg-bg-secondary text-navy"
+                      : "text-muted-light hover:bg-bg-secondary hover:text-navy",
                   )}
-                  onClick={() => setOpen(false)}
                 >
                   {item.label}
                 </Link>
               ))}
               <PrimaryButton
                 href="/contact?interest=consultation"
-                className="mt-3"
-                onClick={() => setOpen(false)}
+                className="mt-3 w-full rounded-full"
               >
                 {brandCopy.primaryCta}
               </PrimaryButton>

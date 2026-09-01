@@ -107,7 +107,7 @@ export function sampleAiLogoParticle(
     const leftShare = 0.48;
     const left = bodyFrac < leftShare;
     const cx = left ? leftCx : rightCx;
-    let local = left
+    const local = left
       ? bodyFrac / leftShare
       : (bodyFrac - leftShare) / (1 - leftShare);
 
@@ -165,21 +165,22 @@ export function sampleAiLogoParticle(
   outPosition.set(px, py, pz);
 
   if (isPlay) {
-    outColor.setHSL(0.985, 0.92, 0.58 + 0.22 * Math.sin(t * 2.0 + h0 * 5));
+    outColor.setHSL(0.985, 0.86, 0.52 + 0.12 * Math.sin(t * 2.0 + h0 * 5));
   } else {
     const swirl =
       0.5 + 0.5 * Math.sin(y * 2.0 + xr * 1.5 + t * 1.4 + w1 * 2.0);
+    // Deeper cyan–blue so the mark reads on a light background
     let hue =
-      0.52 +
-      hueShift * 0.28 * swirl +
-      0.05 * Math.sin(t * 0.5 + frac * 6.28318);
+      0.55 +
+      hueShift * 0.12 * swirl +
+      0.03 * Math.sin(t * 0.5 + frac * 6.28318);
     hue = ((hue % 1) + 1) % 1;
-    const light = 0.62 + 0.28 * swirl + 0.1 * Math.abs(w2);
-    const sat = 0.7 + 0.22 * swirl;
+    const light = 0.42 + 0.18 * swirl;
+    const sat = 0.72 + 0.18 * swirl;
     outColor.setHSL(
       hue,
       Math.min(1, Math.max(0, sat)),
-      Math.min(0.95, Math.max(0.35, light)),
+      Math.min(0.62, Math.max(0.28, light)),
     );
   }
 }

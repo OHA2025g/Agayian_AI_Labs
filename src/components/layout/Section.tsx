@@ -22,7 +22,7 @@ export function Section({
   children,
   className,
   containerClassName,
-  tone = "dark",
+  tone = "light",
   grid = false,
   cta,
   as: Comp = "section",
@@ -32,10 +32,10 @@ export function Section({
       id={id}
       className={cn(
         "relative py-16 md:py-24",
-        tone === "dark" && "bg-bg-primary text-text-on-dark",
-        tone === "elevated" && "bg-bg-secondary text-text-on-dark",
-        tone === "light" && "bg-surface-light text-text-light",
-        grid && (tone === "light" ? "grid-texture-light" : "grid-texture"),
+        tone === "dark" && "on-dark-surface bg-navy-deep text-text-on-dark",
+        tone === "elevated" && "bg-bg-secondary text-navy",
+        tone === "light" && "bg-bg-primary text-navy",
+        grid && "grid-texture",
         className,
       )}
     >
@@ -50,28 +50,34 @@ export function Section({
             {eyebrow && (
               <p
                 className={cn(
-                  "mb-3 text-xs font-semibold uppercase tracking-[0.2em]",
-                  tone === "light" ? "text-brand" : "text-cyan",
+                  "mb-3 font-tech text-[0.65rem] uppercase tracking-[0.22em]",
+                  tone === "dark" ? "text-cyan" : "text-cyan",
                 )}
               >
                 {eyebrow}
               </p>
             )}
             {title && (
-              <h2
-                className={cn(
-                  "font-heading text-[clamp(1.75rem,3vw,2.75rem)] font-semibold tracking-tight text-balance",
-                  tone === "light" ? "text-text-light" : "text-text-on-dark",
-                )}
-              >
-                {title}
-              </h2>
+              <>
+                <div className="mb-3 flex items-center gap-1.5" aria-hidden>
+                  <span className="h-[3px] w-6 rounded-full bg-cyan" />
+                  <span className="h-[3px] w-6 rounded-full bg-brand" />
+                </div>
+                <h2
+                  className={cn(
+                    "font-heading text-[clamp(1.75rem,3vw,2.75rem)] font-semibold tracking-tight text-balance",
+                    tone === "dark" ? "text-text-on-dark" : "text-navy",
+                  )}
+                >
+                  {title}
+                </h2>
+              </>
             )}
             {description && (
               <p
                 className={cn(
                   "mt-4 max-w-2xl text-base leading-relaxed md:text-lg",
-                  tone === "light" ? "text-muted-light" : "text-muted-dark",
+                  tone === "dark" ? "text-muted-dark" : "text-muted-light",
                 )}
               >
                 {description}
