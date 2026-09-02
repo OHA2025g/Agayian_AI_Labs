@@ -12,7 +12,7 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { ProductGlassArt } from "@/components/visualisations/glass/ProductGlassArt";
 import { flagshipProducts } from "@/config/flagship-products";
 import { insights as staticInsights } from "@/data/insights";
-import { getProducts, getInsights } from "@/lib/cms/catalog";
+import { products as staticProducts } from "@/data/products";
 import type { Insight } from "@/types";
 
 const homeInsightSlugs = [
@@ -32,11 +32,9 @@ function resolveHomeInsight(
   );
 }
 
-export default async function HomePage() {
-  const [products, insights] = await Promise.all([
-    getProducts(),
-    getInsights(),
-  ]);
+export default function HomePage() {
+  const products = staticProducts;
+  const insights = staticInsights;
 
   const labProducts = flagshipProducts
     .map((entry) => {

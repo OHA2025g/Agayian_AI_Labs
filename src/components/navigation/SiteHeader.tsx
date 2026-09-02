@@ -67,7 +67,7 @@ export function SiteHeader({ items = mainNavigation }: Props) {
       <div
         className={cn(
           "mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 transition-[height] duration-300 sm:px-6 lg:px-8",
-          scrolled || open ? "h-14" : "h-16 lg:h-[4.25rem]",
+          scrolled || open ? "h-16" : "h-[4.75rem] lg:h-[5.5rem]",
         )}
       >
         <LogoMark className={cn(scrolled && "scale-[0.96]")} />
@@ -89,15 +89,16 @@ export function SiteHeader({ items = mainNavigation }: Props) {
                     : "text-muted-light hover:text-navy",
                 )}
               >
-                <span className="xl:hidden">{item.shortLabel ?? item.label}</span>
-                <span className="hidden xl:inline">{item.label}</span>
-                {active ? (
-                  <motion.span
-                    layoutId={reduce ? undefined : "nav-active"}
-                    className="absolute inset-x-2 bottom-0.5 h-[2px] rounded-full bg-brand"
-                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                  />
-                ) : null}
+                <span className="relative inline-block">
+                  <span className="xl:hidden">{item.shortLabel ?? item.label}</span>
+                  <span className="hidden xl:inline">{item.label}</span>
+                  {active ? (
+                    <span
+                      aria-hidden
+                      className="absolute inset-x-0 -bottom-1 h-[2px] rounded-full bg-brand"
+                    />
+                  ) : null}
+                </span>
               </Link>
             );
           })}

@@ -44,7 +44,9 @@
   --critical: #ef4444;
 
   --section-y: clamp(3.5rem, 6vw, 5.5rem);
-  --container: 80rem;
+  --site-gutter: clamp(1.25rem, 3vw, 2.5rem);
+  --site-max: min(100rem, calc(100vw - (var(--site-gutter) * 2)));
+  --container: var(--site-max);
   --type-display: clamp(2.25rem, 4.5vw, 3.75rem);
   --type-h2: clamp(1.65rem, 3vw, 2.5rem);
   --type-body: 1rem;
@@ -81,6 +83,7 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-critical: var(--critical);
+  --container-7xl: var(--site-max);
   --font-sans: var(--font-inter);
   --font-heading: var(--font-space-grotesk);
   --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
@@ -96,6 +99,8 @@
   }
 
   html {
+    width: 100%;
+    scrollbar-gutter: stable;
     scroll-behavior: smooth;
   }
 
@@ -115,6 +120,8 @@
   }
 
   body {
+    width: 100%;
+    min-width: 0;
     background: var(--background-primary);
     color: var(--text-primary);
     font-family: var(--font-inter), system-ui, sans-serif;
@@ -145,6 +152,10 @@
 }
 
 @layer utilities {
+  .max-w-7xl {
+    max-width: var(--site-max);
+  }
+
   .text-balance {
     text-wrap: balance;
   }

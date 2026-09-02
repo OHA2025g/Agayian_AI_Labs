@@ -131,6 +131,10 @@ export default buildConfig({
       process.env.DATABASE_URI ||
       process.env.DATABASE_URL ||
       "mongodb://127.0.0.1:27017/agrayian",
+    connectOptions: {
+      serverSelectionTimeoutMS: 1500,
+      connectTimeoutMS: 1500,
+    },
   }),
   sharp,
   plugins: [

@@ -14,7 +14,7 @@ export function HomeInsightsRow({ insights }: { insights: Insight[] }) {
         <RevealItem key={insight.id}>
           <Link href={`/insights/${insight.slug}`} className="block h-full">
             <MockupCard className="flex h-full flex-col overflow-hidden p-4 hover:translate-y-0">
-              <InsightGlassThumb variant={index} priority={index < 4} />
+              <InsightGlassThumb variant={index} />
               <span className="mt-4 inline-flex w-fit rounded-full bg-[#dceef8] px-2.5 py-0.5 text-[0.72rem] font-medium text-navy">
                 {insightLabels[index % insightLabels.length]}
               </span>

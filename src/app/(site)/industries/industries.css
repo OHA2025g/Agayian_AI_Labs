@@ -1,21 +1,12 @@
 /* Scoped to /industries only */
 
-html:has(.industries-page-shell),
-html.industries-page {
-  overflow-x: hidden;
-}
-
 html:has(.industries-page-shell) body,
 html.industries-page body {
   background: #ffffff;
 }
 
-html.industries-page body > footer,
-html:has(.industries-page-shell) body > footer {
-  display: none !important;
-}
-
 .industries-page-shell {
+  --ind-u: calc(100vw / 752);
   width: 100%;
   overflow-x: clip;
   background: #ffffff;
@@ -23,172 +14,9 @@ html:has(.industries-page-shell) body > footer {
 }
 
 .industries-main {
-  width: calc(100% - 112px);
-  max-width: 1336px;
+  width: var(--site-max);
+  max-width: var(--site-max);
   margin-inline: auto;
-}
-
-@media (min-width: 1440px) {
-  .industries-main {
-    width: 1330px;
-    max-width: 1330px;
-  }
-}
-
-@media (max-width: 1199px) {
-  .industries-main {
-    width: calc(100% - 48px);
-  }
-}
-
-@media (max-width: 767px) {
-  .industries-main {
-    width: calc(100% - 32px);
-  }
-}
-
-/* Header — industries only. Units are 752px-mockup pixels via --ind-u. */
-@media (min-width: 1024px) {
-  html.industries-page,
-  html:has(.industries-page-shell) {
-    --ind-u: calc(100vw / 752);
-  }
-
-  html.industries-page header,
-  html:has(.industries-page-shell) header {
-    height: calc(55 * var(--ind-u));
-    min-height: calc(55 * var(--ind-u));
-    max-height: calc(55 * var(--ind-u));
-    border-bottom: 1px solid rgba(12, 35, 65, 0.08) !important;
-    background: #ffffff !important;
-    box-shadow: none !important;
-  }
-
-  html.industries-page header > div:first-of-type,
-  html:has(.industries-page-shell) header > div:first-of-type {
-    display: grid !important;
-    grid-template-columns: calc(232 * var(--ind-u)) 1fr calc(100 * var(--ind-u));
-    align-items: center;
-    gap: 0 !important;
-    height: calc(55 * var(--ind-u)) !important;
-    max-width: none !important;
-    padding-left: calc(13 * var(--ind-u)) !important;
-    padding-right: calc(8 * var(--ind-u)) !important;
-  }
-
-  html.industries-page header a[aria-label="Agrayian AI Labs home"],
-  html:has(.industries-page-shell) header a[aria-label="Agrayian AI Labs home"] {
-    width: calc(162 * var(--ind-u));
-    max-width: calc(162 * var(--ind-u));
-    height: calc(34 * var(--ind-u));
-    gap: calc(4 * var(--ind-u));
-    transform: none !important;
-  }
-
-  html.industries-page header a[aria-label="Agrayian AI Labs home"] > span:first-child,
-  html:has(.industries-page-shell) header a[aria-label="Agrayian AI Labs home"] > span:first-child {
-    width: calc(58 * var(--ind-u)) !important;
-    height: calc(26 * var(--ind-u)) !important;
-    overflow: hidden;
-  }
-
-  html.industries-page header a[aria-label="Agrayian AI Labs home"] > span:first-child img,
-  html:has(.industries-page-shell) header a[aria-label="Agrayian AI Labs home"] > span:first-child img {
-    width: 148%;
-    height: 148%;
-    max-width: none;
-    object-fit: contain;
-    object-position: left center;
-    margin-left: calc(-8 * var(--ind-u));
-    margin-top: calc(-5 * var(--ind-u));
-  }
-
-  html.industries-page header a[aria-label="Agrayian AI Labs home"] > span:last-child > span:first-child,
-  html:has(.industries-page-shell) header a[aria-label="Agrayian AI Labs home"] > span:last-child > span:first-child {
-    font-size: calc(12.7 * var(--ind-u));
-    line-height: 1.05;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    color: #10233f;
-  }
-
-  html.industries-page header a[aria-label="Agrayian AI Labs home"] > span:last-child > span:last-child,
-  html:has(.industries-page-shell) header a[aria-label="Agrayian AI Labs home"] > span:last-child > span:last-child {
-    margin-top: calc(2.5 * var(--ind-u));
-    font-size: calc(6.5 * var(--ind-u));
-    letter-spacing: 0;
-    color: #2eb4e4;
-  }
-
-  html.industries-page header nav[aria-label="Primary"],
-  html:has(.industries-page-shell) header nav[aria-label="Primary"] {
-    justify-self: stretch;
-    justify-content: space-between;
-    gap: 0;
-    width: 100%;
-    padding-right: calc(8 * var(--ind-u));
-  }
-
-  html.industries-page header nav[aria-label="Primary"] a,
-  html:has(.industries-page-shell) header nav[aria-label="Primary"] a {
-    font-size: calc(8.35 * var(--ind-u)) !important;
-    line-height: calc(12 * var(--ind-u));
-    font-weight: 500;
-    color: #2a3d58;
-    padding-left: calc(4 * var(--ind-u));
-    padding-right: calc(4 * var(--ind-u));
-    white-space: nowrap;
-  }
-
-  html.industries-page header nav[aria-label="Primary"] a[href="/industries"],
-  html:has(.industries-page-shell) header nav[aria-label="Primary"] a[href="/industries"] {
-    color: #0c274c;
-  }
-
-  html.industries-page header nav[aria-label="Primary"] a span.absolute,
-  html:has(.industries-page-shell) header nav[aria-label="Primary"] a span.absolute {
-    left: 50%;
-    right: auto;
-    width: calc(34 * var(--ind-u));
-    transform: translateX(-50%);
-    bottom: calc(2 * var(--ind-u));
-    height: 1.5px;
-    background: #38b7eb;
-    border-radius: 2px;
-  }
-
-  html.industries-page header nav[aria-label="Primary"] a span.absolute::after,
-  html:has(.industries-page-shell) header nav[aria-label="Primary"] a span.absolute::after {
-    content: "";
-    position: absolute;
-    right: calc(-6 * var(--ind-u));
-    top: 0;
-    width: calc(6 * var(--ind-u));
-    height: 1.5px;
-    border-radius: 2px;
-    background: #ff5360;
-  }
-
-  html.industries-page header > div:first-of-type > div:last-child,
-  html:has(.industries-page-shell) header > div:first-of-type > div:last-child {
-    justify-self: stretch;
-    justify-content: flex-end;
-    width: 100%;
-  }
-
-  html.industries-page header a[href="/contact?interest=consultation"],
-  html:has(.industries-page-shell) header a[href="/contact?interest=consultation"] {
-    width: calc(100 * var(--ind-u));
-    height: calc(30 * var(--ind-u));
-    min-height: calc(30 * var(--ind-u));
-    padding-left: calc(8 * var(--ind-u));
-    padding-right: calc(8 * var(--ind-u));
-    font-size: calc(7.1 * var(--ind-u));
-    font-weight: 600;
-    line-height: 1;
-    white-space: nowrap;
-    box-shadow: none;
-  }
 }
 
 .industries-heading {
@@ -295,8 +123,8 @@ html:has(.industries-page-shell) body > footer {
   .industries-hero {
     position: relative;
     height: calc(332 * var(--ind-u));
-    min-height: calc(332 * var(--ind-u));
-    max-height: calc(332 * var(--ind-u));
+    min-height: max(520px, calc(332 * var(--ind-u)));
+    max-height: none;
     overflow: hidden;
     background-color: #ffffff;
   }

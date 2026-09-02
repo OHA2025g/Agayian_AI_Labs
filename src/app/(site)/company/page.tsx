@@ -175,11 +175,12 @@ function PairConnector() {
 
 function CompanyHubVisual() {
   return (
-    <div className="relative mx-auto w-full max-w-lg overflow-hidden rounded-2xl border border-[#dce8f2] bg-white lg:max-w-none">
+    <div className="relative mx-auto w-full max-w-lg bg-transparent lg:max-w-none">
       <OriginalSculpture
         src={mockupAssets.originalCompanyHub}
         alt="Glass hub connecting public systems, enterprise and human impact"
         priority
+        className="mix-blend-multiply"
       />
       <div className="pointer-events-none absolute left-1/2 top-[48%] z-10 h-11 w-[3.75rem] -translate-x-1/2 -translate-y-1/2">
         <AgrayianMark variant="light" />

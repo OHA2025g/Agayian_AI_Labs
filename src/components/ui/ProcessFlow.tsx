@@ -45,32 +45,32 @@ export function ProcessFlow({
         }}
       />
 
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-[5%] right-[5%] top-[2.9rem] hidden h-[3px] rounded-full lg:block"
-        style={{
-          background:
-            "linear-gradient(90deg, #e63946 0%, #60a5fa 48%, #0ea5b7 100%)",
-          boxShadow:
-            "0 0 18px rgba(59,130,246,0.4), 0 0 24px rgba(230,57,70,0.18)",
-        }}
-      />
+      <div className="relative">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-[5%] top-[2.25rem] z-0 hidden h-[3px] -translate-y-1/2 rounded-full lg:block"
+          style={{
+            background:
+              "linear-gradient(90deg, #e63946 0%, #60a5fa 48%, #0ea5b7 100%)",
+            boxShadow:
+              "0 0 18px rgba(59,130,246,0.4), 0 0 24px rgba(230,57,70,0.18)",
+          }}
+        />
 
-      <div
-        className={cn(
-          "relative grid gap-6",
-          steps.length <= 4
-            ? "sm:grid-cols-2 lg:grid-cols-4"
-            : steps.length <= 5
-              ? "sm:grid-cols-2 lg:grid-cols-5"
-              : steps.length <= 6
-                ? "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
-                : "sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7",
-        )}
-      >
+        <div
+          className={cn(
+            "relative z-10 grid gap-6",
+            steps.length <= 4
+              ? "sm:grid-cols-2 lg:grid-cols-4"
+              : steps.length <= 5
+                ? "sm:grid-cols-2 lg:grid-cols-5"
+                : steps.length <= 6
+                  ? "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
+                  : "sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7",
+          )}
+        >
         {steps.map((step, index) => {
           const Icon = step.icon;
-          const isFirst = index === 0;
           const isLast = index === steps.length - 1;
 
           return (
@@ -78,37 +78,16 @@ export function ProcessFlow({
               key={step.title}
               className={cn(
                 "relative flex flex-col items-center text-center",
-                compact ? "px-1 py-2" : "px-2 py-3",
+                compact ? "px-1" : "px-2",
               )}
             >
-              {isFirst ? (
-                <div className="relative flex flex-col items-center">
-                  <span
-                    aria-hidden
-                    className="mb-2 flex h-8 w-8 items-center justify-center"
-                  >
-                    <span
-                      className="absolute h-10 w-10 rounded-full"
-                      style={{
-                        background:
-                          "radial-gradient(circle, rgba(230,57,70,0.4), transparent 70%)",
-                      }}
-                    />
-                    <span
-                      className="relative h-3 w-3 rounded-full bg-brand"
-                      style={{
-                        boxShadow:
-                          "0 0 0 5px rgba(230,57,70,0.22), 0 0 16px rgba(230,57,70,0.6)",
-                      }}
-                    />
-                  </span>
+              <div className="relative flex h-[4.5rem] w-full items-center justify-center">
+                {isLast ? (
+                  <HexGlassNode icon={Icon} />
+                ) : (
                   <GlassOrb icon={Icon} size="lg" />
-                </div>
-              ) : isLast ? (
-                <HexGlassNode icon={Icon} />
-              ) : (
-                <GlassOrb icon={Icon} size="lg" />
-              )}
+                )}
+              </div>
 
               <p className="mt-3 font-tech text-[0.65rem] text-sky">
                 {String(index + 1).padStart(2, "0")}
@@ -124,6 +103,7 @@ export function ProcessFlow({
             </div>
           );
         })}
+        </div>
       </div>
     </div>
   );
@@ -131,7 +111,7 @@ export function ProcessFlow({
 
 function HexGlassNode({ icon: Icon }: { icon?: LucideIcon }) {
   return (
-    <span className="relative flex h-[4.75rem] w-[4.75rem] items-center justify-center">
+    <span className="relative flex h-[4.25rem] w-[4.25rem] items-center justify-center">
       <span
         aria-hidden
         className="absolute inset-[-6px]"

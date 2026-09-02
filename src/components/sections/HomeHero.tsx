@@ -126,7 +126,7 @@ const wallNodes = [
   [13, 11],
 ] as const;
 
-/** Flat blueprint wall behind the infinity — drawn over the white PNG. */
+/** Flat blueprint wall behind the infinity. */
 function HeroWallGrid() {
   return (
     <svg

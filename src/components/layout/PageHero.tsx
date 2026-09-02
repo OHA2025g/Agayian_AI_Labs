@@ -91,7 +91,7 @@ export function PageHero({
               aria-hidden
               className="pointer-events-none absolute inset-[12%] rounded-full bg-[radial-gradient(circle,rgba(20,159,230,0.1),transparent_70%)]"
             />
-            <div className="relative z-10">{visual}</div>
+            <div className="relative">{visual}</div>
           </div>
         ) : imageSrc ? (
           <div className="relative mx-auto w-full max-w-lg lg:max-w-none">

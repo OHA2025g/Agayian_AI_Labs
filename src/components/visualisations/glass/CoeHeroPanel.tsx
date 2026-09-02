@@ -1,7 +1,10 @@
-import { Check } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ArrowRight, Check } from "lucide-react";
 import { mockupAssets } from "@/config/mockup-assets";
-import { OriginalSculpture } from "@/components/visualisations/glass/OriginalSculpture";
+import { WhiteSculpture } from "@/components/visualisations/glass/WhiteSculpture";
+import { Eyebrow } from "@/components/ui/Eyebrow";
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { SecondaryButton } from "@/components/ui/SecondaryButton";
+import { cn } from "@/lib/utils";
 
 const defaultLayers = [
   "Business strategy",
@@ -23,6 +26,109 @@ const defaultOutcomes = [
   "Measurable business impact",
 ] as const;
 
+function CircleArrow() {
+  return (
+    <span className="coe-cta-arrow" aria-hidden>
+      <ArrowRight className="h-3 w-3" />
+    </span>
+  );
+}
+
+function CoeHeroInlines({ count }: { count: number }) {
+  const last = Math.max(count - 1, 1);
+
+  return (
+    <svg
+      className="coe-hero-inlines"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      aria-hidden
+    >
+      {Array.from({ length: count }, (_, index) => {
+        const startY = 22 + index * 1.15;
+        const endY = 8 + (index / last) * 84;
+        return (
+          <path
+            key={index}
+            d={`M 0 ${startY} C 32 ${startY + 1}, 64 ${endY}, 100 ${endY}`}
+            fill="none"
+            stroke="#4ec8ef"
+            strokeWidth="0.55"
+            opacity="0.72"
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
+export function CoeHero({
+  layers = defaultLayers,
+  outcomes = defaultOutcomes,
+}: {
+  layers?: readonly string[];
+  outcomes?: readonly string[];
+}) {
+  return (
+    <section className="coe-hero">
+      <div className="coe-hero-stage">
+        <div className="coe-hero-copy">
+          <Eyebrow>AI Centre of Excellence</Eyebrow>
+          <h1>AI Centre of Excellence</h1>
+          <p className="coe-hero-sub">
+            An operating model that makes AI repeatable
+          </p>
+          <p className="coe-hero-body">
+            Connect strategy, governance, platforms, talent and delivery so
+            every use case stops restarting from zero.
+          </p>
+          <div className="coe-hero-ctas">
+            <PrimaryButton
+              href="/contact?interest=consultation"
+              showArrow={false}
+            >
+              Book a Consultation
+              <CircleArrow />
+            </PrimaryButton>
+            <SecondaryButton href="#operating-model" showArrow={false}>
+              Explore the Operating Model
+              <CircleArrow />
+            </SecondaryButton>
+          </div>
+        </div>
+
+        <div className="coe-hero-diagram">
+          <CoeHeroInlines count={layers.length} />
+          <div className="coe-hero-tower">
+            <WhiteSculpture
+              src={mockupAssets.coeHeroTower}
+              alt="Nine-layer CoE glass stack"
+              width={600}
+              height={960}
+              priority
+              multiply={false}
+              className="coe-hero-sculpture bg-transparent"
+            />
+          </div>
+          <ol className="coe-hero-callouts">
+            {layers.map((title, index) => (
+              <li key={title}>
+                <span className="coe-hero-lead" aria-hidden />
+                <span className="coe-hero-num">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="coe-hero-label">{title}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <CoeOutcomes outcomes={outcomes} />
+      </div>
+    </section>
+  );
+}
+
 export function CoeHeroPanel({
   layers = defaultLayers,
   outcomes = defaultOutcomes,
@@ -33,76 +139,60 @@ export function CoeHeroPanel({
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "relative overflow-hidden rounded-2xl border border-[#dce8f2] bg-white p-5 md:p-7",
-        className,
-      )}
-    >
-      <ol className="grid grid-cols-2 gap-x-3 gap-y-1.5 sm:grid-cols-3">
+    <div className={cn("coe-hero-panel", className)}>
+      <ol className="coe-layer-grid">
         {layers.map((title, index) => (
-          <li
-            key={title}
-            className="flex items-baseline gap-1.5 text-[0.68rem] leading-snug"
-          >
-            <span className="font-tech text-[0.6rem] text-cyan">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <span className="truncate font-medium text-navy">{title}</span>
+          <li key={title}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <span>{title}</span>
           </li>
         ))}
       </ol>
-
-      <div className="mt-5 grid items-center gap-5 sm:grid-cols-[0.9fr_1.1fr]">
-        <div className="relative mx-auto w-full max-w-[11rem]">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-[-12%] rounded-full bg-[radial-gradient(circle,rgba(20,159,230,0.22),transparent_68%)] blur-xl"
-          />
-          <OriginalSculpture
-            src={mockupAssets.originalCoeStack}
-            alt=""
-            orientation="portrait"
-            priority
-            className="relative z-10"
-          />
-        </div>
-        <div>
-          <p className="font-heading text-sm font-semibold text-navy">
-            Core outcomes
-          </p>
-          <ul className="mt-3 space-y-2.5">
-            {outcomes.map((item) => (
-              <li
-                key={item}
-                className="flex items-start gap-2.5 text-sm leading-snug text-muted-light"
-              >
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-cyan text-white">
-                  <Check className="h-3 w-3" strokeWidth={3} />
-                </span>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="coe-hero-split">
+        <CoeLayerTower priority className="coe-hero-stack" />
+        <CoeOutcomes outcomes={outcomes} />
       </div>
     </div>
   );
 }
 
-export function CoeLayerTower({ className }: { className?: string }) {
+export function CoeOutcomes({
+  outcomes,
+}: {
+  outcomes: readonly string[];
+}) {
   return (
-    <div className={cn("relative mx-auto w-full max-w-[12rem]", className)}>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-[-10%] rounded-full bg-[radial-gradient(circle,rgba(20,159,230,0.2),transparent_70%)] blur-xl"
-      />
-      <OriginalSculpture
-        src={mockupAssets.originalCoeStack}
-        alt="Nine-layer CoE operating model as stacked glass plates"
-        orientation="portrait"
-        className="relative z-10"
-      />
-    </div>
+    <aside className="coe-outcomes">
+      <h3>Core outcomes</h3>
+      <ul>
+        {outcomes.map((item) => (
+          <li key={item}>
+            <span className="coe-check" aria-hidden>
+              <Check className="h-3.5 w-3.5" strokeWidth={3} />
+            </span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </aside>
+  );
+}
+
+export function CoeLayerTower({
+  className,
+  priority = false,
+}: {
+  className?: string;
+  priority?: boolean;
+}) {
+  return (
+    <WhiteSculpture
+      src={mockupAssets.originalCoeStack}
+      alt="Nine-layer CoE operating model as stacked glass plates"
+      width={1024}
+      height={1280}
+      priority={priority}
+      className={cn("coe-hero-stack", className)}
+    />
   );
 }

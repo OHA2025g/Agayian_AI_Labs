@@ -8,6 +8,7 @@ type OriginalSculptureProps = {
   orientation?: "landscape" | "portrait";
   className?: string;
   priority?: boolean;
+  loading?: "eager" | "lazy";
 };
 
 /**
@@ -20,6 +21,7 @@ export function OriginalSculpture({
   orientation = "landscape",
   className,
   priority = false,
+  loading,
 }: OriginalSculptureProps) {
   const { width, height } = originalSculptureSize[orientation];
 
@@ -32,7 +34,11 @@ export function OriginalSculpture({
       quality={100}
       unoptimized
       priority={priority}
-      className={cn("h-auto w-full max-w-full object-contain", className)}
+      loading={priority ? undefined : loading}
+      className={cn(
+        "h-auto w-full max-w-full bg-transparent object-contain",
+        className,
+      )}
     />
   );
 }
