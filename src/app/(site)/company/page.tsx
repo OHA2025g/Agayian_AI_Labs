@@ -182,8 +182,13 @@ function CompanyHubVisual() {
         priority
         className="mix-blend-multiply"
       />
-      <div className="pointer-events-none absolute left-1/2 top-[48%] z-10 h-11 w-[3.75rem] -translate-x-1/2 -translate-y-1/2">
-        <AgrayianMark variant="light" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-[48.8%] z-10 h-[3.45rem] w-[5.7rem] -translate-x-1/2 -translate-y-1/2 mix-blend-multiply"
+      >
+        <div className="h-full w-full origin-center opacity-[0.52] [clip-path:ellipse(48%_42%_at_50%_50%)] [transform:perspective(200px)_rotateX(16deg)_scale(1.03)]">
+          <AgrayianMark variant="navy" />
+        </div>
       </div>
       <span className="absolute left-4 top-6 rounded-lg border border-white/85 bg-white/90 px-2.5 py-1.5 text-[0.65rem] font-semibold text-navy shadow-sm">
         Public systems

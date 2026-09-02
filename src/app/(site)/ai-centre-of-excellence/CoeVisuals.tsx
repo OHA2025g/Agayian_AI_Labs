@@ -235,7 +235,7 @@ export function CoeTower({
       width={1024}
       height={1536}
       priority={priority}
-      multiply
+      multiply={false}
       className={`${styles.tower} ${compact ? styles.towerCompact : ""} bg-transparent`}
     />
   );

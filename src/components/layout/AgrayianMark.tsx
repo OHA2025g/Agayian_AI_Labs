@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 type Props = {
   className?: string;
   /** Dark site chrome — light mark + brand red accent */
-  variant?: "dark" | "light";
+  variant?: "dark" | "light" | "navy";
   title?: string;
 };
 
@@ -31,6 +31,12 @@ export function AgrayianMark({
     );
   }
 
+  if (variant === "navy") {
+    return (
+      <AgrayianMarkSvg className={className} title={title} loop="#1A3A58" />
+    );
+  }
+
   return <AgrayianMarkSvg className={className} title={title} loop="#F1F5F9" />;
 }
 
@@ -43,7 +49,7 @@ function AgrayianMarkSvg({
   title: string;
   loop: string;
 }) {
-  const playId = "ag-play-dark";
+  const playId = `ag-play-${loop.replace("#", "").toLowerCase()}`;
 
   return (
     <svg

@@ -55,18 +55,18 @@ function Hero() {
         </div>
         <div className={styles.heroArchitecture}>
           <HeroStack items={layers} priority />
-          <aside className={styles.outcomes}>
-            <h3>Core outcomes</h3>
-            <ul>
-              {outcomes.map((item) => (
-                <li key={item}>
-                  <OutcomeCheck />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </aside>
         </div>
+        <aside className={styles.outcomes}>
+          <h3>Core outcomes</h3>
+          <ul>
+            {outcomes.map((item) => (
+              <li key={item}>
+                <OutcomeCheck />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </aside>
       </div>
     </section>
   );

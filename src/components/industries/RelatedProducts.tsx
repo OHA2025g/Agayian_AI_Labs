@@ -27,24 +27,33 @@ export function RelatedProducts({
       <div className="industries-product-grid">
         {items.slice(0, 4).map((product) => {
           const card = highlights.get(product.slug);
+          const title = card?.title?.trim() || product.name;
+          const description =
+            card?.description?.trim() || product.shortDescription;
+
           return (
             <Link
               key={product.id}
               href={`/products?product=${product.slug}`}
               className="industries-product-card"
             >
-              <ProductGlassArt
-                slug={product.slug}
-                variant="products"
-                className="industries-product-art"
-                alt=""
-              />
-              <h4>{card?.title ?? product.name}</h4>
-              <p>{card?.description ?? product.shortDescription}</p>
-              <span>
-                Learn more
-                <ArrowRight strokeWidth={2} />
-              </span>
+              <div className="industries-product-art-wrap">
+                <ProductGlassArt
+                  slug={product.slug}
+                  variant="products"
+                  frame="card"
+                  className="industries-product-art"
+                  alt=""
+                />
+              </div>
+              <div className="industries-product-copy">
+                <h4>{title}</h4>
+                <p>{description}</p>
+                <span>
+                  Learn more
+                  <ArrowRight strokeWidth={2} />
+                </span>
+              </div>
             </Link>
           );
         })}

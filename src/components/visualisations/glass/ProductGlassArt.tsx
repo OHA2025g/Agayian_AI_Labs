@@ -87,7 +87,7 @@ export function ProductGlassArt({
           "relative w-full",
           card
             ? "aspect-[4/3] overflow-hidden rounded-xl bg-[#f7fafc]"
-            : "bg-white",
+            : "overflow-hidden bg-transparent",
           className,
         )}
       >

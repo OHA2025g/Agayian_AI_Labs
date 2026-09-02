@@ -6,7 +6,7 @@ html.industries-page body {
 }
 
 .industries-page-shell {
-  --ind-u: calc(100vw / 752);
+  --ind-u: clamp(1px, calc(100vw / 1440), 1.15px);
   width: 100%;
   overflow-x: clip;
   background: #ffffff;
@@ -22,9 +22,9 @@ html.industries-page body {
 .industries-heading {
   margin: 0;
   font-family: var(--font-space-grotesk), sans-serif;
-  font-size: 23px;
+  font-size: 1.5rem;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.25;
   color: #102748;
 }
 
@@ -71,7 +71,7 @@ html.industries-page body {
 
 .industries-hero {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   background: #ffffff;
 }
 
@@ -122,10 +122,10 @@ html.industries-page body {
 @media (min-width: 1200px) {
   .industries-hero {
     position: relative;
-    height: calc(332 * var(--ind-u));
-    min-height: max(520px, calc(332 * var(--ind-u)));
+    height: auto;
+    min-height: 0;
     max-height: none;
-    overflow: hidden;
+    overflow: visible;
     background-color: #ffffff;
   }
 
@@ -143,19 +143,27 @@ html.industries-page body {
 
   .industries-hero-frame {
     position: relative;
-    width: 100%;
-    max-width: none;
-    height: 100%;
-    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(28rem, 36rem) minmax(0, 1fr);
+    column-gap: 1.75rem;
+    align-items: center;
+    width: var(--site-max);
+    max-width: var(--site-max);
+    height: auto;
+    min-height: 0;
+    margin-inline: auto;
+    padding: 3rem 0 1.25rem;
   }
 
   .industries-hero-copy {
     position: relative;
     z-index: 2;
-    width: calc(328 * var(--ind-u));
-    max-width: calc(328 * var(--ind-u));
-    margin-left: calc(33 * var(--ind-u));
-    padding-top: calc(56 * var(--ind-u));
+    grid-column: 1;
+    width: 100%;
+    max-width: 34rem;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
   }
 
   .industries-hero-copy .industries-eyebrow {
@@ -226,27 +234,44 @@ html.industries-page body {
   }
 
   .industries-hero-map {
-    position: absolute;
+    position: relative;
     z-index: 1;
-    left: calc(336 * var(--ind-u));
-    top: calc(3 * var(--ind-u));
-    width: calc(416 * var(--ind-u));
-    height: calc(326 * var(--ind-u));
+    grid-column: 2;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 3 / 2;
+    margin: 0;
+    overflow: visible;
     pointer-events: none;
+  }
+
+  .industries-hero-map img {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    object-fit: contain;
+    object-position: center;
   }
 
   .industries-legend {
     position: absolute;
     z-index: 3;
-    top: calc(29 * var(--ind-u));
-    left: calc(606 * var(--ind-u));
-    width: calc(114 * var(--ind-u));
-    height: calc(65 * var(--ind-u));
-    padding: calc(8 * var(--ind-u)) calc(10 * var(--ind-u));
+    grid-column: 1 / -1;
+    grid-row: 1;
+    top: 3rem;
+    left: auto;
+    right: 0;
+    width: auto;
+    min-width: 13.75rem;
+    height: auto;
+    padding: 0.75rem 0.9rem;
     border: 1px solid #e5edf4;
-    border-radius: calc(8 * var(--ind-u));
+    border-radius: 8px;
     background: #ffffff;
-    box-shadow: 0 calc(6 * var(--ind-u)) calc(16 * var(--ind-u)) rgba(30, 60, 90, 0.06);
+    box-shadow: 0 6px 16px rgba(30, 60, 90, 0.06);
   }
 
   .industries-legend p {
@@ -1035,6 +1060,350 @@ html.industries-page body {
   .industries-outcomes,
   .industries-cta {
     height: auto;
+  }
+}
+
+/* Readable type, unclipped product copy, single site footer */
+.industries-product-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.industries-product-card {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid #e7edf3;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.industries-product-art-wrap {
+  height: 168px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #f7fbfe;
+}
+
+.industries-product-art {
+  height: 168px !important;
+  max-height: 168px;
+  overflow: hidden !important;
+  background: #f7fbfe !important;
+}
+
+.industries-product-art img,
+.industries-product-art svg {
+  display: block;
+  width: 100% !important;
+  height: 168px !important;
+  max-height: 168px;
+  object-fit: contain;
+}
+
+.industries-product-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  padding: 14px 16px 16px;
+  background: #fff;
+}
+
+.industries-product-copy h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #102748;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.industries-product-copy p {
+  margin: 8px 0 0;
+  flex: 1;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #5d7390;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.industries-product-copy > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1c6fa3;
+}
+
+.industries-product-copy > span svg {
+  width: 14px;
+  height: 14px;
+}
+
+.industries-footer {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .industries-hero {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .industries-hero-frame {
+    display: grid;
+    grid-template-columns: minmax(28rem, 36rem) minmax(0, 1fr);
+    column-gap: 1.75rem;
+    align-items: center;
+    width: var(--site-max);
+    max-width: var(--site-max);
+    height: auto;
+    min-height: 0;
+    margin-inline: auto;
+    padding: 3rem 0 1.25rem;
+  }
+
+  .industries-hero-copy {
+    position: relative;
+    z-index: 2;
+    grid-column: 1;
+    width: 100%;
+    max-width: 34rem;
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 0;
+    padding-right: 0;
+  }
+
+  .industries-hero-copy .industries-eyebrow {
+    font-size: 0.9375rem;
+  }
+
+  .industries-hero-copy h1 {
+    width: auto;
+    margin-top: 0.75rem;
+    font-size: clamp(2.25rem, 3.2vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .industries-hero-copy .industries-body {
+    width: auto;
+    max-width: 32rem;
+    margin-top: 1.15rem;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+  }
+
+  .industries-hero-copy .industries-ctas {
+    gap: 0.85rem;
+    margin-top: 1.35rem;
+  }
+
+  .industries-hero-copy .industries-ctas a {
+    width: auto;
+    height: 3rem;
+    min-height: 3rem;
+    padding: 0 1.15rem;
+    font-size: 0.9375rem;
+  }
+
+  .industries-hero-copy .industries-ctas a:first-child,
+  .industries-hero-copy .industries-ctas a:last-child {
+    width: auto;
+  }
+
+  .industries-hero-copy .industries-ctas a svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .industries-hero-map {
+    position: relative;
+    z-index: 1;
+    grid-column: 2;
+    left: auto;
+    top: auto;
+    right: auto;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 3 / 2;
+    margin: 0;
+    overflow: visible;
+  }
+
+  .industries-hero-map img {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+    object-fit: contain;
+    object-position: center;
+    transform: none;
+  }
+
+  .industries-legend {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    top: 3rem;
+    left: auto;
+    right: 0;
+    width: auto;
+    height: auto;
+    min-width: 13.75rem;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .industries-legend p {
+    height: auto;
+    min-height: 1.45rem;
+    font-size: 0.8125rem;
+    gap: 0.5rem;
+    white-space: nowrap;
+  }
+
+  .industries-legend-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  .industries-overview,
+  .industries-challenges,
+  .industries-opportunity,
+  .industries-workflows,
+  .industries-cap-prod,
+  .industries-capabilities,
+  .industries-products,
+  .industries-gov-out,
+  .industries-governance,
+  .industries-outcomes,
+  .industries-cta {
+    height: auto;
+  }
+
+  .industries-overview {
+    grid-template-columns: minmax(22rem, 26rem) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .industries-challenge-item h4 {
+    font-size: 0.9375rem;
+  }
+
+  .industries-challenge-item p {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .industries-callout h4 {
+    font-size: 0.875rem;
+  }
+
+  .industries-callout p {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+
+  .industries-workflow-step h4 {
+    font-size: 0.9375rem;
+  }
+
+  .industries-workflow-step p {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .industries-cap-prod {
+    grid-template-columns: minmax(22rem, 36rem) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .industries-cap-item span {
+    max-width: 11.5rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .industries-products-all {
+    font-size: 0.875rem;
+  }
+
+  .industries-product-card {
+    height: auto;
+  }
+
+  .industries-gov-item h4,
+  .industries-outcome-item {
+    font-size: 0.9375rem;
+  }
+
+  .industries-gov-item p {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+
+  .industries-cta {
+    min-height: 10.5rem;
+    padding: 2rem 2.5rem;
+  }
+
+  .industries-cta h2 {
+    width: min(38rem, 70%);
+    font-size: clamp(1.75rem, 2.4vw, 2.15rem);
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 1199px) {
+  .industries-product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .industries-capabilities,
+  .industries-products,
+  .industries-cta {
+    padding: 24px 20px;
+  }
+
+  .industries-cap-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 16px;
+    margin-top: 28px;
+  }
+
+  .industries-cap-item span {
+    max-width: 12rem;
+    margin-top: 10px;
+    font-size: 0.875rem;
+    font-weight: 650;
+    line-height: 1.35;
+    color: #102748;
+  }
+}
+
+@media (max-width: 640px) {
+  .industries-selector-item > span:not(.industries-icon):not(.industries-selector-pill) {
+    font-size: 12px;
   }
 }
 

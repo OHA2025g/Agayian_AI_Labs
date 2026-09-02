@@ -247,7 +247,12 @@ export function IndustriesExplorer({
             <RelevantCapabilities items={relevantCapabilities} />
             <RelatedProducts
               items={relatedProducts}
-              cards={selected.productCards}
+              cards={
+                selected.productCards?.length
+                  ? selected.productCards
+                  : staticIndustries.find((item) => item.slug === selected.slug)
+                      ?.productCards
+              }
             />
           </section>
 

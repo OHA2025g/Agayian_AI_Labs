@@ -67,17 +67,19 @@
 
 .hero {
   background: #fff;
+  overflow: hidden;
 }
 
 .heroInner {
   max-width: 1420px;
-  min-height: 560px;
+  min-height: 0;
   margin: auto;
-  padding: 64px 42px 42px;
+  padding: 32px 40px 36px;
   display: grid;
-  grid-template-columns: 42% 58%;
+  grid-template-columns: minmax(17rem, 1fr) auto 160px;
   align-items: center;
-  column-gap: 12px;
+  column-gap: 28px;
+  overflow: hidden;
 }
 
 .heroCopy {
@@ -90,13 +92,13 @@
 .eyebrow {
   color: #008fdc;
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.01em;
   display: flex;
   gap: 18px;
   align-items: center;
-  margin-bottom: 22px;
+  margin-bottom: 14px;
 }
 
 .eyebrow b {
@@ -106,47 +108,56 @@
 }
 
 .hero h1 {
-  margin: 0 0 22px;
-  font-size: clamp(2rem, 3.4vw, 3rem);
-  line-height: 1.13;
+  margin: 0 0 16px;
+  font-size: clamp(1.65rem, 2.5vw, 2.4rem);
+  line-height: 1.15;
   letter-spacing: -0.047em;
 }
 
 .heroCopy > p {
-  max-width: 560px;
+  max-width: 520px;
   margin: 0;
   color: #4c5f77;
-  font-size: 18px;
-  line-height: 1.58;
+  font-size: 16px;
+  line-height: 1.55;
 }
 
 .heroActions {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 30px;
+  gap: 12px;
+  margin-top: 22px;
 }
 
 .heroArchitecture {
-  min-height: 470px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 176px;
-  align-items: center;
-  column-gap: 16px;
+  min-height: 0;
+  min-width: 0;
+  display: block;
   position: relative;
+  overflow: hidden;
 }
 
 .heroStack {
-  --label-col: 208px;
+  --label-col: 172px;
+  --tower-w: min(
+    236px,
+    calc((100vh - 260px) / 1.5),
+    100cqi - var(--label-col) - 8px
+  );
   container-type: inline-size;
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--label-col);
+  grid-template-columns: var(--tower-w) var(--label-col);
   align-items: stretch;
-  min-height: 470px;
+  justify-self: start;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
   column-gap: 0;
+  overflow: hidden;
 }
 
 .heroArchitecture::before {
@@ -185,12 +196,13 @@
 
 .tower img {
   background: transparent !important;
-  mix-blend-mode: multiply;
+  mix-blend-mode: normal;
+  filter: contrast(1.12) saturate(1.1);
 }
 
 .heroStack .tower {
-  width: min(420px, 100%);
-  margin: 0 0 0 auto;
+  width: 100%;
+  margin: 0;
 }
 
 .towerSpine {
@@ -325,6 +337,7 @@
 .layerLabels {
   position: relative;
   z-index: 3;
+  height: 100%;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -343,7 +356,6 @@
 }
 
 .layerLead {
-  --tower-w: min(420px, 100cqi - var(--label-col));
   position: absolute;
   top: 50%;
   right: calc(100% + 8px);
@@ -378,15 +390,16 @@
 }
 
 .layerLabels span {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 650;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
 .outcomes {
-  align-self: stretch;
-  margin: 28px 0;
-  padding: 26px 20px;
+  align-self: center;
+  margin: 0;
+  padding: 20px 16px;
+  min-width: 0;
   border: 1px solid #dce8ef;
   border-radius: 17px;
   background: rgba(255, 255, 255, 0.92);
@@ -409,7 +422,7 @@
   color: #4f6279;
   font-size: 13px;
   line-height: 1.45;
-  padding: 10px 0;
+  padding: 7px 0;
 }
 
 .outcomes i {
@@ -1122,13 +1135,12 @@
 
 @media (max-width: 1180px) {
   .heroInner {
-    grid-template-columns: 45% 55%;
-    padding-left: 30px;
-    padding-right: 20px;
+    grid-template-columns: minmax(16rem, 1fr) auto;
+    padding: 24px 30px 20px 20px;
   }
 
   .hero h1 {
-    font-size: 40px;
+    font-size: 32px;
   }
 
   .heroArchitecture {
@@ -1192,8 +1204,9 @@
   }
 
   .heroStack {
-    --label-col: 180px;
-    grid-template-columns: minmax(200px, 1fr) var(--label-col);
+    --label-col: 160px;
+    --tower-w: min(240px, 100cqi - var(--label-col) - 4px);
+    grid-template-columns: var(--tower-w) var(--label-col);
   }
 
   .tower {

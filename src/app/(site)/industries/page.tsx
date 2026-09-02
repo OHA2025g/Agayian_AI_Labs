@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { IndustriesExplorer } from "@/components/industries/IndustriesExplorer";
-import { IndustriesFooter } from "@/components/industries/IndustriesFooter";
 import { IndustriesHero } from "@/components/industries/IndustriesHero";
 import { LoadingState } from "@/components/states/LoadingState";
 import {
@@ -53,8 +52,6 @@ export default async function IndustriesPage() {
           products={products}
         />
       </Suspense>
-
-      <IndustriesFooter />
     </div>
   );
 }
