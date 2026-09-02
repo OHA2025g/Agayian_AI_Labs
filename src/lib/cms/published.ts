@@ -1,5 +1,5 @@
 import type { Where } from "payload";
-import { getPayloadClient } from "@/lib/payload";
+import { getPayloadClient, isPayloadSkipped } from "@/lib/payload";
 
 const CMS_BUDGET_MS = 1200;
 
@@ -79,6 +79,7 @@ export async function findPublished<T = Record<string, unknown>>(
     depth?: number;
   },
 ): Promise<T[]> {
+  if (isPayloadSkipped()) return [];
   return withCmsBudget(queryPublished(collection, options), []);
 }
 
@@ -109,6 +110,7 @@ export async function findPublishedBySlug<T = Record<string, unknown>>(
   collection: SlugCollection,
   slug: string,
 ): Promise<T | null> {
+  if (isPayloadSkipped()) return null;
   return withCmsBudget(queryPublishedBySlug<T>(collection, slug), null);
 }
 
@@ -131,6 +133,7 @@ async function queryPublishedBySlug<T>(
 export async function getPublishedGlobal<T = Record<string, unknown>>(
   slug: GlobalSlug,
 ): Promise<T | null> {
+  if (isPayloadSkipped()) return null;
   return withCmsBudget(queryPublishedGlobal<T>(slug), null);
 }
 

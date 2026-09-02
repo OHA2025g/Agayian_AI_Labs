@@ -42,6 +42,8 @@ Or run seed from your laptop against the remote Mongo URI if the network allows.
 
 8. Open `https://your-domain.com/admin` and sign in.
 
+The Docker image build does **not** talk to Mongo (`SKIP_PAYLOAD=1`). Public pages compile against the static catalog. Payload connects to `DATABASE_URI` only when the container starts.
+
 ### Faster rebuilds
 
 The `Dockerfile` uses BuildKit cache mounts for `npm` and `.next/cache`. First deploy is still slow (full install + compile). Later deploys that only change app code are much faster when EasyPanel keeps the builder cache.

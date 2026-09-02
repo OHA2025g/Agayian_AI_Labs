@@ -10,8 +10,7 @@ type PageProps = {
 };
 
 export async function generateStaticParams() {
-  const list = await getInsights();
-  return (list.length ? list : insights).map((insight) => ({
+  return insights.map((insight) => ({
     slug: insight.slug,
   }));
 }

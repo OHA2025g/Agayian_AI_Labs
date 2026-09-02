@@ -40,6 +40,9 @@ import {
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+const skipPayloadDb =
+  process.env.SKIP_PAYLOAD === "1" ||
+  process.env.NEXT_PHASE === "phase-production-build";
 
 const useS3 =
   process.env.S3_BUCKET &&
@@ -127,13 +130,14 @@ export default buildConfig({
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   db: mongooseAdapter({
-    url:
-      process.env.DATABASE_URI ||
-      process.env.DATABASE_URL ||
-      "mongodb://127.0.0.1:27017/agrayian",
+    url: skipPayloadDb
+      ? "mongodb://127.0.0.1:27017/agrayian-build-skip"
+      : process.env.DATABASE_URI ||
+        process.env.DATABASE_URL ||
+        "mongodb://127.0.0.1:27017/agrayian",
     connectOptions: {
-      serverSelectionTimeoutMS: 1500,
-      connectTimeoutMS: 1500,
+      serverSelectionTimeoutMS: skipPayloadDb ? 300 : 1500,
+      connectTimeoutMS: skipPayloadDb ? 300 : 1500,
     },
   }),
   sharp,

@@ -19,10 +19,12 @@ RUN --mount=type=cache,target=/root/.npm \
 
 COPY . .
 
-# Build-time placeholders (runtime values come from EasyPanel / compose)
+# Build-time placeholders (runtime values come from EasyPanel / compose).
+# SKIP_PAYLOAD=1 so "Collecting page data" does not hang on Mongo.
 ENV NODE_ENV=production \
+    SKIP_PAYLOAD=1 \
     PAYLOAD_SECRET=build-time-placeholder-not-used-in-runtime \
-    DATABASE_URI=mongodb://127.0.0.1:27017/agrayian \
+    DATABASE_URI=mongodb://127.0.0.1:27017/agrayian-build-skip \
     NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 
 # Cache Next compile output between EasyPanel rebuilds when BuildKit is on
