@@ -130,6 +130,50 @@ export type Insight = {
   body: string[];
 };
 
+export type ResourceFile = {
+  url: string;
+  filename?: string;
+  mimeType?: string;
+  filesize?: number;
+};
+
+export type Resource = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  category: string;
+  publishedAt: string;
+  featured: boolean;
+  file?: ResourceFile;
+};
+
+export type FaqItem = {
+  id: string;
+  question: string;
+  answer: string;
+  placement: string[];
+};
+
+export type TeamMember = {
+  id: string;
+  slug: string;
+  name: string;
+  title: string;
+  bio: string;
+  photoUrl?: string;
+  order: number;
+};
+
+export type CareerRole = {
+  id: string;
+  slug: string;
+  title: string;
+  location: string;
+  employmentType: string;
+  summary: string;
+};
+
 export type CompanyValue = {
   title: string;
   description: string;

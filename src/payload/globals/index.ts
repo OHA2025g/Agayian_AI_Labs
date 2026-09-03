@@ -1,4 +1,5 @@
 import { withGlobalGroup } from "../admin/withAdminGroup";
+import { hideWebsiteFromSpecialists } from "../admin/visibility";
 import { CoePage as CoePageBase } from "./CoePage";
 import { CompanyPage as CompanyPageBase } from "./CompanyPage";
 import { ContactPage as ContactPageBase } from "./ContactPage";
@@ -14,22 +15,53 @@ import {
 import { Navigation as NavigationBase } from "./Navigation";
 import { SiteSettings as SiteSettingsBase } from "./SiteSettings";
 
-const PAGES = "Pages";
+const WEBSITE = "Website";
 const SETTINGS = "Settings";
-const LEGAL = "Legal";
 
-export const SiteSettings = withGlobalGroup(SiteSettingsBase, SETTINGS);
-export const Navigation = withGlobalGroup(NavigationBase, SETTINGS);
-export const HomePage = withGlobalGroup(HomePageBase, PAGES);
-export const CoePage = withGlobalGroup(CoePageBase, PAGES);
-export const GovernancePage = withGlobalGroup(GovernancePageBase, PAGES);
-export const CompanyPage = withGlobalGroup(CompanyPageBase, PAGES);
-export const ContactPage = withGlobalGroup(ContactPageBase, PAGES);
-export const PrivacyPolicy = withGlobalGroup(PrivacyPolicyBase, LEGAL);
-export const TermsOfUse = withGlobalGroup(TermsOfUseBase, LEGAL);
-export const ResponsibleAi = withGlobalGroup(ResponsibleAiBase, LEGAL);
-export const CookiePolicy = withGlobalGroup(CookiePolicyBase, LEGAL);
+export const SiteSettings = withGlobalGroup(SiteSettingsBase, SETTINGS, {
+  label: "Site settings",
+  description: "Brand, contact, SEO, announcement and marketing tags.",
+  hidden: hideWebsiteFromSpecialists,
+});
+export const Navigation = withGlobalGroup(NavigationBase, SETTINGS, {
+  label: "Navigation",
+  description: "Header and footer links used on the public site.",
+  hidden: hideWebsiteFromSpecialists,
+});
+export const HomePage = withGlobalGroup(HomePageBase, WEBSITE, {
+  label: "Home page",
+  hidden: hideWebsiteFromSpecialists,
+});
+export const CoePage = withGlobalGroup(CoePageBase, WEBSITE, {
+  label: "AI CoE page",
+  hidden: hideWebsiteFromSpecialists,
+});
+export const GovernancePage = withGlobalGroup(GovernancePageBase, WEBSITE, {
+  label: "Governance page",
+  hidden: hideWebsiteFromSpecialists,
+});
+export const CompanyPage = withGlobalGroup(CompanyPageBase, WEBSITE, {
+  label: "Company page",
+  hidden: hideWebsiteFromSpecialists,
+});
+export const ContactPage = withGlobalGroup(ContactPageBase, WEBSITE, {
+  label: "Contact page",
+  hidden: hideWebsiteFromSpecialists,
+});
+export const PrivacyPolicy = withGlobalGroup(PrivacyPolicyBase, SETTINGS, {
+  hidden: hideWebsiteFromSpecialists,
+});
+export const TermsOfUse = withGlobalGroup(TermsOfUseBase, SETTINGS, {
+  hidden: hideWebsiteFromSpecialists,
+});
+export const ResponsibleAi = withGlobalGroup(ResponsibleAiBase, SETTINGS, {
+  hidden: hideWebsiteFromSpecialists,
+});
+export const CookiePolicy = withGlobalGroup(CookiePolicyBase, SETTINGS, {
+  hidden: hideWebsiteFromSpecialists,
+});
 export const AccessibilityStatement = withGlobalGroup(
   AccessibilityStatementBase,
-  LEGAL,
+  SETTINGS,
+  { hidden: hideWebsiteFromSpecialists },
 );

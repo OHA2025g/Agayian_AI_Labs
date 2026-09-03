@@ -8,13 +8,14 @@ import { impactStories } from "../data/impactStories";
 import { insights } from "../data/insights";
 import { companyIntro, companyValues } from "../data/company";
 import {
-  capabilityRibbon,
+  defaultHeaderCta,
   footerCapabilities,
-  footerContact,
-  footerExplore,
+  footerCompany,
+  footerIndustries,
   footerLegal,
+  footerProducts,
+  footerResources,
   mainNavigation,
-  capabilityNav,
 } from "../data/navigation";
 import { brandCopy, siteConfig } from "../config/site";
 import { consultationFlow } from "../lib/contact-schema";
@@ -195,8 +196,13 @@ async function run() {
         description: brandCopy.supporting,
       },
       announcement: {
-        enabled: true,
+        enabled: false,
         message: brandCopy.announcement,
+        href: "/ai-centre-of-excellence",
+        ctaLabel: "Explore AI CoE",
+      },
+      marketing: {
+        defaultUtmSource: "agrayian.ai",
       },
       cookie: {
         title: "Cookie preferences",
@@ -217,12 +223,16 @@ async function run() {
     slug: "navigation",
     data: {
       main: mainNavigation,
-      capabilityNav,
+      primaryCta: {
+        label: defaultHeaderCta.label,
+        href: defaultHeaderCta.href,
+      },
       footerCapabilities,
-      footerExplore,
-      footerContact,
+      footerProducts,
+      footerIndustries,
+      footerCompany,
+      footerResources,
       footerLegal,
-      capabilityRibbon: [...capabilityRibbon],
     },
     overrideAccess: true,
   });
@@ -275,7 +285,8 @@ async function run() {
         eyebrow: brandCopy.eyebrow,
         headlineLine1: brandCopy.headlineLines[0],
         headlineLine2: brandCopy.headlineLines[1] ?? "",
-        supporting: brandCopy.supporting,
+        supporting:
+          "We help enterprises and governments turn complex data into responsible AI systems, measurable decisions and action.",
         primaryCtaLabel: brandCopy.primaryCta,
         primaryCtaHref: "/contact?interest=consultation",
         secondaryCtaLabel: brandCopy.secondaryCta,
@@ -312,6 +323,49 @@ async function run() {
     data: { status: "published", layout: [] },
     overrideAccess: true,
   });
+
+  const campaignExisting = await payload.find({
+    collection: "campaigns",
+    where: { code: { equals: "consult-linkedin" } },
+    limit: 1,
+    overrideAccess: true,
+  });
+  if (!campaignExisting.docs[0]) {
+    await payload.create({
+      collection: "campaigns",
+      data: {
+        name: "Consultation — LinkedIn",
+        code: "consult-linkedin",
+        channel: "linkedin",
+        status: "planned",
+        objective: "Invite enterprise and government readers to a consultation.",
+        landingUrl: "/contact?interest=consultation",
+        utmSource: "linkedin",
+        utmMedium: "social",
+        utmCampaign: "consult-linkedin",
+      },
+      overrideAccess: true,
+    });
+  }
+
+  const calendarExisting = await payload.find({
+    collection: "content-calendar",
+    where: { title: { equals: "Responsible AI operating model" } },
+    limit: 1,
+    overrideAccess: true,
+  });
+  if (!calendarExisting.docs[0]) {
+    await payload.create({
+      collection: "content-calendar",
+      data: {
+        title: "Responsible AI operating model",
+        channel: "linkedin",
+        status: "idea",
+        copy: "Draft a LinkedIn note on how a CoE makes responsible AI operational.",
+      },
+      overrideAccess: true,
+    });
+  }
 
   console.log(
     "Seed complete. Team/partners/careers/resources left empty by design.",

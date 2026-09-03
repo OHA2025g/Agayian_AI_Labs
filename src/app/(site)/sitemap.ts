@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
 import {
   getImpactStories,
+  getIndustries,
   getInsights,
   getProducts,
 } from "@/lib/cms/catalog";
@@ -27,10 +28,11 @@ const routes = [
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
-  const [products, stories, insights] = await Promise.all([
+  const [products, stories, insights, industries] = await Promise.all([
     getProducts(),
     getImpactStories(),
     getInsights(),
+    getIndustries(),
   ]);
 
   const staticEntries = routes.map((route) => ({
@@ -45,16 +47,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticEntries,
     ...products.map((product) => ({
-      url: `${siteConfig.websiteUrl}/products?product=${product.slug}`,
+      url: `${siteConfig.websiteUrl}/products/${product.slug}`,
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.65,
     })),
     ...stories.map((story) => ({
-      url: `${siteConfig.websiteUrl}/impact-stories#${story.slug}`,
+      url: `${siteConfig.websiteUrl}/impact-stories/${story.slug}`,
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.55,
+    })),
+    ...industries.map((industry) => ({
+      url: `${siteConfig.websiteUrl}/industries/${industry.slug}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
     })),
     ...insights.map((insight) => ({
       url: `${siteConfig.websiteUrl}/insights/${insight.slug}`,

@@ -110,10 +110,19 @@ export function ContactForm({
   defaultInterest,
   defaultProduct,
   defaultCapability,
+  utm,
 }: {
   defaultInterest?: string | null;
   defaultProduct?: string | null;
   defaultCapability?: string | null;
+  utm?: {
+    source?: string | null;
+    medium?: string | null;
+    campaign?: string | null;
+    content?: string | null;
+    term?: string | null;
+    landingPath?: string | null;
+  };
 }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
     "idle",
@@ -148,6 +157,12 @@ export function ContactForm({
       website: "",
       product: defaultProduct ?? "",
       industry: "",
+      utmSource: utm?.source ?? "",
+      utmMedium: utm?.medium ?? "",
+      utmCampaign: utm?.campaign ?? "",
+      utmContent: utm?.content ?? "",
+      utmTerm: utm?.term ?? "",
+      landingPath: utm?.landingPath ?? "/contact",
     },
   });
 

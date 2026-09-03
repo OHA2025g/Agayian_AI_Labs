@@ -66,6 +66,15 @@ export const enquiryAccess: Access = ({ req }) =>
 export const enquiryMutate: Access = ({ req }) =>
   canManageEnquiries(req.user as UserWithRole);
 
+/** Marketing / studio collections — admin only, not public catalog. */
+export const studioRead: Access = ({ req }) => {
+  if (!req.user) return false;
+  return (
+    canEditContent(req.user as UserWithRole) ||
+    isReadOnly(req.user as UserWithRole)
+  );
+};
+
 export const publishedOnlyField: FieldAccess = ({ req }) => Boolean(req.user);
 
 /** Who may touch the status field at all (values constrained in editorial-workflow hook). */
@@ -76,4 +85,4 @@ export const statusFieldAccess: FieldAccess = ({ req }) => {
   return canEditContent(user);
 };
 
-export { isSuperAdmin, canPublish, canManageEnquiries };
+export { isSuperAdmin, canPublish, canManageEnquiries, isReadOnly };

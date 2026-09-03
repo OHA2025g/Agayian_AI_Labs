@@ -11,7 +11,7 @@ export default function NavFooter() {
       >
         Open website
       </a>
-      <p className="agrayian-nav-footer__meta">Responsible AI · Content ops</p>
+      <p className="agrayian-nav-footer__meta">Website · Leads · Settings</p>
     </div>
   );
 }

@@ -50,7 +50,7 @@ export function ImpactStoryCard({
         </div>
       </dl>
       <Link
-        href={`/impact-stories#${story.slug}`}
+        href={`/impact-stories/${story.slug}`}
         className="mt-5 text-sm font-semibold text-text-on-dark hover:text-cyan"
       >
         Read story

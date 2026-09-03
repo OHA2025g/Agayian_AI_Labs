@@ -1,142 +1,131 @@
-/* Agrayian AI Labs — Payload admin brand theme */
+/* Agrayian admin — light workspace */
 
 @layer payload {
   :root {
-    --ag-navy-950: #020408;
-    --ag-navy-900: #050b18;
-    --ag-navy-850: #091426;
-    --ag-navy-800: #0e1b30;
-    --ag-navy-700: #162742;
-    --ag-navy-600: #1e3554;
+    --ag-navy: #0b1a2e;
+    --ag-navy-700: #1a3a58;
     --ag-red: #e63946;
-    --ag-red-hover: #ff4d5a;
-    --ag-cyan: #19c3d3;
-    --ag-cyan-soft: rgba(25, 195, 211, 0.16);
-    --ag-red-soft: rgba(230, 57, 70, 0.14);
-    --ag-text: #f8fafc;
-    --ag-muted: #9ca9bc;
+    --ag-red-hover: #d32f3c;
+    --ag-cyan: #0e8a96;
+    --ag-paper: #f6f7fa;
+    --ag-card: #ffffff;
+    --ag-line: #e4e8ef;
+    --ag-muted: #5b6b7c;
 
-    /* Cool navy greyscale — dark mode inherits via elevation inversion */
     --color-base-0: rgb(255, 255, 255);
-    --color-base-50: rgb(246, 248, 251);
-    --color-base-100: rgb(232, 238, 246);
-    --color-base-150: rgb(214, 223, 235);
-    --color-base-200: rgb(190, 203, 220);
-    --color-base-250: rgb(166, 182, 204);
-    --color-base-300: rgb(142, 161, 186);
-    --color-base-350: rgb(122, 142, 168);
-    --color-base-400: rgb(105, 126, 154);
-    --color-base-450: rgb(90, 112, 140);
+    --color-base-50: rgb(246, 247, 250);
+    --color-base-100: rgb(238, 241, 246);
+    --color-base-150: rgb(228, 232, 239);
+    --color-base-200: rgb(214, 220, 230);
+    --color-base-250: rgb(196, 205, 218);
+    --color-base-300: rgb(172, 184, 201);
+    --color-base-350: rgb(148, 163, 184);
+    --color-base-400: rgb(122, 140, 164);
+    --color-base-450: rgb(98, 118, 144);
     --color-base-500: rgb(78, 99, 126);
-    --color-base-550: rgb(66, 86, 112);
-    --color-base-600: rgb(54, 74, 99);
-    --color-base-650: rgb(42, 62, 86);
-    --color-base-700: rgb(30, 53, 84);
-    --color-base-750: rgb(22, 39, 66);
-    --color-base-800: rgb(14, 27, 48);
-    --color-base-850: rgb(9, 20, 38);
-    --color-base-900: rgb(5, 11, 24);
-    --color-base-950: rgb(3, 7, 16);
-    --color-base-1000: rgb(2, 4, 8);
+    --color-base-550: rgb(58, 80, 108);
+    --color-base-600: rgb(42, 64, 90);
+    --color-base-650: rgb(30, 52, 78);
+    --color-base-700: rgb(22, 42, 66);
+    --color-base-750: rgb(16, 34, 54);
+    --color-base-800: rgb(11, 26, 46);
+    --color-base-850: rgb(8, 20, 36);
+    --color-base-900: rgb(6, 14, 26);
+    --color-base-950: rgb(4, 10, 18);
+    --color-base-1000: rgb(2, 6, 12);
 
-    /* Brand red as error accent */
-    --color-error-400: rgb(255, 90, 102);
-    --color-error-450: rgb(242, 70, 82);
+    --color-error-400: rgb(255, 120, 128);
+    --color-error-450: rgb(242, 80, 90);
     --color-error-500: rgb(230, 57, 70);
     --color-error-550: rgb(204, 48, 60);
     --color-error-600: rgb(178, 40, 52);
 
-    /* Cyan as success / primary action accent */
-    --color-success-400: rgb(56, 214, 228);
-    --color-success-450: rgb(36, 205, 220);
-    --color-success-500: rgb(25, 195, 211);
-    --color-success-550: rgb(18, 168, 182);
-    --color-success-600: rgb(14, 142, 155);
+    --color-success-400: rgb(56, 180, 168);
+    --color-success-450: rgb(32, 160, 150);
+    --color-success-500: rgb(14, 138, 150);
+    --color-success-550: rgb(12, 118, 128);
+    --color-success-600: rgb(10, 98, 108);
 
-    --color-blue-500: rgb(25, 195, 211);
-    --color-blue-550: rgb(18, 168, 182);
+    --color-blue-500: rgb(14, 138, 150);
+    --color-blue-550: rgb(12, 118, 128);
 
-    --style-radius-s: 6px;
-    --style-radius-m: 10px;
-    --style-radius-l: 14px;
+    --style-radius-s: 8px;
+    --style-radius-m: 12px;
+    --style-radius-l: 16px;
   }
 
   html {
+    color-scheme: light;
     font-feature-settings: "ss01" on, "cv11" on;
   }
 
-  /* ——— Shell ——— */
   .template-default__wrap {
-    background:
-      radial-gradient(ellipse 80% 50% at 10% -10%, rgba(25, 195, 211, 0.08), transparent 55%),
-      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(230, 57, 70, 0.07), transparent 50%),
-      var(--theme-bg);
+    background: var(--ag-paper);
   }
 
   .nav {
-    border-right: 1px solid color-mix(in srgb, var(--ag-cyan) 18%, var(--theme-border-color));
-    background:
-      linear-gradient(180deg, rgba(25, 195, 211, 0.05), transparent 28%),
-      var(--theme-bg);
+    background: var(--ag-card);
+    border-right: 1px solid var(--ag-line);
   }
 
   .nav-group__toggle {
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    font-size: 0.68rem;
-    color: var(--theme-elevation-600);
+    font-size: 0.66rem;
+    font-weight: 650;
+    color: var(--ag-muted);
+  }
+
+  .nav .nav__link {
+    border-radius: 8px;
   }
 
   .nav .nav__link:hover,
   .nav .nav__link:focus-visible {
-    background: var(--ag-cyan-soft);
+    background: #eef3f8;
   }
 
   .app-header__bg {
+    background: color-mix(in srgb, var(--ag-card) 92%, transparent);
+    border-bottom: 1px solid var(--ag-line);
     backdrop-filter: blur(12px);
-    background: color-mix(in srgb, var(--theme-bg) 82%, transparent);
-    border-bottom: 1px solid color-mix(in srgb, var(--ag-cyan) 12%, var(--theme-border-color));
   }
 
-  /* ——— Buttons ——— */
   .btn--style-primary {
-    background: linear-gradient(135deg, var(--ag-red), #c92a38) !important;
+    background: var(--ag-red) !important;
     border-color: transparent !important;
     color: #fff !important;
-    box-shadow: 0 8px 24px rgba(230, 57, 70, 0.28);
+    box-shadow: none;
   }
 
   .btn--style-primary:hover {
-    background: linear-gradient(135deg, var(--ag-red-hover), var(--ag-red)) !important;
+    background: var(--ag-red-hover) !important;
   }
 
   .btn--style-secondary {
-    border-color: color-mix(in srgb, var(--ag-cyan) 35%, var(--theme-border-color)) !important;
-  }
-
-  /* ——— Login ——— */
-  .login__brand {
-    margin-bottom: 1.25rem;
+    border-color: var(--ag-line) !important;
+    background: var(--ag-card) !important;
   }
 
   html:has(.login__form),
   body:has(.login__form),
   .template-default__wrap:has(.login__form) {
     background:
-      radial-gradient(ellipse 70% 55% at 20% 10%, rgba(25, 195, 211, 0.14), transparent 55%),
-      radial-gradient(ellipse 55% 45% at 90% 80%, rgba(230, 57, 70, 0.12), transparent 50%),
-      var(--ag-navy-900) !important;
+      radial-gradient(ellipse 70% 50% at 12% 0%, rgba(230, 57, 70, 0.06), transparent 50%),
+      radial-gradient(ellipse 50% 40% at 100% 100%, rgba(14, 138, 150, 0.06), transparent 46%),
+      var(--ag-paper) !important;
+  }
+
+  .login__brand {
+    margin-bottom: 1rem;
   }
 
   .login__form {
-    border: 1px solid color-mix(in srgb, var(--ag-cyan) 22%, transparent);
-    border-radius: 16px;
+    border: 1px solid var(--ag-line);
+    border-radius: 18px;
     padding: 1.75rem;
-    background: color-mix(in srgb, var(--ag-navy-800) 88%, transparent);
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.03),
-      0 24px 64px rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(10px);
+    background: var(--ag-card);
+    box-shadow: 0 18px 48px rgba(11, 26, 46, 0.08);
   }
 
   .agrayian-login-tagline {
@@ -148,7 +137,6 @@
     text-align: center;
   }
 
-  /* ——— Cards / tables ——— */
   .card,
   .collection-list__wrap,
   .doc-controls,
@@ -156,23 +144,18 @@
     border-radius: var(--style-radius-l);
   }
 
-  .card:hover {
-    border-color: color-mix(in srgb, var(--ag-cyan) 30%, var(--theme-border-color));
-  }
-
   .table thead th {
     letter-spacing: 0.04em;
     text-transform: uppercase;
     font-size: 0.7rem;
-    color: var(--theme-elevation-500);
+    color: var(--ag-muted);
   }
 
-  /* ——— Brand graphics ——— */
   .agrayian-admin-logo {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
-    color: var(--ag-text);
+    gap: 0.8rem;
+    color: var(--ag-navy);
   }
 
   .agrayian-admin-logo__mark {
@@ -189,10 +172,6 @@
     box-shadow: none;
   }
 
-  .agrayian-admin-logo__mark--svg {
-    background: transparent;
-  }
-
   .agrayian-admin-logo__mark img {
     width: 100%;
     height: 100%;
@@ -203,19 +182,19 @@
   .agrayian-admin-logo__copy {
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 0.15rem;
     line-height: 1.15;
   }
 
   .agrayian-admin-logo__name {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 650;
     letter-spacing: -0.02em;
   }
 
   .agrayian-admin-logo__tag {
-    font-size: 0.68rem;
-    letter-spacing: 0.16em;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--ag-cyan);
   }
@@ -238,171 +217,186 @@
     padding: 0;
   }
 
-  /* ——— Dashboard welcome ——— */
   .agrayian-dash {
     display: grid;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: 1.35rem;
+    margin-bottom: 0.5rem;
   }
 
   .agrayian-dash__hero {
-    position: relative;
-    overflow: hidden;
-    border-radius: 18px;
-    padding: clamp(1.5rem, 3vw, 2.25rem);
-    border: 1px solid color-mix(in srgb, var(--ag-cyan) 24%, transparent);
-    background:
-      linear-gradient(135deg, rgba(25, 195, 211, 0.12), transparent 42%),
-      linear-gradient(320deg, rgba(230, 57, 70, 0.12), transparent 40%),
-      linear-gradient(180deg, var(--ag-navy-800), var(--ag-navy-900));
-    color: var(--ag-text);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
-  }
-
-  .agrayian-dash__hero::after {
-    content: "";
-    position: absolute;
-    inset: auto -20% -60% auto;
-    width: 280px;
-    height: 280px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(25, 195, 211, 0.22), transparent 65%);
-    pointer-events: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+    padding: 1.35rem 1.5rem;
+    border: 1px solid var(--ag-line);
+    border-radius: 16px;
+    background: var(--ag-card);
   }
 
   .agrayian-dash__eyebrow {
-    margin: 0 0 0.55rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
+    margin: 0 0 0.35rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--ag-cyan);
+    font-weight: 650;
   }
 
   .agrayian-dash__title {
     margin: 0;
-    font-size: clamp(1.55rem, 2.4vw, 2.1rem);
+    font-size: clamp(1.35rem, 2vw, 1.7rem);
     font-weight: 650;
     letter-spacing: -0.03em;
-    line-height: 1.15;
+    color: var(--ag-navy);
+    line-height: 1.2;
   }
 
   .agrayian-dash__lead {
-    margin: 0.75rem 0 0;
-    max-width: 46rem;
+    margin: 0.45rem 0 0;
+    max-width: 40rem;
     color: var(--ag-muted);
-    font-size: 0.98rem;
-    line-height: 1.55;
+    font-size: 0.92rem;
+    line-height: 1.5;
   }
 
   .agrayian-dash__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.65rem;
-    margin-top: 1.35rem;
+    gap: 0.55rem;
   }
 
   .agrayian-dash__btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 2.4rem;
-    padding: 0.55rem 1.05rem;
+    min-height: 2.25rem;
+    padding: 0.45rem 0.95rem;
     border-radius: 999px;
-    font-size: 0.875rem;
+    font-size: 0.84rem;
     font-weight: 600;
     text-decoration: none;
-    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-  }
-
-  .agrayian-dash__btn:hover {
-    transform: translateY(-1px);
   }
 
   .agrayian-dash__btn--primary {
-    background: linear-gradient(135deg, var(--ag-red), #c92a38);
+    background: var(--ag-red);
     color: #fff;
-    box-shadow: 0 10px 28px rgba(230, 57, 70, 0.32);
+  }
+
+  .agrayian-dash__btn--primary:hover {
+    background: var(--ag-red-hover);
   }
 
   .agrayian-dash__btn--ghost {
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    color: var(--ag-text);
-    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--ag-line);
+    color: var(--ag-navy);
+    background: var(--ag-card);
   }
 
   .agrayian-dash__btn--ghost:hover {
-    border-color: color-mix(in srgb, var(--ag-cyan) 50%, transparent);
-    background: var(--ag-cyan-soft);
+    border-color: #c9d3e0;
+    background: #f3f6f9;
+  }
+
+  .agrayian-dash__section {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .agrayian-dash__section-title {
+    margin: 0;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ag-muted);
+    font-weight: 650;
   }
 
   .agrayian-dash__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 0.85rem;
+    grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+    gap: 0.7rem;
   }
 
   .agrayian-dash__card {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
-    padding: 1rem 1.1rem;
-    border-radius: 14px;
+    gap: 0.28rem;
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
     text-decoration: none;
     color: inherit;
-    border: 1px solid var(--theme-border-color);
-    background: color-mix(in srgb, var(--theme-elevation-50) 88%, transparent);
-    transition:
-      border-color 0.15s ease,
-      transform 0.15s ease,
-      box-shadow 0.15s ease;
+    border: 1px solid var(--ag-line);
+    background: var(--ag-card);
   }
 
   .agrayian-dash__card:hover {
-    transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--ag-cyan) 40%, var(--theme-border-color));
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+    border-color: #c5d0de;
+    background: #fbfcfe;
   }
 
   .agrayian-dash__card-label {
     font-weight: 650;
     letter-spacing: -0.01em;
+    color: var(--ag-navy);
   }
 
   .agrayian-dash__card-hint {
-    font-size: 0.8rem;
-    color: var(--theme-elevation-500);
+    font-size: 0.78rem;
+    color: var(--ag-muted);
     line-height: 1.4;
   }
 
-  /* ——— Nav footer ——— */
+  .agrayian-dash__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .agrayian-dash__list a {
+    color: var(--ag-navy);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .agrayian-dash__list a:hover {
+    color: var(--ag-red);
+  }
+
   .agrayian-nav-footer {
     margin-top: auto;
     padding: 1rem 1.25rem 1.25rem;
-    border-top: 1px solid var(--theme-border-color);
+    border-top: 1px solid var(--ag-line);
   }
 
   .agrayian-nav-footer__link {
     display: inline-flex;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--ag-cyan);
+    color: var(--ag-navy-700);
     text-decoration: none;
   }
 
   .agrayian-nav-footer__link:hover {
-    color: #5fd7e3;
+    color: var(--ag-red);
   }
 
   .agrayian-nav-footer__meta {
-    margin: 0.4rem 0 0;
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
+    margin: 0.35rem 0 0;
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--theme-elevation-500);
+    color: var(--ag-muted);
   }
 
-  /* Soften default dashboard list cards under our hero */
-  .dashboard .dashboard__group {
-    margin-top: 0.5rem;
+  /* Default Payload collection cards duplicate the studio shortcuts. */
+  .dashboard .dashboard__group,
+  .dashboard .dashboard__label,
+  .dashboard .modular-dashboard,
+  .dashboard .collections__card-list {
+    display: none !important;
   }
 }

@@ -7,8 +7,10 @@ import { buildConfig } from "payload";
 import sharp from "sharp";
 import {
   AuditLogs,
+  Campaigns,
   Capabilities,
   Careers,
+  ContentCalendar,
   Enquiries,
   Faqs,
   ImpactStories,
@@ -18,6 +20,7 @@ import {
   NewsletterSubscribers,
   Partners,
   Products,
+  Redirects,
   Resources,
   TeamMembers,
   Testimonials,
@@ -58,7 +61,7 @@ export default buildConfig({
     meta: {
       titleSuffix: " · Agrayian Admin",
       description:
-        "Agrayian AI Labs content command centre — products, insights, and site globals.",
+        "Agrayian AI Labs content studio — pages, catalog, campaigns and inbox.",
       icons: [
         {
           rel: "icon",
@@ -73,7 +76,7 @@ export default buildConfig({
       ],
       openGraph: {
         title: "Agrayian Admin",
-        description: "Content command centre for Agrayian AI Labs.",
+        description: "Content studio for Agrayian AI Labs.",
         images: [{ url: "/og-default.png" }],
       },
     },
@@ -86,7 +89,7 @@ export default buildConfig({
       beforeLogin: ["/payload/admin/LoginTagline"],
       afterNavLinks: ["/payload/admin/NavFooter"],
     },
-    theme: "dark",
+    theme: "light",
   },
   routes: {
     admin: "/admin",
@@ -100,6 +103,9 @@ export default buildConfig({
     Industries,
     ImpactStories,
     Insights,
+    Campaigns,
+    ContentCalendar,
+    Redirects,
     Faqs,
     TeamMembers,
     Careers,

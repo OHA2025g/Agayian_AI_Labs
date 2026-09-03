@@ -21,46 +21,26 @@ import {
   UserCog,
   type LucideIcon,
 } from "lucide-react";
+import Link from "next/link";
 import { PageHero } from "@/components/layout/PageHero";
-import { AgrayianMark } from "@/components/layout/AgrayianMark";
-import { OriginalSculpture } from "@/components/visualisations/glass/OriginalSculpture";
-import { mockupAssets } from "@/config/mockup-assets";
+import { CompanyGlowSculpture } from "@/components/visualisations/company/CompanyGlowSculpture";
+import { companySculptures } from "@/config/company-sculptures";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { LightCtaBar } from "@/components/ui/DarkCtaBand";
 import { ProcessFlow } from "@/components/ui/ProcessFlow";
-import { companyIntro, companyValues } from "@/data/company";
-import { getPublishedGlobal } from "@/lib/cms/published";
+import { getCareers, getTeamMembers } from "@/lib/cms/catalog";
+import { getCompanyPageContent } from "@/lib/cms/page-content";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
-export const metadata = buildMetadata({
-  title: "Company",
-  description:
-    "Learn about Agrayian AI Labs — our vision, mission, values and commitment to responsible AI for enterprises and governments.",
-  path: "/company",
-});
-
-type CompanyGlobal = {
-  vision?: string;
-  mission?: string;
-  introduction?: string;
-  whyAgrayian?: { text?: string }[] | string[];
-  deliveryPhilosophy?: string[] | string;
-  responsibleAiCommitment?: string;
-  technologyPhilosophy?: string;
-  careersCopy?: string;
-  partnerEcosystemCopy?: string;
-  values?: { title?: string; description?: string }[];
-};
-
-function asStringList(value: unknown): string[] {
-  if (!Array.isArray(value)) return [];
-  return value.map((item) =>
-    typeof item === "string"
-      ? item
-      : String((item as { text?: string }).text ?? ""),
-  );
+export async function generateMetadata() {
+  const company = await getCompanyPageContent();
+  return buildMetadata({
+    title: company.seo.title,
+    description: company.seo.description,
+    path: "/company",
+  });
 }
 
 const principleIcons: LucideIcon[] = [
@@ -176,91 +156,33 @@ function PairConnector() {
 function CompanyHubVisual() {
   return (
     <div className="relative mx-auto w-full max-w-lg bg-transparent lg:max-w-none">
-      <OriginalSculpture
-        src={mockupAssets.originalCompanyHub}
-        alt="Glass hub connecting public systems, enterprise and human impact"
+      <CompanyGlowSculpture
+        asset={companySculptures.heroHub}
         priority
-        className="mix-blend-multiply"
+        sizes="(max-width: 1024px) 90vw, 48vw"
       />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[48.8%] z-10 h-[3.45rem] w-[5.7rem] -translate-x-1/2 -translate-y-1/2 mix-blend-multiply"
-      >
-        <div className="h-full w-full origin-center opacity-[0.52] [clip-path:ellipse(48%_42%_at_50%_50%)] [transform:perspective(200px)_rotateX(16deg)_scale(1.03)]">
-          <AgrayianMark variant="navy" />
-        </div>
-      </div>
-      <span className="absolute left-4 top-6 rounded-lg border border-white/85 bg-white/90 px-2.5 py-1.5 text-[0.65rem] font-semibold text-navy shadow-sm">
+      <span className="absolute left-[6%] top-[8%] rounded-lg border border-[var(--border-soft)] bg-bg-primary/85 px-2.5 py-1.5 text-[0.65rem] font-semibold text-navy">
         Public systems
       </span>
-      <span className="absolute right-4 top-6 rounded-lg border border-white/85 bg-white/90 px-2.5 py-1.5 text-[0.65rem] font-semibold text-navy shadow-sm">
-        Human impact
-      </span>
-      <span className="absolute left-1/2 top-4 -translate-x-1/2 rounded-lg border border-white/85 bg-white/90 px-2.5 py-1.5 text-[0.65rem] font-semibold text-navy shadow-sm">
+      <span className="absolute left-1/2 top-[2%] -translate-x-1/2 rounded-lg border border-[var(--border-soft)] bg-bg-primary/85 px-2.5 py-1.5 text-[0.65rem] font-semibold text-navy">
         Enterprise
+      </span>
+      <span className="absolute right-[6%] top-[8%] rounded-lg border border-[var(--border-soft)] bg-bg-primary/85 px-2.5 py-1.5 text-[0.65rem] font-semibold text-navy">
+        Human impact
       </span>
     </div>
   );
 }
 
-function CubeGlyph({ variant }: { variant: "simple" | "platform" | "puzzle" }) {
-  const shapes =
-    variant === "simple"
-      ? [
-          "M40 28 L64 40 L40 52 L16 40 Z",
-          "M16 40 L40 52 L40 68 L16 56 Z",
-          "M40 52 L64 40 L64 56 L40 68 Z",
-        ]
-      : variant === "platform"
-        ? [
-            "M28 24 L52 36 L28 48 L4 36 Z",
-            "M4 36 L28 48 L28 60 L4 48 Z",
-            "M28 48 L52 36 L52 48 L28 60 Z",
-            "M48 20 L72 32 L48 44 L24 32 Z",
-            "M52 40 L76 28 L76 40 L52 52 Z",
-          ]
-        : [
-            "M32 20 L52 30 L32 40 L12 30 Z",
-            "M12 30 L32 40 L32 54 L12 44 Z",
-            "M32 40 L52 30 L52 44 L32 54 Z",
-            "M52 34 L72 44 L52 54 L32 44 Z",
-            "M52 54 L72 44 L72 58 L52 68 Z",
-          ];
-
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 80 76"
-      className="h-16 w-16 shrink-0 text-tech-blue sm:h-[4.5rem] sm:w-[4.5rem]"
-    >
-      {shapes.map((d, i) => (
-        <path
-          key={i}
-          d={d}
-          fill={
-            i % 3 === 0
-              ? "rgba(59,130,246,0.35)"
-              : i % 3 === 1
-                ? "rgba(59,130,246,0.18)"
-                : "rgba(30,58,95,0.22)"
-          }
-          stroke="rgba(255,255,255,0.75)"
-          strokeWidth="1"
-        />
-      ))}
-    </svg>
-  );
-}
-
 function ImpactHexDiagram() {
   return (
-    <div className="relative mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-[1fr_auto_1fr] lg:gap-4">
-      <ul className="space-y-5 lg:space-y-8 lg:pr-4 lg:text-right">
+    <div className="relative mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-[1fr_minmax(16rem,28rem)_1fr] lg:gap-2">
+      <ul className="space-y-5 lg:space-y-8 lg:pr-2 lg:text-right">
         {impactLeft.map((item) => {
           const Icon = item.icon;
           return (
             <li key={item.title} className="flex gap-3 lg:flex-row-reverse">
-              <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/80 bg-white/85 text-tech-blue shadow-sm">
+              <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border-soft)] bg-white/80 text-tech-blue">
                 <Icon className="h-5 w-5" aria-hidden />
               </span>
               <div className="min-w-0">
@@ -276,73 +198,19 @@ function ImpactHexDiagram() {
         })}
       </ul>
 
-      <div className="relative mx-auto flex h-56 w-56 items-center justify-center sm:h-64 sm:w-64">
-        <svg
-          aria-hidden
-          viewBox="0 0 200 200"
-          className="absolute inset-0 h-full w-full"
-        >
-          <defs>
-            <radialGradient id="hexGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#ff4d5e" stopOpacity="0.35" />
-              <stop offset="55%" stopColor="#149fe6" stopOpacity="0.12" />
-              <stop offset="100%" stopColor="#149fe6" stopOpacity="0" />
-            </radialGradient>
-            <linearGradient id="hexStroke" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#93c5fd" />
-              <stop offset="100%" stopColor="#ff4d5e" stopOpacity="0.7" />
-            </linearGradient>
-          </defs>
-          <circle cx="100" cy="100" r="92" fill="url(#hexGlow)" />
-          {/* Outer hex */}
-          <polygon
-            points="100,18 168,55 168,145 100,182 32,145 32,55"
-            fill="rgba(255,255,255,0.55)"
-            stroke="url(#hexStroke)"
-            strokeWidth="2"
-          />
-          {/* Inner hex */}
-          <polygon
-            points="100,48 145,72 145,128 100,152 55,128 55,72"
-            fill="rgba(255,255,255,0.75)"
-            stroke="rgba(59,130,246,0.35)"
-            strokeWidth="1.5"
-          />
-          {/* Dashed spokes */}
-          <g
-            stroke="rgba(59,130,246,0.35)"
-            strokeWidth="1.2"
-            strokeDasharray="3 4"
-            fill="none"
-          >
-            <line x1="100" y1="100" x2="32" y2="55" />
-            <line x1="100" y1="100" x2="32" y2="145" />
-            <line x1="100" y1="100" x2="100" y2="18" />
-            <line x1="100" y1="100" x2="168" y2="55" />
-            <line x1="100" y1="100" x2="168" y2="145" />
-            <line x1="100" y1="100" x2="100" y2="182" />
-          </g>
-          <circle cx="100" cy="100" r="28" fill="rgba(255,77,94,0.12)" />
-          <circle
-            cx="100"
-            cy="100"
-            r="22"
-            fill="rgba(255,255,255,0.95)"
-            stroke="rgba(255,77,94,0.45)"
-            strokeWidth="1.5"
-          />
-        </svg>
-        <div className="relative z-10 h-12 w-16 sm:h-14 sm:w-[4.5rem]">
-          <AgrayianMark variant="light" />
-        </div>
+      <div className="relative mx-auto w-full max-w-md bg-transparent">
+        <CompanyGlowSculpture
+          asset={companySculptures.impact}
+          sizes="(max-width: 1024px) 80vw, 28rem"
+        />
       </div>
 
-      <ul className="space-y-5 lg:space-y-8 lg:pl-4">
+      <ul className="space-y-5 lg:space-y-8 lg:pl-2">
         {impactRight.map((item) => {
           const Icon = item.icon;
           return (
             <li key={item.title} className="flex gap-3">
-              <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/80 bg-white/85 text-tech-blue shadow-sm">
+              <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border-soft)] bg-white/80 text-tech-blue">
                 <Icon className="h-5 w-5" aria-hidden />
               </span>
               <div className="min-w-0">
@@ -362,36 +230,23 @@ function ImpactHexDiagram() {
 }
 
 export default async function CompanyPage() {
-  const doc = await getPublishedGlobal<CompanyGlobal>("company-page");
+  const [company, roles, people] = await Promise.all([
+    getCompanyPageContent(),
+    getCareers(),
+    getTeamMembers(),
+  ]);
   const intro = {
-    vision: doc?.vision || companyIntro.vision,
-    mission: doc?.mission || companyIntro.mission,
-    introduction: doc?.introduction || companyIntro.introduction,
-    whyAgrayian: doc?.whyAgrayian
-      ? asStringList(doc.whyAgrayian)
-      : companyIntro.whyAgrayian,
-    deliveryPhilosophy: doc?.deliveryPhilosophy
-      ? asStringList(
-          Array.isArray(doc.deliveryPhilosophy)
-            ? doc.deliveryPhilosophy
-            : [doc.deliveryPhilosophy],
-        )
-      : companyIntro.deliveryPhilosophy,
-    responsibleAiCommitment:
-      doc?.responsibleAiCommitment || companyIntro.responsibleAiCommitment,
-    technologyPhilosophy:
-      doc?.technologyPhilosophy || companyIntro.technologyPhilosophy,
-    careers: doc?.careersCopy || companyIntro.careers,
-    partnerEcosystem:
-      doc?.partnerEcosystemCopy || companyIntro.partnerEcosystem,
+    vision: company.vision,
+    mission: company.mission,
+    introduction: company.introduction,
+    whyAgrayian: company.whyAgrayian,
+    deliveryPhilosophy: company.deliveryPhilosophy,
+    responsibleAiCommitment: company.responsibleAiCommitment,
+    technologyPhilosophy: company.technologyPhilosophy,
+    careers: company.careersCopy,
+    partnerEcosystem: company.partnerEcosystemCopy,
   };
-  const values =
-    doc?.values?.length && doc.values.every((v) => v.title)
-      ? doc.values.map((v) => ({
-          title: String(v.title),
-          description: String(v.description ?? ""),
-        }))
-      : companyValues;
+  const values = company.values;
 
   const partnershipDelivery =
     intro.whyAgrayian[0] ||
@@ -402,19 +257,19 @@ export default async function CompanyPage() {
       title: "Responsible AI",
       body: intro.responsibleAiCommitment,
       icon: Shield,
-      cube: "simple" as const,
+      sculpture: companySculptures.responsible,
     },
     {
       title: "Technology",
       body: intro.technologyPhilosophy,
       icon: Layers,
-      cube: "platform" as const,
+      sculpture: companySculptures.technology,
     },
     {
       title: "Partnership",
       body: partnershipDelivery,
       icon: Handshake,
-      cube: "puzzle" as const,
+      sculpture: companySculptures.partnership,
     },
   ];
 
@@ -548,40 +403,29 @@ export default async function CompanyPage() {
             </h2>
           </Reveal>
 
-          {intro.deliveryPhilosophy.length > 0 ? (
-            <RevealGroup className="mt-8 grid gap-3 sm:grid-cols-2">
-              {intro.deliveryPhilosophy.map((item) => (
-                <RevealItem key={item}>
-                  <GlassCard variant="soft" className="h-full p-4 text-sm text-muted-light">
-                    {item}
-                  </GlassCard>
-                </RevealItem>
-              ))}
-            </RevealGroup>
-          ) : null}
-
-          <RevealGroup className="mt-10 space-y-5">
+          <RevealGroup className="mt-10 grid gap-5 md:grid-cols-3">
             {deliveryRows.map((row) => {
               const Icon = row.icon;
               return (
                 <RevealItem key={row.title}>
-                  <GlassCard className="overflow-hidden p-5 md:p-6">
-                    <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex min-w-0 flex-1 gap-4">
-                        <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/80 bg-white/85 text-tech-blue shadow-sm">
-                          <Icon className="h-5 w-5" aria-hidden />
-                        </span>
-                        <div className="min-w-0">
-                          <h3 className="font-heading text-lg font-semibold text-navy">
-                            {row.title}
-                          </h3>
-                          <p className="mt-2 text-sm leading-relaxed text-muted-light">
-                            {row.body}
-                          </p>
-                        </div>
-                      </div>
-                      <CubeGlyph variant={row.cube} />
+                  <GlassCard className="flex h-full flex-col overflow-hidden p-5 md:p-6">
+                    <div className="mx-auto w-full max-w-[13rem] bg-transparent">
+                      <CompanyGlowSculpture
+                        asset={row.sculpture}
+                        sizes="(max-width: 768px) 60vw, 13rem"
+                      />
                     </div>
+                    <div className="mt-4 flex items-center gap-3">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--border-soft)] bg-white/80 text-tech-blue">
+                        <Icon className="h-5 w-5" aria-hidden />
+                      </span>
+                      <h3 className="font-heading text-lg font-semibold text-navy">
+                        {row.title}
+                      </h3>
+                    </div>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-light">
+                      {row.body}
+                    </p>
                   </GlassCard>
                 </RevealItem>
               );
@@ -626,6 +470,22 @@ export default async function CompanyPage() {
                 <p className="mt-4 flex-1 text-sm leading-relaxed text-muted-light">
                   {intro.careers}
                 </p>
+                {roles.length ? (
+                  <Link
+                    href="/company/careers"
+                    className="mt-4 text-sm font-semibold text-tech-blue hover:text-navy"
+                  >
+                    View open roles
+                  </Link>
+                ) : null}
+                {people.length ? (
+                  <Link
+                    href="/company/leadership"
+                    className="mt-2 text-sm font-semibold text-tech-blue hover:text-navy"
+                  >
+                    Leadership
+                  </Link>
+                ) : null}
                 <p className="mt-5 inline-flex items-start gap-2 rounded-full border border-[var(--border-soft)] bg-white/70 px-3.5 py-2 text-xs text-muted-light shadow-sm">
                   <Bell className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand" />
                   Opportunities appear only when verified openings are available.

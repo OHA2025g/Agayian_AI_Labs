@@ -43,7 +43,7 @@ export function RelatedProductsRow({
           {products.map((product) => (
             <Link
               key={product.id}
-              href={`/products?product=${product.slug}`}
+              href={`/products/${product.slug}`}
               className="capabilities-product-card"
             >
               <ProductGlassArt

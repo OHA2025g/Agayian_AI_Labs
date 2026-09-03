@@ -1,21 +1,29 @@
 import type { NextConfig } from "next";
 import { withPayload } from "@payloadcms/next/withPayload";
-import { products } from "./src/data/products";
 
 const turnstileHosts = "https://challenges.cloudflare.com";
 const vercelInsights =
   "https://va.vercel-scripts.com https://vitals.vercel-insights.com";
+const marketingHosts =
+  "https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://connect.facebook.net https://www.facebook.com https://snap.licdn.com https://px.ads.linkedin.com";
 
 const publicCsp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' " +
     vercelInsights +
     " " +
-    turnstileHosts,
+    turnstileHosts +
+    " " +
+    marketingHosts,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  "img-src 'self' data: blob: https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com https://px.ads.linkedin.com",
   "font-src 'self' data:",
-  "connect-src 'self' " + vercelInsights + " " + turnstileHosts,
+  "connect-src 'self' " +
+    vercelInsights +
+    " " +
+    turnstileHosts +
+    " " +
+    marketingHosts,
   "frame-src " + turnstileHosts,
   "frame-ancestors 'none'",
   "base-uri 'self'",
@@ -51,15 +59,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   // Required for production Docker / EasyPanel images
   output: "standalone",
+  allowedDevOrigins: ["127.0.0.1"],
   images: {
     qualities: [100, 75],
-  },
-  async redirects() {
-    return products.map((product) => ({
-      source: `/products/${product.slug}`,
-      destination: `/products?product=${product.slug}`,
-      permanent: true,
-    }));
   },
   async headers() {
     return [

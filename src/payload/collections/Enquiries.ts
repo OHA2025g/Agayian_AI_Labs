@@ -72,6 +72,24 @@ export const Enquiries: CollectionConfig = {
       relationTo: "users",
     },
     {
+      type: "collapsible",
+      label: "Campaign attribution",
+      admin: { initCollapsed: true },
+      fields: [
+        { name: "utmSource", type: "text" },
+        { name: "utmMedium", type: "text" },
+        { name: "utmCampaign", type: "text" },
+        { name: "utmContent", type: "text" },
+        { name: "utmTerm", type: "text" },
+        { name: "landingPath", type: "text" },
+        {
+          name: "campaign",
+          type: "relationship",
+          relationTo: "campaigns",
+        },
+      ],
+    },
+    {
       name: "notes",
       type: "array",
       fields: [

@@ -34,7 +34,7 @@ export function RelatedProducts({
           return (
             <Link
               key={product.id}
-              href={`/products?product=${product.slug}`}
+              href={`/products/${product.slug}`}
               className="industries-product-card"
             >
               <div className="industries-product-art-wrap">

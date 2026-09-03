@@ -74,6 +74,9 @@ export interface Config {
     industries: Industry;
     'impact-stories': ImpactStory;
     insights: Insight;
+    campaigns: Campaign;
+    'content-calendar': ContentCalendar;
+    redirects: Redirect;
     faqs: Faq;
     'team-members': TeamMember;
     careers: Career;
@@ -97,6 +100,9 @@ export interface Config {
     industries: IndustriesSelect<false> | IndustriesSelect<true>;
     'impact-stories': ImpactStoriesSelect<false> | ImpactStoriesSelect<true>;
     insights: InsightsSelect<false> | InsightsSelect<true>;
+    campaigns: CampaignsSelect<false> | CampaignsSelect<true>;
+    'content-calendar': ContentCalendarSelect<false> | ContentCalendarSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     careers: CareersSelect<false> | CareersSelect<true>;
@@ -262,24 +268,23 @@ export interface Media {
  */
 export interface Product {
   id: string;
-  slug: string;
   name: string;
   category: string;
   shortDescription: string;
+  featured?: boolean | null;
+  productStatus?: string | null;
   valueProposition?: string | null;
   businessProblem?: string | null;
   solutionOverview?: string | null;
   industries?: string[] | null;
   technologies?: string[] | null;
   targetUsers?: string[] | null;
-  capabilities?: string[] | null;
   outcomes?: string[] | null;
   dataSources?: string[] | null;
   aiCapabilities?: string[] | null;
   governance?: string[] | null;
   architecture?: string[] | null;
   deploymentOptions?: string[] | null;
-  relatedCapabilities?: string[] | null;
   modules?:
     | {
         title: string;
@@ -294,19 +299,20 @@ export interface Product {
         id?: string | null;
       }[]
     | null;
-  featured?: boolean | null;
-  productStatus?: string | null;
+  capabilities?: string[] | null;
+  relatedCapabilities?: string[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
+  slug: string;
   status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
   publishedAt?: string | null;
   /**
    * When set in the future, a secured cron can promote to published.
    */
   scheduledPublishAt?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    ogImage?: (string | null) | Media;
-  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -352,13 +358,10 @@ export interface Capability {
  */
 export interface Industry {
   id: string;
-  slug: string;
   name: string;
   summary: string;
   challenges?: string[] | null;
   opportunities?: string[] | null;
-  capabilities?: string[] | null;
-  products?: string[] | null;
   governance?: string[] | null;
   outcomes?: string[] | null;
   workflows?:
@@ -368,17 +371,20 @@ export interface Industry {
         id?: string | null;
       }[]
     | null;
+  capabilities?: string[] | null;
+  products?: string[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
+  slug: string;
   status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
   publishedAt?: string | null;
   /**
    * When set in the future, a secured cron can promote to published.
    */
   scheduledPublishAt?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    ogImage?: (string | null) | Media;
-  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -389,7 +395,6 @@ export interface Industry {
  */
 export interface ImpactStory {
   id: string;
-  slug: string;
   title: string;
   clientLabel: string;
   industry: string;
@@ -404,17 +409,18 @@ export interface ImpactStory {
   outcomes?: string[] | null;
   relatedProducts?: string[] | null;
   relatedCapabilities?: string[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
+  slug: string;
   status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
   publishedAt?: string | null;
   /**
    * When set in the future, a secured cron can promote to published.
    */
   scheduledPublishAt?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    ogImage?: (string | null) | Media;
-  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -425,7 +431,6 @@ export interface ImpactStory {
  */
 export interface Insight {
   id: string;
-  slug: string;
   title: string;
   excerpt: string;
   category?: string | null;
@@ -457,20 +462,101 @@ export interface Insight {
         id?: string | null;
       }[]
     | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
+  slug: string;
   status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
   publishedAt?: string | null;
   /**
    * When set in the future, a secured cron can promote to published.
    */
   scheduledPublishAt?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    ogImage?: (string | null) | Media;
-  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * Plan paid, organic and email campaigns. The tracking URL is built from the landing page and UTM fields.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaigns".
+ */
+export interface Campaign {
+  id: string;
+  name: string;
+  /**
+   * Short code used as utm_campaign when that field is empty.
+   */
+  code?: string | null;
+  channel: 'google_ads' | 'linkedin' | 'email' | 'organic' | 'social' | 'event' | 'partner' | 'other';
+  status: 'planned' | 'live' | 'paused' | 'completed';
+  objective?: string | null;
+  /**
+   * Path or full URL, e.g. /contact?interest=consultation
+   */
+  landingUrl: string;
+  /**
+   * Generated on save from the landing URL and UTM fields.
+   */
+  trackingUrl?: string | null;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+  utmContent?: string | null;
+  utmTerm?: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  budgetNote?: string | null;
+  notes?: string | null;
+  relatedInsight?: (string | null) | Insight;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Plan LinkedIn, email, blog and web updates. This is an editorial calendar, not an auto-poster.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "content-calendar".
+ */
+export interface ContentCalendar {
+  id: string;
+  title: string;
+  channel: 'linkedin' | 'instagram' | 'youtube' | 'x' | 'blog' | 'email' | 'website' | 'event';
+  status: 'idea' | 'drafting' | 'scheduled' | 'published' | 'cancelled';
+  scheduledAt?: string | null;
+  copy?: string | null;
+  publishedUrl?: string | null;
+  asset?: (string | null) | Media;
+  campaign?: (string | null) | Campaign;
+  relatedInsight?: (string | null) | Insight;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Send old or campaign URLs to a live page. Admin, API and system paths cannot be redirected.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: string;
+  /**
+   * Exact path, e.g. /old-contact
+   */
+  fromPath: string;
+  /**
+   * Destination path or full agrayian.ai URL.
+   */
+  toPath: string;
+  type: '301' | '302';
+  enabled?: boolean | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -602,11 +688,20 @@ export interface Testimonial {
  */
 export interface Resource {
   id: string;
-  slug: string;
   title: string;
   description?: string | null;
-  file: string | Media;
-  category?: string | null;
+  category?: ('Guide' | 'Framework' | 'Briefing' | 'Checklist' | 'Research') | null;
+  featured?: boolean | null;
+  /**
+   * Optional download. Leave empty if the resource is a page only — never invent a file.
+   */
+  file?: (string | null) | Media;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
+  slug: string;
   status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
   publishedAt?: string | null;
   /**
@@ -639,6 +734,13 @@ export interface Enquiry {
   capability?: string | null;
   careerRole?: string | null;
   assignee?: (string | null) | User;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+  utmContent?: string | null;
+  utmTerm?: string | null;
+  landingPath?: string | null;
+  campaign?: (string | null) | Campaign;
   notes?:
     | {
         body: string;
@@ -734,6 +836,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'insights';
         value: string | Insight;
+      } | null)
+    | ({
+        relationTo: 'campaigns';
+        value: string | Campaign;
+      } | null)
+    | ({
+        relationTo: 'content-calendar';
+        value: string | ContentCalendar;
+      } | null)
+    | ({
+        relationTo: 'redirects';
+        value: string | Redirect;
       } | null)
     | ({
         relationTo: 'faqs';
@@ -896,24 +1010,23 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
-  slug?: T;
   name?: T;
   category?: T;
   shortDescription?: T;
+  featured?: T;
+  productStatus?: T;
   valueProposition?: T;
   businessProblem?: T;
   solutionOverview?: T;
   industries?: T;
   technologies?: T;
   targetUsers?: T;
-  capabilities?: T;
   outcomes?: T;
   dataSources?: T;
   aiCapabilities?: T;
   governance?: T;
   architecture?: T;
   deploymentOptions?: T;
-  relatedCapabilities?: T;
   modules?:
     | T
     | {
@@ -928,11 +1041,8 @@ export interface ProductsSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
-  featured?: T;
-  productStatus?: T;
-  status?: T;
-  publishedAt?: T;
-  scheduledPublishAt?: T;
+  capabilities?: T;
+  relatedCapabilities?: T;
   seo?:
     | T
     | {
@@ -940,6 +1050,10 @@ export interface ProductsSelect<T extends boolean = true> {
         description?: T;
         ogImage?: T;
       };
+  slug?: T;
+  status?: T;
+  publishedAt?: T;
+  scheduledPublishAt?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -982,13 +1096,10 @@ export interface CapabilitiesSelect<T extends boolean = true> {
  * via the `definition` "industries_select".
  */
 export interface IndustriesSelect<T extends boolean = true> {
-  slug?: T;
   name?: T;
   summary?: T;
   challenges?: T;
   opportunities?: T;
-  capabilities?: T;
-  products?: T;
   governance?: T;
   outcomes?: T;
   workflows?:
@@ -998,9 +1109,8 @@ export interface IndustriesSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
-  status?: T;
-  publishedAt?: T;
-  scheduledPublishAt?: T;
+  capabilities?: T;
+  products?: T;
   seo?:
     | T
     | {
@@ -1008,6 +1118,10 @@ export interface IndustriesSelect<T extends boolean = true> {
         description?: T;
         ogImage?: T;
       };
+  slug?: T;
+  status?: T;
+  publishedAt?: T;
+  scheduledPublishAt?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1017,7 +1131,6 @@ export interface IndustriesSelect<T extends boolean = true> {
  * via the `definition` "impact-stories_select".
  */
 export interface ImpactStoriesSelect<T extends boolean = true> {
-  slug?: T;
   title?: T;
   clientLabel?: T;
   industry?: T;
@@ -1032,9 +1145,6 @@ export interface ImpactStoriesSelect<T extends boolean = true> {
   outcomes?: T;
   relatedProducts?: T;
   relatedCapabilities?: T;
-  status?: T;
-  publishedAt?: T;
-  scheduledPublishAt?: T;
   seo?:
     | T
     | {
@@ -1042,6 +1152,10 @@ export interface ImpactStoriesSelect<T extends boolean = true> {
         description?: T;
         ogImage?: T;
       };
+  slug?: T;
+  status?: T;
+  publishedAt?: T;
+  scheduledPublishAt?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1051,7 +1165,6 @@ export interface ImpactStoriesSelect<T extends boolean = true> {
  * via the `definition` "insights_select".
  */
 export interface InsightsSelect<T extends boolean = true> {
-  slug?: T;
   title?: T;
   excerpt?: T;
   category?: T;
@@ -1066,9 +1179,6 @@ export interface InsightsSelect<T extends boolean = true> {
         text?: T;
         id?: T;
       };
-  status?: T;
-  publishedAt?: T;
-  scheduledPublishAt?: T;
   seo?:
     | T
     | {
@@ -1076,9 +1186,69 @@ export interface InsightsSelect<T extends boolean = true> {
         description?: T;
         ogImage?: T;
       };
+  slug?: T;
+  status?: T;
+  publishedAt?: T;
+  scheduledPublishAt?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaigns_select".
+ */
+export interface CampaignsSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  channel?: T;
+  status?: T;
+  objective?: T;
+  landingUrl?: T;
+  trackingUrl?: T;
+  utmSource?: T;
+  utmMedium?: T;
+  utmCampaign?: T;
+  utmContent?: T;
+  utmTerm?: T;
+  startDate?: T;
+  endDate?: T;
+  budgetNote?: T;
+  notes?: T;
+  relatedInsight?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "content-calendar_select".
+ */
+export interface ContentCalendarSelect<T extends boolean = true> {
+  title?: T;
+  channel?: T;
+  status?: T;
+  scheduledAt?: T;
+  copy?: T;
+  publishedUrl?: T;
+  asset?: T;
+  campaign?: T;
+  relatedInsight?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects_select".
+ */
+export interface RedirectsSelect<T extends boolean = true> {
+  fromPath?: T;
+  toPath?: T;
+  type?: T;
+  enabled?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1169,11 +1339,19 @@ export interface TestimonialsSelect<T extends boolean = true> {
  * via the `definition` "resources_select".
  */
 export interface ResourcesSelect<T extends boolean = true> {
-  slug?: T;
   title?: T;
   description?: T;
-  file?: T;
   category?: T;
+  featured?: T;
+  file?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+      };
+  slug?: T;
   status?: T;
   publishedAt?: T;
   scheduledPublishAt?: T;
@@ -1202,6 +1380,13 @@ export interface EnquiriesSelect<T extends boolean = true> {
   capability?: T;
   careerRole?: T;
   assignee?: T;
+  utmSource?: T;
+  utmMedium?: T;
+  utmCampaign?: T;
+  utmContent?: T;
+  utmTerm?: T;
+  landingPath?: T;
+  campaign?: T;
   notes?:
     | T
     | {
@@ -1277,6 +1462,8 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Brand, contact, SEO, announcement and marketing tags.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
@@ -1286,6 +1473,12 @@ export interface SiteSetting {
   shortName?: string | null;
   websiteUrl: string;
   description?: string | null;
+  brandCopy?: {
+    headline?: string | null;
+    supporting?: string | null;
+    primaryCta?: string | null;
+    secondaryCta?: string | null;
+  };
   contactEmail?: string | null;
   contactPhone?: string | null;
   address?: string | null;
@@ -1304,58 +1497,85 @@ export interface SiteSetting {
     enabled?: boolean | null;
     message?: string | null;
     href?: string | null;
+    ctaLabel?: string | null;
+  };
+  /**
+   * IDs load only after a visitor accepts cookies. Leave blank to keep Vercel Analytics only.
+   */
+  marketing?: {
+    googleTagManagerId?: string | null;
+    gaMeasurementId?: string | null;
+    metaPixelId?: string | null;
+    linkedinPartnerId?: string | null;
+    defaultUtmSource?: string | null;
   };
   cookie?: {
     title?: string | null;
     description?: string | null;
   };
-  brandCopy?: {
-    headline?: string | null;
-    supporting?: string | null;
-    primaryCta?: string | null;
-    secondaryCta?: string | null;
-  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
+ * Header and footer links used on the public site.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navigation".
  */
 export interface Navigation {
   id: string;
+  /**
+   * Primary header links. Contact stays the red consultation button.
+   */
   main?:
     | {
         label: string;
         href: string;
+        shortLabel?: string | null;
         id?: string | null;
       }[]
     | null;
-  capabilityNav?:
-    | {
-        label: string;
-        href: string;
-        id?: string | null;
-      }[]
-    | null;
+  primaryCta?: {
+    label?: string | null;
+    href?: string | null;
+  };
   footerCapabilities?:
     | {
         label: string;
         href: string;
+        shortLabel?: string | null;
         id?: string | null;
       }[]
     | null;
-  footerExplore?:
+  footerProducts?:
     | {
         label: string;
         href: string;
+        shortLabel?: string | null;
         id?: string | null;
       }[]
     | null;
-  footerContact?:
+  footerIndustries?:
     | {
         label: string;
         href: string;
+        shortLabel?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  footerCompany?:
+    | {
+        label: string;
+        href: string;
+        shortLabel?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  footerResources?:
+    | {
+        label: string;
+        href: string;
+        shortLabel?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -1363,10 +1583,10 @@ export interface Navigation {
     | {
         label: string;
         href: string;
+        shortLabel?: string | null;
         id?: string | null;
       }[]
     | null;
-  capabilityRibbon?: string[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1387,6 +1607,30 @@ export interface HomePage {
     secondaryCtaHref?: string | null;
     trustLine?: string | null;
   };
+  sections?: {
+    ambition?: string | null;
+    products?: string | null;
+    industries?: string | null;
+    responsible?: string | null;
+    insights?: string | null;
+  };
+  featuredProducts?: (string | Product)[] | null;
+  featuredInsights?: (string | Insight)[] | null;
+  finalCta?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
+  status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
+  publishedAt?: string | null;
+  /**
+   * When set in the future, a secured cron can promote to published.
+   */
+  scheduledPublishAt?: string | null;
   layout?:
     | (
         | {
@@ -1537,17 +1781,6 @@ export interface HomePage {
    */
   animationPreset?:
     ('none' | 'fade' | 'fade_up' | 'stagger' | 'slide_left' | 'slide_right' | 'mask_reveal' | 'subtle_parallax') | null;
-  status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
-  publishedAt?: string | null;
-  /**
-   * When set in the future, a secured cron can promote to published.
-   */
-  scheduledPublishAt?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    ogImage?: (string | null) | Media;
-  };
   _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1558,10 +1791,51 @@ export interface HomePage {
  */
 export interface CoePage {
   id: string;
+  hero?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    description?: string | null;
+    primaryCtaLabel?: string | null;
+    primaryCtaHref?: string | null;
+    secondaryCtaLabel?: string | null;
+    secondaryCtaHref?: string | null;
+  };
+  outcomesTitle?: string | null;
+  whatTitle?: string | null;
+  whatBody?: string | null;
+  whyTitle?: string | null;
+  whyBody?: string | null;
+  operatingTitle?: string | null;
+  operatingDescription?: string | null;
+  ideaTitle?: string | null;
+  ideaDescription?: string | null;
+  pillarsTitle?: string | null;
+  pillarsDescription?: string | null;
+  maturityTitle?: string | null;
+  maturityDescription?: string | null;
+  roadmapTitle?: string | null;
+  roadmapDescription?: string | null;
+  ctaTitle?: string | null;
+  ctaDescription?: string | null;
+  faqs?: (string | Faq)[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
+  status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
+  publishedAt?: string | null;
+  /**
+   * When set in the future, a secured cron can promote to published.
+   */
+  scheduledPublishAt?: string | null;
+  /**
+   * Legacy title field.
+   */
   title?: string | null;
   description?: string | null;
   /**
-   * Migrated structured CoE page content.
+   * Legacy structured content. Not rendered on the public page.
    */
   contentJson?:
     | {
@@ -1722,17 +1996,6 @@ export interface CoePage {
    */
   animationPreset?:
     ('none' | 'fade' | 'fade_up' | 'stagger' | 'slide_left' | 'slide_right' | 'mask_reveal' | 'subtle_parallax') | null;
-  status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
-  publishedAt?: string | null;
-  /**
-   * When set in the future, a secured cron can promote to published.
-   */
-  scheduledPublishAt?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    ogImage?: (string | null) | Media;
-  };
   _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1743,8 +2006,40 @@ export interface CoePage {
  */
 export interface GovernancePage {
   id: string;
+  hero?: {
+    title?: string | null;
+    subtitle?: string | null;
+    description?: string | null;
+    primaryCtaLabel?: string | null;
+    primaryCtaHref?: string | null;
+    secondaryCtaLabel?: string | null;
+    secondaryCtaHref?: string | null;
+  };
+  pillarsTitle?: string | null;
+  raciTitle?: string | null;
+  raciDescription?: string | null;
+  commandTitle?: string | null;
+  commandDescription?: string | null;
+  engagementTitle?: string | null;
+  engagementDescription?: string | null;
+  ctaTitle?: string | null;
+  ctaDescription?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
+  status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
+  publishedAt?: string | null;
+  /**
+   * When set in the future, a secured cron can promote to published.
+   */
+  scheduledPublishAt?: string | null;
   title?: string | null;
   description?: string | null;
+  /**
+   * Legacy JSON. Not rendered on the public page.
+   */
   contentJson?:
     | {
         [k: string]: unknown;
@@ -1904,17 +2199,6 @@ export interface GovernancePage {
    */
   animationPreset?:
     ('none' | 'fade' | 'fade_up' | 'stagger' | 'slide_left' | 'slide_right' | 'mask_reveal' | 'subtle_parallax') | null;
-  status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
-  publishedAt?: string | null;
-  /**
-   * When set in the future, a secured cron can promote to published.
-   */
-  scheduledPublishAt?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    ogImage?: (string | null) | Media;
-  };
   _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1925,15 +2209,10 @@ export interface GovernancePage {
  */
 export interface CompanyPage {
   id: string;
+  introduction?: string | null;
   vision?: string | null;
   mission?: string | null;
-  introduction?: string | null;
   whyAgrayian?: string[] | null;
-  deliveryPhilosophy?: string[] | null;
-  responsibleAiCommitment?: string | null;
-  technologyPhilosophy?: string | null;
-  careersCopy?: string | null;
-  partnerEcosystemCopy?: string | null;
   values?:
     | {
         title: string;
@@ -1941,6 +2220,22 @@ export interface CompanyPage {
         id?: string | null;
       }[]
     | null;
+  deliveryPhilosophy?: string[] | null;
+  responsibleAiCommitment?: string | null;
+  technologyPhilosophy?: string | null;
+  careersCopy?: string | null;
+  partnerEcosystemCopy?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
+  status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
+  publishedAt?: string | null;
+  /**
+   * When set in the future, a secured cron can promote to published.
+   */
+  scheduledPublishAt?: string | null;
   layout?:
     | (
         | {
@@ -2082,17 +2377,6 @@ export interface CompanyPage {
           }
       )[]
     | null;
-  status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
-  publishedAt?: string | null;
-  /**
-   * When set in the future, a secured cron can promote to published.
-   */
-  scheduledPublishAt?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    ogImage?: (string | null) | Media;
-  };
   _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -2114,17 +2398,17 @@ export interface ContactPage {
       }[]
     | null;
   faqs?: (string | Faq)[] | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
   status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
   publishedAt?: string | null;
   /**
    * When set in the future, a secured cron can promote to published.
    */
   scheduledPublishAt?: string | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    ogImage?: (string | null) | Media;
-  };
   _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -2363,6 +2647,14 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   shortName?: T;
   websiteUrl?: T;
   description?: T;
+  brandCopy?:
+    | T
+    | {
+        headline?: T;
+        supporting?: T;
+        primaryCta?: T;
+        secondaryCta?: T;
+      };
   contactEmail?: T;
   contactPhone?: T;
   address?: T;
@@ -2387,20 +2679,22 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         enabled?: T;
         message?: T;
         href?: T;
+        ctaLabel?: T;
+      };
+  marketing?:
+    | T
+    | {
+        googleTagManagerId?: T;
+        gaMeasurementId?: T;
+        metaPixelId?: T;
+        linkedinPartnerId?: T;
+        defaultUtmSource?: T;
       };
   cookie?:
     | T
     | {
         title?: T;
         description?: T;
-      };
-  brandCopy?:
-    | T
-    | {
-        headline?: T;
-        supporting?: T;
-        primaryCta?: T;
-        secondaryCta?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2416,34 +2710,53 @@ export interface NavigationSelect<T extends boolean = true> {
     | {
         label?: T;
         href?: T;
+        shortLabel?: T;
         id?: T;
       };
-  capabilityNav?:
+  primaryCta?:
     | T
     | {
         label?: T;
         href?: T;
-        id?: T;
       };
   footerCapabilities?:
     | T
     | {
         label?: T;
         href?: T;
+        shortLabel?: T;
         id?: T;
       };
-  footerExplore?:
+  footerProducts?:
     | T
     | {
         label?: T;
         href?: T;
+        shortLabel?: T;
         id?: T;
       };
-  footerContact?:
+  footerIndustries?:
     | T
     | {
         label?: T;
         href?: T;
+        shortLabel?: T;
+        id?: T;
+      };
+  footerCompany?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        shortLabel?: T;
+        id?: T;
+      };
+  footerResources?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        shortLabel?: T;
         id?: T;
       };
   footerLegal?:
@@ -2451,9 +2764,9 @@ export interface NavigationSelect<T extends boolean = true> {
     | {
         label?: T;
         href?: T;
+        shortLabel?: T;
         id?: T;
       };
-  capabilityRibbon?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2476,6 +2789,33 @@ export interface HomePageSelect<T extends boolean = true> {
         secondaryCtaHref?: T;
         trustLine?: T;
       };
+  sections?:
+    | T
+    | {
+        ambition?: T;
+        products?: T;
+        industries?: T;
+        responsible?: T;
+        insights?: T;
+      };
+  featuredProducts?: T;
+  featuredInsights?: T;
+  finalCta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+      };
+  status?: T;
+  publishedAt?: T;
+  scheduledPublishAt?: T;
   layout?:
     | T
     | {
@@ -2595,16 +2935,6 @@ export interface HomePageSelect<T extends boolean = true> {
       };
   sectionTheme?: T;
   animationPreset?: T;
-  status?: T;
-  publishedAt?: T;
-  scheduledPublishAt?: T;
-  seo?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        ogImage?: T;
-      };
   _status?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2615,6 +2945,45 @@ export interface HomePageSelect<T extends boolean = true> {
  * via the `definition` "coe-page_select".
  */
 export interface CoePageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+        primaryCtaLabel?: T;
+        primaryCtaHref?: T;
+        secondaryCtaLabel?: T;
+        secondaryCtaHref?: T;
+      };
+  outcomesTitle?: T;
+  whatTitle?: T;
+  whatBody?: T;
+  whyTitle?: T;
+  whyBody?: T;
+  operatingTitle?: T;
+  operatingDescription?: T;
+  ideaTitle?: T;
+  ideaDescription?: T;
+  pillarsTitle?: T;
+  pillarsDescription?: T;
+  maturityTitle?: T;
+  maturityDescription?: T;
+  roadmapTitle?: T;
+  roadmapDescription?: T;
+  ctaTitle?: T;
+  ctaDescription?: T;
+  faqs?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+      };
+  status?: T;
+  publishedAt?: T;
+  scheduledPublishAt?: T;
   title?: T;
   description?: T;
   contentJson?: T;
@@ -2737,16 +3106,6 @@ export interface CoePageSelect<T extends boolean = true> {
       };
   sectionTheme?: T;
   animationPreset?: T;
-  status?: T;
-  publishedAt?: T;
-  scheduledPublishAt?: T;
-  seo?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        ogImage?: T;
-      };
   _status?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2757,6 +3116,36 @@ export interface CoePageSelect<T extends boolean = true> {
  * via the `definition` "governance-page_select".
  */
 export interface GovernancePageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T;
+        subtitle?: T;
+        description?: T;
+        primaryCtaLabel?: T;
+        primaryCtaHref?: T;
+        secondaryCtaLabel?: T;
+        secondaryCtaHref?: T;
+      };
+  pillarsTitle?: T;
+  raciTitle?: T;
+  raciDescription?: T;
+  commandTitle?: T;
+  commandDescription?: T;
+  engagementTitle?: T;
+  engagementDescription?: T;
+  ctaTitle?: T;
+  ctaDescription?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+      };
+  status?: T;
+  publishedAt?: T;
+  scheduledPublishAt?: T;
   title?: T;
   description?: T;
   contentJson?: T;
@@ -2879,16 +3268,6 @@ export interface GovernancePageSelect<T extends boolean = true> {
       };
   sectionTheme?: T;
   animationPreset?: T;
-  status?: T;
-  publishedAt?: T;
-  scheduledPublishAt?: T;
-  seo?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        ogImage?: T;
-      };
   _status?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2899,15 +3278,10 @@ export interface GovernancePageSelect<T extends boolean = true> {
  * via the `definition` "company-page_select".
  */
 export interface CompanyPageSelect<T extends boolean = true> {
+  introduction?: T;
   vision?: T;
   mission?: T;
-  introduction?: T;
   whyAgrayian?: T;
-  deliveryPhilosophy?: T;
-  responsibleAiCommitment?: T;
-  technologyPhilosophy?: T;
-  careersCopy?: T;
-  partnerEcosystemCopy?: T;
   values?:
     | T
     | {
@@ -2915,6 +3289,21 @@ export interface CompanyPageSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  deliveryPhilosophy?: T;
+  responsibleAiCommitment?: T;
+  technologyPhilosophy?: T;
+  careersCopy?: T;
+  partnerEcosystemCopy?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+      };
+  status?: T;
+  publishedAt?: T;
+  scheduledPublishAt?: T;
   layout?:
     | T
     | {
@@ -3031,16 +3420,6 @@ export interface CompanyPageSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-      };
-  status?: T;
-  publishedAt?: T;
-  scheduledPublishAt?: T;
-  seo?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        ogImage?: T;
       };
   _status?: T;
   updatedAt?: T;
@@ -3063,9 +3442,6 @@ export interface ContactPageSelect<T extends boolean = true> {
         id?: T;
       };
   faqs?: T;
-  status?: T;
-  publishedAt?: T;
-  scheduledPublishAt?: T;
   seo?:
     | T
     | {
@@ -3073,6 +3449,9 @@ export interface ContactPageSelect<T extends boolean = true> {
         description?: T;
         ogImage?: T;
       };
+  status?: T;
+  publishedAt?: T;
+  scheduledPublishAt?: T;
   _status?: T;
   updatedAt?: T;
   createdAt?: T;

@@ -17,7 +17,7 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { LightCtaBar } from "@/components/ui/DarkCtaBand";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { footerLegal } from "@/data/navigation";
+import { getResolvedNav } from "@/lib/cms/site";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -79,7 +79,9 @@ const principles: {
   },
 ];
 
-export default function TrustCentrePage() {
+export default async function TrustCentrePage() {
+  const nav = await getResolvedNav();
+  const legalLinks = nav.footerLegal;
   return (
     <>
       <script
@@ -168,7 +170,7 @@ export default function TrustCentrePage() {
             <SectionTitle>Legal documents</SectionTitle>
           </Reveal>
           <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {footerLegal
+            {legalLinks
               .filter((item) => item.href.startsWith("/"))
               .map((item) => (
                 <li key={item.href}>

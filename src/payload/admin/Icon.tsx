@@ -21,7 +21,7 @@ export default function Icon() {
              C26 68 14 56 14 40
              C14 24 26 12 44 12
              C52 12 59 15 64 20"
-          stroke="#F1F5F9"
+          stroke="#1A3A58"
           strokeWidth="14"
           strokeLinecap="round"
           strokeLinejoin="round"

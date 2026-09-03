@@ -6,14 +6,12 @@ export default function Logo() {
     <div className="agrayian-admin-logo" aria-label="Agrayian AI Labs">
       <span className="agrayian-admin-logo__mark agrayian-admin-logo__mark--svg">
         <span className="block h-9 w-[4rem]">
-          <AgrayianMark variant="dark" />
+          <AgrayianMark variant="navy" />
         </span>
       </span>
       <span className="agrayian-admin-logo__copy">
         <span className="agrayian-admin-logo__name">Agrayian AI Labs</span>
-        <span className="agrayian-admin-logo__tag">
-          Growth reimagined with AI
-        </span>
+        <span className="agrayian-admin-logo__tag">Content studio</span>
       </span>
     </div>
   );

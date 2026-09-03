@@ -97,6 +97,12 @@ export async function POST(request: Request) {
     preferredContactMethod: data.preferredContactMethod,
     product: data.product,
     capability,
+    utmSource: data.utmSource,
+    utmMedium: data.utmMedium,
+    utmCampaign: data.utmCampaign,
+    utmContent: data.utmContent,
+    utmTerm: data.utmTerm,
+    landingPath: data.landingPath,
   });
 
   const resend = getResendClient();
@@ -128,6 +134,7 @@ export async function POST(request: Request) {
     `Preferred contact: ${data.preferredContactMethod}`,
     `Product: ${data.product || "—"}`,
     `Capability: ${capability || "—"}`,
+    `UTM: ${[data.utmSource, data.utmMedium, data.utmCampaign].filter(Boolean).join(" / ") || "—"}`,
     "",
     "Project summary:",
     data.projectSummary,

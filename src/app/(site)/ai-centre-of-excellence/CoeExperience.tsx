@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { WhiteSculpture } from "@/components/visualisations/glass/WhiteSculpture";
 import { mockupAssets } from "@/config/mockup-assets";
+import type { CoePageContent } from "@/lib/cms/page-content";
 import {
   foundations,
   intakeSteps,
@@ -25,31 +26,35 @@ import {
 } from "./CoeVisuals";
 import styles from "./ai-coe.module.css";
 
-function Hero() {
+function Hero({ copy }: { copy: CoePageContent }) {
   return (
     <section className={styles.hero}>
       <div className={styles.heroInner}>
         <div className={styles.heroCopy}>
           <span className={styles.eyebrow}>
-            AI Centre of Excellence <b>›</b>
+            {copy.hero.eyebrow} <b>›</b>
           </span>
           <h1>
-            AI Centre of Excellence —{" "}
-            <br />
-            An operating model that
-            <br />
-            makes AI repeatable
+            {copy.hero.title ===
+            "AI Centre of Excellence — An operating model that makes AI repeatable" ? (
+              <>
+                AI Centre of Excellence —{" "}
+                <br />
+                An operating model that
+                <br />
+                makes AI repeatable
+              </>
+            ) : (
+              copy.hero.title
+            )}
           </h1>
-          <p>
-            Connect strategy, governance, platforms, talent and delivery so
-            every use case stops restarting from zero.
-          </p>
+          <p>{copy.hero.description}</p>
           <div className={styles.heroActions}>
-            <ArrowLink href="/contact?interest=consultation">
-              Book a Consultation
+            <ArrowLink href={copy.hero.primaryCtaHref}>
+              {copy.hero.primaryCtaLabel}
             </ArrowLink>
-            <ArrowLink href="#operating-model" secondary>
-              Explore the Operating Model
+            <ArrowLink href={copy.hero.secondaryCtaHref} secondary>
+              {copy.hero.secondaryCtaLabel}
             </ArrowLink>
           </div>
         </div>
@@ -57,7 +62,7 @@ function Hero() {
           <HeroStack items={layers} priority />
         </div>
         <aside className={styles.outcomes}>
-          <h3>Core outcomes</h3>
+          <h3>{copy.outcomesTitle}</h3>
           <ul>
             {outcomes.map((item) => (
               <li key={item}>
@@ -72,15 +77,12 @@ function Hero() {
   );
 }
 
-function DefinitionSection() {
+function DefinitionSection({ copy }: { copy: CoePageContent }) {
   return (
     <section className={styles.definitionGrid}>
       <article id="what">
-        <h2>What an AI CoE is</h2>
-        <p>
-          A cross-functional capability that sets direction, enables standards,
-          funds the right work and accelerates delivery across the enterprise.
-        </p>
+        <h2>{copy.whatTitle}</h2>
+        <p>{copy.whatBody}</p>
         <div className={styles.definitionFeatures}>
           {whatFeatures.map((feature) => (
             <div className={styles.miniFeature} key={feature.title}>
@@ -94,11 +96,8 @@ function DefinitionSection() {
         </div>
       </article>
       <article id="why">
-        <h2>Why organisations need an AI CoE</h2>
-        <p>
-          Without a centre of excellence, AI efforts remain inconsistent, costly
-          and hard to sustain.
-        </p>
+        <h2>{copy.whyTitle}</h2>
+        <p>{copy.whyBody}</p>
         <div className={styles.needFeatures}>
           {whyFeatures.map((feature) => (
             <div className={styles.miniFeature} key={feature.title}>
@@ -115,15 +114,15 @@ function DefinitionSection() {
   );
 }
 
-function OperatingModel() {
+function OperatingModel({ copy }: { copy: CoePageContent }) {
   const left = layers.slice(0, 5);
   const right = layers.slice(5);
 
   return (
     <section className={styles.operatingModel} id="operating-model">
       <div className={styles.sectionHeading}>
-        <h2>The AI CoE operating model</h2>
-        <p>Nine integrated layers that turn strategy into measurable value.</p>
+        <h2>{copy.operatingTitle}</h2>
+        <p>{copy.operatingDescription}</p>
       </div>
       <div className={styles.modelGrid}>
         <div className={styles.layerColumn}>
@@ -157,15 +156,12 @@ function OperatingModel() {
   );
 }
 
-function IdeaToImpact() {
+function IdeaToImpact({ copy }: { copy: CoePageContent }) {
   return (
     <section className={styles.ideaImpact} id="idea-to-impact">
       <div>
-        <h2>From idea to impact</h2>
-        <p>
-          A governed intake and decision process that funds and scales the right
-          work.
-        </p>
+        <h2>{copy.ideaTitle}</h2>
+        <p>{copy.ideaDescription}</p>
       </div>
       <div className={styles.stepFlow}>
         {intakeSteps.map((step, index) => (
@@ -185,19 +181,22 @@ function IdeaToImpact() {
   );
 }
 
-function Pillars() {
+function Pillars({ copy }: { copy: CoePageContent }) {
   return (
     <section className={styles.pillars} id="pillars">
       <div className={styles.pillarIntro}>
         <h2>
-          The CoE works
-          <br />
-          on three pillars
-        </h2>
-        <p>
-          Three connected mandates that keep the model focused and
-          outcomes-driven.
-        </p>
+            {copy.pillarsTitle === "The CoE works on three pillars" ? (
+              <>
+                The CoE works
+                <br />
+                on three pillars
+              </>
+            ) : (
+              copy.pillarsTitle
+            )}
+          </h2>
+        <p>{copy.pillarsDescription}</p>
         <Link href="#foundations">
           Learn more <span aria-hidden>→</span>
         </Link>
@@ -269,7 +268,7 @@ function JourneyRow({
   );
 }
 
-function FinalCta() {
+function FinalCta({ copy }: { copy: CoePageContent }) {
   return (
     <section className={styles.finalCta}>
       <WhiteSculpture
@@ -283,46 +282,50 @@ function FinalCta() {
       />
       <div>
         <h2>
-          Build an AI CoE that delivers
-          <br />
-          governed, measurable outcomes.
-        </h2>
-        <p>
-          Partner with Agrayian AI Labs to design, build and scale your Centre
-          of Excellence.
-        </p>
+            {copy.ctaTitle ===
+            "Build an AI CoE that delivers governed, measurable outcomes." ? (
+              <>
+                Build an AI CoE that delivers
+                <br />
+                governed, measurable outcomes.
+              </>
+            ) : (
+              copy.ctaTitle
+            )}
+          </h2>
+        <p>{copy.ctaDescription}</p>
       </div>
-      <ArrowLink href="/contact?interest=consultation">
-        Book a Consultation
+      <ArrowLink href={copy.hero.primaryCtaHref}>
+        {copy.hero.primaryCtaLabel}
       </ArrowLink>
     </section>
   );
 }
 
-export function CoeExperience() {
+export function CoeExperience({ copy }: { copy: CoePageContent }) {
   return (
     <div className={styles.page}>
-      <Hero />
+      <Hero copy={copy} />
       <div className={styles.content}>
-        <DefinitionSection />
-        <OperatingModel />
-        <IdeaToImpact />
-        <Pillars />
+        <DefinitionSection copy={copy} />
+        <OperatingModel copy={copy} />
+        <IdeaToImpact copy={copy} />
+        <Pillars copy={copy} />
         <Foundations />
         <JourneyRow
           id="maturity"
-          title="AI CoE maturity levels"
-          subtitle="A progressive maturity journey to build capability and value over time."
+          title={copy.maturityTitle}
+          subtitle={copy.maturityDescription}
           items={maturity}
         />
         <JourneyRow
           id="roadmap"
-          title="Your roadmap to build and scale"
-          subtitle="A phased approach tailored to your organisation's goals and context."
+          title={copy.roadmapTitle}
+          subtitle={copy.roadmapDescription}
           items={roadmap}
         />
         <CoeFaq />
-        <FinalCta />
+        <FinalCta copy={copy} />
       </div>
     </div>
   );

@@ -1,17 +1,23 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { brandCopy } from "@/config/site";
+import type { ResolvedAnnouncement } from "@/lib/cms/site";
 
-export function AnnouncementBar() {
+export function AnnouncementBar({
+  announcement,
+}: {
+  announcement: ResolvedAnnouncement;
+}) {
+  if (!announcement.enabled) return null;
+
   return (
-    <div className="relative z-50 border-b border-white/10 bg-bg-elevated/90 text-center text-xs text-muted-dark backdrop-blur">
+    <div className="relative z-50 border-b border-[var(--border-soft)] bg-[#f5f8fb] text-center text-xs text-navy">
       <div className="mx-auto flex max-w-7xl items-center justify-center gap-2 px-4 py-2">
-        <p>{brandCopy.announcement}</p>
+        <p>{announcement.message}</p>
         <Link
-          href="/ai-centre-of-excellence"
-          className="inline-flex items-center gap-1 font-medium text-cyan transition hover:text-white"
+          href={announcement.href}
+          className="inline-flex items-center gap-1 font-medium text-tech-blue transition hover:text-navy"
         >
-          Explore AI CoE
+          {announcement.ctaLabel}
           <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>

@@ -10,15 +10,17 @@ export default defineConfig({
   retries: isCI ? 2 : 0,
   workers: isCI ? 1 : undefined,
   reporter: isCI ? "github" : "list",
+  timeout: 60_000,
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL: "http://localhost:3000",
+    navigationTimeout: 60_000,
     trace: "on-first-retry",
   },
   webServer: {
     // CI already runs `npm run build` before e2e. Locally, build then start
     // unless a server is already running (reuseExistingServer).
     command: isCI ? "npm run start" : "npm run build && npm run start",
-    url: "http://127.0.0.1:3000",
+    url: "http://localhost:3000",
     reuseExistingServer: !isCI,
     timeout: 180_000,
   },

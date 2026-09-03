@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { LegalDocument } from "@/data/legal";
-import { footerLegal } from "@/data/navigation";
 import { getPublishedGlobal } from "@/lib/cms/published";
+import { getResolvedNav } from "@/lib/cms/site";
 import { cn } from "@/lib/utils";
 
 type GlobalSlug =
@@ -33,6 +33,8 @@ export async function LegalDocumentView({
       ? doc.sections
       : fallback.sections;
 
+  const nav = await getResolvedNav();
+  const legalLinks = nav.footerLegal;
   const currentPath =
     slug === "responsible-ai" ? "/responsible-ai" : `/${slug}`;
 
@@ -55,7 +57,7 @@ export async function LegalDocumentView({
             aria-label="Trust and legal documents"
             className="mt-8 flex flex-wrap gap-2"
           >
-            {footerLegal
+            {legalLinks
               .filter((item) => item.href.startsWith("/"))
               .map((item) => (
                 <Link

@@ -17,6 +17,7 @@ function subscribe(onStoreChange: () => void) {
 
 function getSnapshot() {
   try {
+    if (window.location.hash === "#cookie-preferences") return true;
     return !localStorage.getItem(KEY);
   } catch {
     return true;
@@ -37,7 +38,13 @@ function clearPreference() {
   }
 }
 
-export function CookieBanner() {
+export function CookieBanner({
+  title = "Cookie preferences",
+  description,
+}: {
+  title?: string;
+  description?: string;
+}) {
   const visible = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -130,12 +137,12 @@ export function CookieBanner() {
         id="cookie-banner-title"
         className="font-heading text-base font-semibold text-navy"
       >
-        Cookie preferences
+        {title}
       </h2>
       <p id="cookie-banner-desc" className="mt-2 text-sm text-muted-light">
-        Essential cookies keep the site working. If you accept all, we also load
-        privacy-friendly Vercel Analytics and Speed Insights for aggregate usage
-        and performance. See our{" "}
+        {description ??
+          "Essential cookies keep the site working. If you accept all, we also load privacy-friendly Vercel Analytics and Speed Insights for aggregate usage and performance."}{" "}
+        See our{" "}
         <Link href="/privacy-policy" className="text-cyan hover:underline">
           Privacy Policy
         </Link>

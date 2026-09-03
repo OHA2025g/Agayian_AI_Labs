@@ -59,7 +59,7 @@ export function HomeIndustryCards() {
         const industry = getIndustryBySlug(item.slug);
         return (
           <RevealItem key={item.label} className="h-full">
-            <Link href={`/industries?industry=${item.slug}`} className="block h-full">
+            <Link href={`/industries/${item.slug}`} className="block h-full">
               <MockupCard className="flex h-full min-h-[22rem] flex-col px-4 pb-4 pt-4 hover:translate-y-0 xl:min-h-[24rem]">
                 <div
                   className="relative mb-5 flex min-h-[10.5rem] flex-[1.15] items-center justify-center overflow-hidden rounded-xl"

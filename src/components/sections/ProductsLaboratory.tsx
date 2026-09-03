@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Building2,
   Landmark,
@@ -11,6 +12,7 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
+import { products as staticProducts } from "@/data/products";
 import { OneTouchDashboard } from "@/components/products/OneTouchDashboard";
 import { ProductSculpture } from "@/components/products/ProductSculptures";
 import { ProductsInfinityGraphic } from "@/components/products/ProductsInfinityGraphic";
@@ -19,6 +21,8 @@ import {
   productsCatalog,
   type ProductCategory,
 } from "@/components/products/products-catalog";
+import { ProductDetailView } from "@/components/products/ProductDetailView";
+import { AccessibleModal } from "@/components/ui/AccessibleModal";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import type { Product } from "@/types";
@@ -66,11 +70,45 @@ const spotlightTags = [
 export function ProductsLaboratory({ items }: { items: Product[] }) {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState<ProductCategory>("All");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const querySlug = searchParams.get("product");
+  const [localSlug, setLocalSlug] = useState<string | null>(null);
+  const [ignoreQuery, setIgnoreQuery] = useState(false);
+  const modalSlug = localSlug ?? (ignoreQuery ? null : querySlug);
 
   const liveBySlug = useMemo(() => {
     const map = new Map(items.map((item) => [item.slug, item]));
     return map;
   }, [items]);
+
+  const modalProduct = useMemo(() => {
+    if (!modalSlug) return undefined;
+    const needle = modalSlug.replace(/-/g, " ").toLowerCase();
+    return (
+      items.find((item) => item.slug === modalSlug) ??
+      staticProducts.find((item) => item.slug === modalSlug) ??
+      items.find((item) => item.name.toLowerCase().includes(needle)) ??
+      staticProducts.find((item) => item.name.toLowerCase().includes(needle))
+    );
+  }, [items, modalSlug]);
+
+  const closeModal = () => {
+    setLocalSlug(null);
+    setIgnoreQuery(true);
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("product");
+    const next = params.toString();
+    router.replace(next ? `/products?${next}` : "/products", { scroll: false });
+  };
+
+  const openModal = (slug: string) => {
+    setIgnoreQuery(false);
+    setLocalSlug(slug);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("product", slug);
+    router.replace(`/products?${params.toString()}`, { scroll: false });
+  };
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -207,9 +245,18 @@ export function ProductsLaboratory({ items }: { items: Product[] }) {
                   <div className="products-card-body">
                     <h3>{product.name}</h3>
                     <p>{product.description}</p>
-                    <Link href={`/products/${product.slug}`}>
-                      Learn more <span>→</span>
-                    </Link>
+                    <div className="mt-3 flex flex-wrap items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => openModal(product.slug)}
+                        className="text-sm font-semibold text-tech-blue"
+                      >
+                        View details
+                      </button>
+                      <Link href={`/products/${product.slug}`}>
+                        Open page <span>→</span>
+                      </Link>
+                    </div>
                   </div>
                 </article>
               ))}
@@ -217,6 +264,27 @@ export function ProductsLaboratory({ items }: { items: Product[] }) {
           )}
         </section>
       </div>
+
+      <AccessibleModal
+        open={Boolean(modalProduct)}
+        onClose={closeModal}
+        title={modalProduct?.name ?? "Product"}
+        className="bg-white text-navy md:border-[var(--border-soft)]"
+      >
+        {modalProduct ? (
+          <div>
+            <ProductDetailView product={modalProduct} compact />
+            <p className="mt-6">
+              <Link
+                href={`/products/${modalProduct.slug}`}
+                className="text-sm font-semibold text-tech-blue hover:text-navy"
+              >
+                Open full page
+              </Link>
+            </p>
+          </div>
+        ) : null}
+      </AccessibleModal>
     </>
   );
 }

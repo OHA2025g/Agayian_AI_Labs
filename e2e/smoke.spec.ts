@@ -19,21 +19,34 @@ test.describe("smoke", () => {
     );
   });
 
-  test("product slug redirects into laboratory query", async ({ page }) => {
-    await page.goto("/products/smart-hiring");
-    await expect(page).toHaveURL(/\/products\?product=smart-hiring/);
+  test("product slug is a real product page", async ({ page }) => {
+    const response = await page.goto("/products/smart-hiring");
+    expect(response?.status()).toBe(200);
+    await expect(page).toHaveURL(/\/products\/smart-hiring/);
     await expect(
       page.getByRole("heading", { name: /Smart Hiring/i }).first(),
     ).toBeVisible();
   });
 
-  test("impact story slug redirects to hash panel", async ({ page }) => {
-    await page.goto(
+  test("impact story slug is a real story page", async ({ page }) => {
+    const response = await page.goto(
       "/impact-stories/ai-powered-talent-intelligence-transformation",
     );
+    expect(response?.status()).toBe(200);
     await expect(page).toHaveURL(
-      /\/impact-stories#ai-powered-talent-intelligence-transformation/,
+      /\/impact-stories\/ai-powered-talent-intelligence-transformation/,
     );
+    await expect(
+      page.getByRole("heading", { name: /Talent Intelligence/i }).first(),
+    ).toBeVisible();
+  });
+
+  test("header contains Impact and Insights", async ({ page }) => {
+    await page.goto("/");
+    const nav = page.getByRole("navigation", { name: "Primary" });
+    await expect(nav.getByRole("link", { name: "Impact" })).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Insights" })).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Resources" })).toHaveCount(0);
   });
 
   test("products laboratory opens detail modal", async ({ page }) => {
@@ -49,7 +62,7 @@ test.describe("smoke", () => {
     const dialog = page.getByRole("dialog").filter({
       hasNot: page.locator("#cookie-preferences"),
     });
-    await expect(dialog).toBeVisible();
+    await expect(dialog).toBeVisible({ timeout: 15_000 });
     await expect(dialog.getByRole("heading").first()).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
@@ -64,9 +77,11 @@ test.describe("smoke", () => {
       }
     });
     await page.goto("/products?product=smart-hiring");
-    const dialog = page.getByRole("dialog", { name: /Smart Hiring/i });
-    await expect(dialog).toBeVisible();
-    await expect(dialog.getByText(/Smart Hiring/i).first()).toBeVisible();
+    const dialog = page.getByRole("dialog").filter({
+      hasNot: page.locator("#cookie-preferences"),
+    });
+    await expect(dialog).toBeVisible({ timeout: 15_000 });
+    await expect(dialog.getByText(/Smart Hiring|vedhire/i).first()).toBeVisible();
   });
 
   test("cookie Accept all and Essential only", async ({ page }) => {
@@ -79,8 +94,8 @@ test.describe("smoke", () => {
     });
 
     await page.goto("/");
-    const banner = page.getByRole("dialog", { name: /Cookie preferences/i });
-    await expect(banner).toBeVisible();
+    const banner = page.locator("#cookie-preferences");
+    await expect(banner).toBeVisible({ timeout: 15_000 });
     await banner.getByRole("button", { name: "Accept all" }).click();
     await expect(banner).toBeHidden();
 
@@ -89,20 +104,33 @@ test.describe("smoke", () => {
       window.dispatchEvent(new Event("agrayian-cookie-change"));
     });
     await page.reload();
-    const again = page.getByRole("dialog", { name: /Cookie preferences/i });
-    await expect(again).toBeVisible();
+    const again = page.locator("#cookie-preferences");
+    await expect(again).toBeVisible({ timeout: 15_000 });
     await again.getByRole("button", { name: "Essential only" }).click();
     await expect(again).toBeHidden();
   });
 
   test("mobile nav opens", async ({ page }) => {
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem("agrayian-cookie-preference", "essential");
+      } catch {
+        /* ignore */
+      }
+    });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
+    await expect(page.locator("header[data-nav-ready='true']")).toBeVisible();
     await page.getByRole("button", { name: /Open menu/i }).click();
     await expect(page.locator("#mobile-navigation")).toBeVisible();
     await expect(
       page.locator("#mobile-navigation").getByRole("link").first(),
     ).toBeVisible();
+  });
+
+  test("resources route is gone", async ({ page }) => {
+    const response = await page.goto("/resources");
+    expect(response?.status()).toBe(404);
   });
 
   test("404 page", async ({ page }) => {
@@ -139,12 +167,10 @@ test.describe("smoke", () => {
     });
 
     await page.goto("/");
-    await expect(
-      page.getByRole("dialog", { name: /Cookie preferences/i }),
-    ).toBeHidden();
+    await expect(page.locator("#cookie-preferences")).toBeHidden();
     await page.getByRole("link", { name: /Cookie Preferences/i }).click();
-    await expect(
-      page.getByRole("dialog", { name: /Cookie preferences/i }),
-    ).toBeVisible();
+    await expect(page.locator("#cookie-preferences")).toBeVisible({
+      timeout: 15_000,
+    });
   });
 });

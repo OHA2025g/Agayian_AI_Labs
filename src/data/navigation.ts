@@ -1,6 +1,6 @@
 import type { NavItem } from "@/types";
 
-/** Primary chrome — kept short for a clean Upswing-style header. */
+/** Primary chrome — Contact is the red header CTA, not a text link. */
 export const mainNavigation: NavItem[] = [
   { label: "Capabilities", href: "/capabilities", shortLabel: "Capabilities" },
   { label: "Products", href: "/products", shortLabel: "Products" },
@@ -11,9 +11,21 @@ export const mainNavigation: NavItem[] = [
     shortLabel: "AI CoE",
   },
   { label: "Governance", href: "/ai-governance", shortLabel: "Governance" },
+  { label: "Impact", href: "/impact-stories", shortLabel: "Impact" },
+  { label: "Insights", href: "/insights", shortLabel: "Insights" },
   { label: "Company", href: "/company", shortLabel: "Company" },
-  { label: "Contact", href: "/contact", shortLabel: "Contact" },
 ];
+
+export const headerContactItem: NavItem = {
+  label: "Contact",
+  href: "/contact",
+  shortLabel: "Contact",
+};
+
+export const defaultHeaderCta = {
+  label: "Book a Consultation",
+  href: "/contact?interest=consultation",
+} as const;
 
 export const capabilityRibbon = [
   "AI Strategy",
@@ -39,24 +51,24 @@ export const capabilityNav: NavItem[] = [
 
 export const footerCapabilities: NavItem[] = [
   { label: "AI Strategy", href: "/capabilities#strategy" },
-  { label: "AI CoE", href: "/capabilities#ai-coe" },
-  { label: "AI Governance", href: "/capabilities#governance" },
+  { label: "AI CoE", href: "/ai-centre-of-excellence" },
+  { label: "AI Governance", href: "/ai-governance" },
   { label: "Generative AI", href: "/capabilities#generative-ai" },
   { label: "Agentic AI", href: "/capabilities#agentic-ai" },
   { label: "Data and Analytics", href: "/capabilities#data" },
 ];
 
 export const footerProducts: NavItem[] = [
-  { label: "OneTouch Audit", href: "/products?product=onetouch-audit" },
-  { label: "vedhire.ai", href: "/products?product=smart-hiring" },
-  { label: "Governance Command Centre", href: "/products?product=ai-governance-command-centre" },
+  { label: "OneTouch Audit", href: "/products/onetouch-audit" },
+  { label: "vedhire.ai", href: "/products/smart-hiring" },
+  { label: "Governance Command Centre", href: "/products/ai-governance-command-centre" },
   { label: "All products", href: "/products" },
 ];
 
 export const footerIndustries: NavItem[] = [
-  { label: "Government", href: "/industries?industry=government" },
-  { label: "Financial Services", href: "/industries?industry=banking" },
-  { label: "Healthcare", href: "/industries?industry=healthcare-social" },
+  { label: "Government", href: "/industries/government" },
+  { label: "Financial Services", href: "/industries/banking" },
+  { label: "Healthcare", href: "/industries/healthcare-social" },
   { label: "All industries", href: "/industries" },
 ];
 
@@ -65,6 +77,11 @@ export const footerCompany: NavItem[] = [
   { label: "Impact Stories", href: "/impact-stories" },
   { label: "Insights", href: "/insights" },
   { label: "Contact", href: "/contact" },
+];
+
+export const footerResources: NavItem[] = [
+  { label: "Insights library", href: "/insights" },
+  { label: "Impact stories", href: "/impact-stories" },
 ];
 
 /** @deprecated Prefer footerProducts / footerIndustries / footerCompany */

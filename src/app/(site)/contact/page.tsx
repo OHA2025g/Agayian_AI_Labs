@@ -25,16 +25,29 @@ import { FAQSection } from "@/components/sections/FAQSection";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { ProcessFlow } from "@/components/ui/ProcessFlow";
 import { DarkCtaBand } from "@/components/ui/DarkCtaBand";
-import { siteConfig } from "@/config/site";
-import { consultationFlow } from "@/lib/contact-schema";
+import { getFaqs } from "@/lib/cms/catalog";
+import { getContactPageContent } from "@/lib/cms/page-content";
+import { getResolvedSite } from "@/lib/cms/site";
 import { buildMetadata } from "@/lib/seo";
 
-export const metadata = buildMetadata({
+const contactFallback = {
   title: "Contact",
   description:
     "Book a consultation with Agrayian AI Labs for AI strategy, CoE design, governance, products and enterprise or government programmes.",
-  path: "/contact",
-});
+};
+
+export async function generateMetadata() {
+  const [site, page] = await Promise.all([
+    getResolvedSite(),
+    getContactPageContent(),
+  ]);
+  return buildMetadata({
+    title: page.seo.title || contactFallback.title,
+    description: page.seo.description || contactFallback.description,
+    path: "/contact",
+    site,
+  });
+}
 
 const whyContact = [
   "Exploring AI strategy and investment sequencing",
@@ -137,19 +150,37 @@ export default async function ContactPage({
     interest?: string;
     product?: string;
     capability?: string;
+    utm_source?: string;
+    utm_medium?: string;
+    utm_campaign?: string;
+    utm_content?: string;
+    utm_term?: string;
   }>;
 }) {
   const params = await searchParams;
-  const mailto = siteConfig.contactEmail
-    ? `mailto:${siteConfig.contactEmail}`
+  const [site, page, publishedFaqs] = await Promise.all([
+    getResolvedSite(),
+    getContactPageContent(),
+    getFaqs("contact"),
+  ]);
+  const mailto = site.contactEmail
+    ? `mailto:${site.contactEmail}`
     : "/contact";
+  const heroDescription = page.description;
+  const flow = page.consultationFlow;
+  const faqItems = publishedFaqs.length
+    ? publishedFaqs.map((item) => ({
+        question: item.question,
+        answer: item.answer,
+      }))
+    : faqs;
 
   return (
     <>
       <PageHero
-        title="Contact"
+        title={page.title}
         subtitle="Book a consultation"
-        description="Tell us about your AI ambition, governance needs or product interest. We will review the requirement and propose a suitable discovery discussion."
+        description={heroDescription}
         visual={<ContactNetworkHero />}
       />
 
@@ -166,6 +197,14 @@ export default async function ContactPage({
                   defaultInterest={params.interest}
                   defaultProduct={params.product}
                   defaultCapability={params.capability}
+                  utm={{
+                    source: params.utm_source,
+                    medium: params.utm_medium,
+                    campaign: params.utm_campaign,
+                    content: params.utm_content,
+                    term: params.utm_term,
+                    landingPath: "/contact",
+                  }}
                 />
               </GlassCard>
             </Reveal>
@@ -181,12 +220,12 @@ export default async function ContactPage({
                       Direct email
                     </h2>
                   </div>
-                  {siteConfig.contactEmail ? (
+                  {site.contactEmail ? (
                     <a
                       className="mt-4 block text-tech-blue hover:underline"
                       href={mailto}
                     >
-                      {siteConfig.contactEmail}
+                      {site.contactEmail}
                     </a>
                   ) : (
                     <p className="mt-4 text-sm text-muted-light">
@@ -250,9 +289,9 @@ export default async function ContactPage({
             </h2>
             <div className="mt-8">
               <ProcessFlow
-                steps={consultationFlow.map((step, index) => ({
-                  title: step.title,
-                  description: step.description,
+                steps={flow.map((step, index) => ({
+                  title: step.title || `Step ${index + 1}`,
+                  description: step.description || "",
                   icon: flowIcons[index],
                 }))}
               />
@@ -282,7 +321,7 @@ export default async function ContactPage({
           </Reveal>
 
           <Reveal className="mt-16 md:mt-20">
-            <FAQSection items={faqs} columns={2} />
+            <FAQSection items={faqItems} columns={2} />
           </Reveal>
 
           <GlassCard
@@ -321,8 +360,8 @@ export default async function ContactPage({
       <DarkCtaBand
         title="Prefer a direct conversation?"
         description={
-          siteConfig.contactEmail
-            ? `Email ${siteConfig.contactEmail} and we will route your request to the right specialists.`
+          site.contactEmail
+            ? `Email ${site.contactEmail} and we will route your request to the right specialists.`
             : "Email our team and we will route your request to the right specialists."
         }
         primaryHref={mailto}

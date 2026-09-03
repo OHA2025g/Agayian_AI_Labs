@@ -7,8 +7,9 @@ import {
   useRef,
   type KeyboardEvent,
 } from "react";
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Briefcase,
   Building2,
@@ -83,7 +84,6 @@ export function IndustriesExplorer({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const reduce = useReducedMotion();
   const scrollerRef = useRef<HTMLDivElement>(null);
 
   const orderedItems = useMemo(() => {
@@ -224,6 +224,15 @@ export function IndustriesExplorer({
         scrollerRef={scrollerRef}
         onKeyDown={onTabKeyDown}
       />
+
+      <p className="industries-main pt-4 text-sm">
+        <Link
+          href={`/industries/${selected.slug}`}
+          className="font-semibold text-tech-blue hover:text-navy"
+        >
+          Open {selected.name} page
+        </Link>
+      </p>
 
       <AnimatePresence mode="wait">
         <motion.div

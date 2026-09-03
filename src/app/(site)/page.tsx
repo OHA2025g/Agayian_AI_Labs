@@ -11,56 +11,55 @@ import { MockupCard } from "@/components/ui/MockupCard";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { ProductGlassArt } from "@/components/visualisations/glass/ProductGlassArt";
 import { flagshipProducts } from "@/config/flagship-products";
-import { insights as staticInsights } from "@/data/insights";
-import { products as staticProducts } from "@/data/products";
+import { getInsights, getProducts } from "@/lib/cms/catalog";
+import { getHomePageContent } from "@/lib/cms/page-content";
 import type { Insight } from "@/types";
 
-const homeInsightSlugs = [
-  "operationalizing-responsible-ai-in-the-enterprise",
-  "from-data-to-decisions-the-enterprise-ai-playbook",
-  "agentic-ai-building-systems-that-act-with-accountability",
-  "governance-frameworks-for-the-age-of-ai",
-] as const;
+export default async function HomePage() {
+  const [home, products, insights] = await Promise.all([
+    getHomePageContent(),
+    getProducts(),
+    getInsights(),
+  ]);
 
-function resolveHomeInsight(
-  slug: string,
-  published: Insight[],
-): Insight | undefined {
-  return (
-    published.find((item) => item.slug === slug) ??
-    staticInsights.find((item) => item.slug === slug)
-  );
-}
+  const featuredSlugs = home.featuredProductSlugs.length
+    ? home.featuredProductSlugs
+    : flagshipProducts.map((entry) => entry.slug);
 
-export default function HomePage() {
-  const products = staticProducts;
-  const insights = staticInsights;
-
-  const labProducts = flagshipProducts
-    .map((entry) => {
-      const product = products.find((item) => item.slug === entry.slug);
+  const labProducts = featuredSlugs
+    .map((slug) => {
+      const product = products.find((item) => item.slug === slug);
       if (!product) return null;
+      const entry = flagshipProducts.find((item) => item.slug === slug);
       return {
         ...product,
-        name: entry.displayName,
-        shortDescription: entry.displayDescription,
+        name: entry?.displayName ?? product.name,
+        shortDescription: entry?.displayDescription ?? product.shortDescription,
       };
     })
     .filter(Boolean);
 
-  const featuredInsights = homeInsightSlugs
-    .map((slug) => resolveHomeInsight(slug, insights))
+  const featuredInsights = home.featuredInsightSlugs
+    .map((slug) => insights.find((item) => item.slug === slug))
     .filter((item): item is Insight => Boolean(item));
 
   return (
     <div className="relative isolate bg-white">
-      <HomeHero />
+      <HomeHero
+        headline={home.hero.headline}
+        supporting={home.hero.supporting}
+        primaryCta={home.hero.primaryCtaLabel}
+        primaryCtaHref={home.hero.primaryCtaHref}
+        secondaryCta={home.hero.secondaryCtaLabel}
+        secondaryCtaHref={home.hero.secondaryCtaHref}
+        trustStatement={home.hero.trustLine}
+      />
 
       <section id="home-what-we-do" className="bg-white py-14 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <SectionTitle align="center" accent="below">
-              From ambition to accountable intelligence
+              {home.sections.ambition}
             </SectionTitle>
           </Reveal>
           <div className="mt-10 md:mt-12">
@@ -88,7 +87,7 @@ export default function HomePage() {
                 </Link>
               }
             >
-              Flagship products
+              {home.sections.products}
             </SectionTitle>
           </Reveal>
 
@@ -97,7 +96,7 @@ export default function HomePage() {
               product ? (
                 <div key={product.id}>
                   <Link
-                    href={`/products?product=${product.slug}`}
+                    href={`/products/${product.slug}`}
                     className="block h-full"
                   >
                     <MockupCard className="flex h-full flex-col p-5 hover:translate-y-0">
@@ -148,7 +147,7 @@ export default function HomePage() {
                 </Link>
               }
             >
-              Industries we empower
+              {home.sections.industries}
             </SectionTitle>
           </Reveal>
 
@@ -162,7 +161,7 @@ export default function HomePage() {
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
-            <SectionTitle accent="below">Responsible AI by design</SectionTitle>
+            <SectionTitle accent="below">{home.sections.responsible}</SectionTitle>
           </Reveal>
           <div className="mt-10 md:mt-12">
             <HomeResponsibleRow />
@@ -192,7 +191,7 @@ export default function HomePage() {
                   </Link>
                 }
               >
-                Insights that inspire
+                {home.sections.insights}
               </SectionTitle>
             </Reveal>
 
@@ -202,8 +201,8 @@ export default function HomePage() {
       ) : null}
 
       <LightCtaBar
-        title="Ready to build governed intelligence?"
-        description="Strategy to scale. Governance by design. Human accountability throughout."
+        title={home.cta.title}
+        description={home.cta.description}
       />
     </div>
   );

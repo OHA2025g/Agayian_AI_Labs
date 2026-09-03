@@ -1,12 +1,31 @@
+import Link from "next/link";
 import type { Product } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { Separator } from "@/components/ui/separator";
 import { DashboardPreview } from "@/components/visualisations/DashboardPreview";
+import { cn } from "@/lib/utils";
 
-export function ProductDetailView({ product }: { product: Product }) {
+export function ProductDetailView({
+  product,
+  compact = false,
+}: {
+  product: Product;
+  compact?: boolean;
+}) {
   return (
-    <div className="space-y-8 text-sm">
+    <div className={cn("space-y-8 text-sm", !compact && "mx-auto max-w-4xl px-4 py-12 sm:px-6 md:py-16 lg:px-8")}>
+      {!compact ? (
+        <nav className="text-sm text-muted-light">
+          <Link href="/" className="hover:text-navy">
+            Home
+          </Link>
+          <span className="px-2">/</span>
+          <Link href="/products" className="hover:text-navy">
+            Products
+          </Link>
+        </nav>
+      ) : null}
       <div className="flex flex-wrap gap-2">
         <Badge variant="cyan">{product.category}</Badge>
         <Badge>{product.status}</Badge>
@@ -18,10 +37,10 @@ export function ProductDetailView({ product }: { product: Product }) {
       </div>
 
       <div>
-        <h1 className="font-heading text-[clamp(1.8rem,3.5vw,3rem)] font-semibold text-balance text-text-on-dark">
+        <h1 className="font-heading text-[clamp(1.8rem,3.5vw,3rem)] font-semibold text-balance text-navy">
           {product.name}
         </h1>
-        <p className="mt-4 max-w-3xl text-base text-muted-dark md:text-lg">
+        <p className="mt-4 max-w-3xl text-base text-muted-light md:text-lg">
           {product.valueProposition}
         </p>
       </div>
@@ -30,14 +49,14 @@ export function ProductDetailView({ product }: { product: Product }) {
       <DetailBlock title="Solution overview" body={product.solutionOverview} />
 
       <div>
-        <h2 className="font-heading text-base font-semibold text-text-on-dark">
+        <h2 className="font-heading text-base font-semibold text-navy">
           Target users
         </h2>
         <ul className="mt-2 grid gap-2 sm:grid-cols-2">
           {product.targetUsers.map((user) => (
             <li
               key={user}
-              className="rounded-md border border-white/10 bg-white/5 px-3 py-2 text-muted-dark"
+              className="rounded-md border border-[var(--border-soft)] bg-[#f5f8fb] px-3 py-2 text-muted-light"
             >
               {user}
             </li>
@@ -46,17 +65,17 @@ export function ProductDetailView({ product }: { product: Product }) {
       </div>
 
       <div>
-        <h2 className="font-heading text-base font-semibold text-text-on-dark">
+        <h2 className="font-heading text-base font-semibold text-navy">
           Major modules
         </h2>
         <div className="mt-3 grid gap-3 md:grid-cols-2">
           {product.modules.map((module) => (
             <div
               key={module.title}
-              className="rounded-lg border border-white/10 bg-bg-primary/50 p-4"
+              className="rounded-lg border border-[var(--border-soft)] bg-[#f5f8fb] p-4"
             >
-              <p className="font-medium text-text-on-dark">{module.title}</p>
-              <p className="mt-1 text-muted-dark">{module.description}</p>
+              <p className="font-medium text-navy">{module.title}</p>
+              <p className="mt-1 text-muted-light">{module.description}</p>
             </div>
           ))}
         </div>
@@ -65,7 +84,7 @@ export function ProductDetailView({ product }: { product: Product }) {
       <TagBlock title="Key capabilities" items={product.capabilities} />
 
       <div>
-        <h2 className="font-heading text-base font-semibold text-text-on-dark">
+        <h2 className="font-heading text-base font-semibold text-navy">
           Product workflow
         </h2>
         <ol className="mt-3 space-y-3">
@@ -75,8 +94,8 @@ export function ProductDetailView({ product }: { product: Product }) {
                 {index + 1}
               </span>
               <div>
-                <p className="font-medium text-text-on-dark">{step.title}</p>
-                <p className="text-muted-dark">{step.description}</p>
+                <p className="font-medium text-navy">{step.title}</p>
+                <p className="text-muted-light">{step.description}</p>
               </div>
             </li>
           ))}
@@ -103,12 +122,12 @@ export function ProductDetailView({ product }: { product: Product }) {
       )}
 
       <div>
-        <h2 className="font-heading text-base font-semibold text-text-on-dark">
+        <h2 className="font-heading text-base font-semibold text-navy">
           Expected outcomes
         </h2>
         <ul className="mt-2 space-y-2">
           {product.outcomes.map((outcome) => (
-            <li key={outcome} className="flex gap-2 text-muted-dark">
+            <li key={outcome} className="flex gap-2 text-muted-light">
               <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
               {outcome}
             </li>
@@ -117,7 +136,7 @@ export function ProductDetailView({ product }: { product: Product }) {
       </div>
 
       <div>
-        <h2 className="font-heading text-base font-semibold text-text-on-dark">
+        <h2 className="font-heading text-base font-semibold text-navy">
           Interface preview
         </h2>
         <div className="mt-3">
@@ -146,10 +165,10 @@ export function ProductDetailView({ product }: { product: Product }) {
 function DetailBlock({ title, body }: { title: string; body: string }) {
   return (
     <div>
-      <h2 className="font-heading text-base font-semibold text-text-on-dark">
+      <h2 className="font-heading text-base font-semibold text-navy">
         {title}
       </h2>
-      <p className="mt-2 leading-relaxed text-muted-dark">{body}</p>
+      <p className="mt-2 leading-relaxed text-muted-light">{body}</p>
     </div>
   );
 }
@@ -157,7 +176,7 @@ function DetailBlock({ title, body }: { title: string; body: string }) {
 function TagBlock({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
-      <h2 className="font-heading text-base font-semibold text-text-on-dark">
+      <h2 className="font-heading text-base font-semibold text-navy">
         {title}
       </h2>
       <div className="mt-2 flex flex-wrap gap-2">

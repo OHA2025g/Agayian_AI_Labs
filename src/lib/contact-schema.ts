@@ -108,6 +108,12 @@ export const contactSchema = z.object({
   website: z.string().optional(),
   product: z.string().trim().max(120).optional(),
   industry: z.string().trim().max(160).optional(),
+  utmSource: z.string().trim().max(120).optional(),
+  utmMedium: z.string().trim().max(120).optional(),
+  utmCampaign: z.string().trim().max(160).optional(),
+  utmContent: z.string().trim().max(160).optional(),
+  utmTerm: z.string().trim().max(160).optional(),
+  landingPath: z.string().trim().max(240).optional(),
 });
 
 export type ContactFormValues = z.infer<typeof contactSchema>;

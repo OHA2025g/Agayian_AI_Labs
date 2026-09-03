@@ -9,19 +9,40 @@ import {
   footerProducts,
 } from "@/data/navigation";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
+import type { ResolvedNav, ResolvedSite } from "@/lib/cms/site";
 
-const socialEntries = Object.entries(siteConfig.socialLinks).filter(
-  ([, href]) => Boolean(href),
-) as [string, string][];
+type Props = {
+  site?: ResolvedSite | typeof siteConfig;
+  nav?: Pick<
+    ResolvedNav,
+    | "footerCapabilities"
+    | "footerProducts"
+    | "footerIndustries"
+    | "footerCompany"
+    | "footerLegal"
+  >;
+};
 
-export function SiteFooter() {
+export function SiteFooter({
+  site = siteConfig,
+  nav,
+}: Props) {
+  const capabilities = nav?.footerCapabilities ?? footerCapabilities;
+  const products = nav?.footerProducts ?? footerProducts;
+  const industries = nav?.footerIndustries ?? footerIndustries;
+  const company = nav?.footerCompany ?? footerCompany;
+  const legal = nav?.footerLegal ?? footerLegal;
+  const socialEntries = Object.entries(site.socialLinks).filter(
+    ([, href]) => Boolean(href),
+  ) as [string, string][];
+
   return (
     <footer className="on-dark-surface bg-navy-deep text-text-on-dark">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-12 lg:px-8">
-        <div className="lg:col-span-4">
+        <div className="lg:col-span-3">
           <LogoMark tone="dark" />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-dark">
-            {siteConfig.description}
+            {site.description}
           </p>
           <div className="mt-6">
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-dark">
@@ -30,20 +51,20 @@ export function SiteFooter() {
             <NewsletterForm />
           </div>
           <div className="mt-6 flex flex-wrap gap-3 text-sm text-muted-dark">
-            {siteConfig.contactEmail && (
+            {site.contactEmail && (
               <a
-                href={`mailto:${siteConfig.contactEmail}`}
+                href={`mailto:${site.contactEmail}`}
                 className="transition hover:text-cyan"
               >
-                {siteConfig.contactEmail}
+                {site.contactEmail}
               </a>
             )}
-            {siteConfig.contactPhone && (
+            {site.contactPhone && (
               <a
-                href={`tel:${siteConfig.contactPhone.replace(/\s+/g, "")}`}
+                href={`tel:${site.contactPhone.replace(/\s+/g, "")}`}
                 className="transition hover:text-cyan"
               >
-                {siteConfig.contactPhone}
+                {site.contactPhone}
               </a>
             )}
           </div>
@@ -64,19 +85,21 @@ export function SiteFooter() {
           )}
         </div>
 
-        <FooterColumn title="Capabilities" links={footerCapabilities} />
-        <FooterColumn title="Products" links={footerProducts} />
-        <FooterColumn title="Industries" links={footerIndustries} />
-        <FooterColumn title="Company" links={footerCompany} />
+        <div className="grid gap-10 sm:grid-cols-2 lg:col-span-9 lg:grid-cols-4">
+          <FooterColumn title="Capabilities" links={capabilities} />
+          <FooterColumn title="Products" links={products} />
+          <FooterColumn title="Industries" links={industries} />
+          <FooterColumn title="Company" links={company} />
+        </div>
       </div>
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-5 text-xs text-muted-dark sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
           <p>
-            © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+            © {new Date().getFullYear()} {site.name}. All rights reserved.
           </p>
           <ul className="flex flex-wrap gap-x-4 gap-y-1">
-            {footerLegal.map((link) => (
+            {legal.map((link) => (
               <li key={link.href}>
                 <Link href={link.href} className="transition hover:text-cyan">
                   {link.label}
@@ -98,7 +121,7 @@ function FooterColumn({
   links: { label: string; href: string }[];
 }) {
   return (
-    <div className="lg:col-span-2">
+    <div>
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-dark">
         {title}
       </p>

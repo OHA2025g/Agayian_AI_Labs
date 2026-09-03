@@ -1,8 +1,7 @@
 "use client";
 
 import {
-  useEffect,
-  useState,
+  useSyncExternalStore,
   type KeyboardEvent,
   type ReactNode,
   type RefObject,
@@ -21,11 +20,11 @@ function SelectorArrow({
   onClick: () => void;
   children: ReactNode;
 }) {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    setReady(true);
-  }, []);
+  const ready = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   const className =
     "flex h-10 w-10 items-center justify-center text-[#314b6f]";

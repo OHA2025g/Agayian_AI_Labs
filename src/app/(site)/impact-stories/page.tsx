@@ -1,15 +1,8 @@
-import {
-  FileCheck2,
-  Shield,
-  Sparkles,
-  Users,
-  type LucideIcon,
-} from "lucide-react";
-import { PageHero } from "@/components/layout/PageHero";
-import { OriginalSculpture } from "@/components/visualisations/glass/OriginalSculpture";
-import { mockupAssets } from "@/config/mockup-assets";
 import { ImpactStoriesCinematic } from "@/components/sections/ImpactStoriesCinematic";
 import { LightCtaBar } from "@/components/ui/DarkCtaBand";
+import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { SecondaryButton } from "@/components/ui/SecondaryButton";
+import { ImpactPrismHero } from "@/components/visualisations/impact/ImpactPrismHero";
 import {
   getCapabilities,
   getImpactStories,
@@ -24,76 +17,6 @@ export const metadata = buildMetadata({
     "Explore anonymised sector-level impact stories showing how Agrayian approaches AI transformation, governance and product delivery.",
   path: "/impact-stories",
 });
-
-const floatingStories: {
-  title: string;
-  icon: LucideIcon;
-  position: string;
-}[] = [
-  {
-    title: "AI-Powered Talent Intelligence Transformation",
-    icon: Users,
-    position: "left-2 top-4 sm:left-4 sm:top-6",
-  },
-  {
-    title: "Social Development Decision-Intelligence Platform",
-    icon: Sparkles,
-    position: "right-2 top-10 sm:right-6 sm:top-12",
-  },
-  {
-    title: "Enterprise Audit & Assurance Command Centre",
-    icon: FileCheck2,
-    position: "left-4 bottom-16 sm:left-8 sm:bottom-20",
-  },
-  {
-    title: "Regulated AI Governance & Assurance Enablement",
-    icon: Shield,
-    position: "right-3 bottom-8 sm:right-8 sm:bottom-12",
-  },
-];
-
-const heroPrinciples = [
-  "Patterns over projects",
-  "Evidence over claims",
-  "Impact through governance",
-] as const;
-
-function PrismHeroVisual() {
-  return (
-    <div className="relative overflow-hidden rounded-2xl border border-[#dce8f2] bg-white p-4 md:p-6">
-      <div className="relative w-full overflow-hidden rounded-xl">
-        <OriginalSculpture
-          src={mockupAssets.originalImpactPrism}
-          alt=""
-          priority
-        />
-
-        {floatingStories.map(({ title, icon: Icon, position }) => (
-          <div
-            key={title}
-            className={`absolute max-w-[10.5rem] rounded-xl border border-[#dce8f2] bg-white px-2.5 py-2 shadow-[0_10px_28px_rgba(11,31,58,0.08)] sm:max-w-[12rem] ${position}`}
-          >
-            <span className="mb-1.5 flex h-6 w-6 items-center justify-center rounded-md text-navy">
-              <Icon className="h-3.5 w-3.5" aria-hidden />
-            </span>
-            <p className="text-[0.65rem] font-semibold leading-snug text-navy sm:text-xs">
-              {title}
-            </p>
-          </div>
-        ))}
-
-        <ul className="absolute bottom-3 right-3 hidden space-y-1.5 rounded-xl border border-[#dce8f2] bg-white px-3 py-2 text-[0.65rem] shadow-sm sm:block">
-          {heroPrinciples.map((item) => (
-            <li key={item} className="flex items-center gap-2 text-navy">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand" />
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  );
-}
 
 export default async function ImpactStoriesPage() {
   const [stories, industries, capabilities, products] = await Promise.all([
@@ -117,20 +40,35 @@ export default async function ImpactStoriesPage() {
         }}
       />
 
-      <PageHero
-        title="Impact Stories"
-        subtitle="Transformation patterns, told with evidence"
-        description="Anonymised engagement stories showing the challenge, design response, governance approach and outcome pathway."
-        primaryCta={{
-          href: "/contact?interest=consultation",
-          label: "Book a Consultation",
-        }}
-        secondaryCta={{
-          href: "/capabilities",
-          label: "Explore Capabilities",
-        }}
-        visual={<PrismHeroVisual />}
-      />
+      <section className="scene-hero relative overflow-hidden">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 grid-texture opacity-40"
+        />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.18fr)] lg:gap-8 lg:px-8 lg:py-16">
+          <div className="max-w-xl">
+            <h1 className="font-heading text-[clamp(2.2rem,4.5vw,3.6rem)] font-semibold leading-[1.05] tracking-tight text-navy text-balance">
+              Impact Stories
+            </h1>
+            <p className="mt-3 text-lg font-semibold text-navy md:text-xl">
+              Transformation patterns, told with evidence
+            </p>
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-muted-light md:text-lg">
+              Anonymised engagement stories showing the challenge, design
+              response, governance approach and outcome pathway.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <PrimaryButton href="/contact?interest=consultation">
+                Book a Consultation
+              </PrimaryButton>
+              <SecondaryButton href="/capabilities">
+                Explore Capabilities
+              </SecondaryButton>
+            </div>
+          </div>
+          <ImpactPrismHero />
+        </div>
+      </section>
 
       <ImpactStoriesCinematic
         stories={stories}

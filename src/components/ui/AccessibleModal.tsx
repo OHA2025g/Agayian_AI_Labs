@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useId, useRef, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
@@ -24,6 +24,11 @@ export function AccessibleModal({
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -56,7 +61,7 @@ export function AccessibleModal({
     };
   }, [open, onClose]);
 
-  if (typeof document === "undefined") return null;
+  if (!mounted) return null;
 
   return createPortal(
     <AnimatePresence>

@@ -15,6 +15,12 @@ type EnquiryPersistInput = {
   product?: string;
   capability?: string;
   careerRole?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
+  landingPath?: string;
 };
 
 export async function persistEnquiry(input: EnquiryPersistInput) {

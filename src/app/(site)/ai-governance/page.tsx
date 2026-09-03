@@ -31,16 +31,19 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { LightCtaBar } from "@/components/ui/DarkCtaBand";
 import { GovernanceDashboardLazy } from "@/components/visualisations/GovernanceDashboardLazy";
 import { mockupAssets } from "@/config/mockup-assets";
-import { OriginalSculpture } from "@/components/visualisations/glass/OriginalSculpture";
+import { WhiteSculpture } from "@/components/visualisations/glass/WhiteSculpture";
+import { getGovernancePageContent } from "@/lib/cms/page-content";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
-export const metadata = buildMetadata({
-  title: "AI Governance",
-  description:
-    "Implement responsible AI governance with Agrayian — risk classification, model lifecycle control, explainability, human oversight, monitoring, audit and third-party AI risk management.",
-  path: "/ai-governance",
-});
+export async function generateMetadata() {
+  const copy = await getGovernancePageContent();
+  return buildMetadata({
+    title: copy.seo.title,
+    description: copy.seo.description,
+    path: "/ai-governance",
+  });
+}
 
 const lifecycleStages: { label: string; icon: LucideIcon }[] = [
   { label: "Ideate", icon: Lightbulb },
@@ -264,24 +267,24 @@ function SectionHeading({
 
 function LifecycleInfinityHero() {
   return (
-    <GlassCard variant="glow" className="relative overflow-hidden p-4 md:p-6">
-      <div className="relative aspect-[5/4] w-full overflow-hidden rounded-xl bg-gradient-to-br from-[#eef5fc] via-white to-[#e8f0fa] sm:aspect-[4/3]">
-        <OriginalSculpture
-          src={mockupAssets.originalGovernanceLoop}
+    <div className="relative bg-transparent">
+      <div className="relative aspect-[5/4] w-full bg-transparent sm:aspect-[4/3]">
+        <WhiteSculpture
+          src={mockupAssets.governanceHeroLoopClear}
           alt=""
           priority
-          className="absolute inset-0 h-full w-full object-contain p-4 opacity-95 sm:p-6"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_55%,transparent_40%,rgba(255,255,255,0.55)_100%)]"
+          multiply={false}
+          width={1536}
+          height={1024}
+          className="absolute inset-0"
+          imageClassName="h-full w-full object-contain p-2 sm:p-4"
         />
 
         <div className="absolute inset-x-3 top-3 grid grid-cols-4 gap-1.5 sm:inset-x-4 sm:top-4 sm:gap-2">
           {lifecycleStages.slice(0, 4).map(({ label, icon: Icon }) => (
             <div
               key={label}
-              className="flex items-center gap-1.5 rounded-lg border border-white/80 bg-white/85 px-2 py-1.5 shadow-sm backdrop-blur-md"
+              className="flex items-center gap-1.5 rounded-lg border border-[var(--border-soft)] bg-bg-primary/80 px-2 py-1.5"
             >
               <Icon className="h-3.5 w-3.5 shrink-0 text-tech-blue" aria-hidden />
               <span className="truncate text-[0.65rem] font-semibold text-navy sm:text-xs">
@@ -295,7 +298,7 @@ function LifecycleInfinityHero() {
           {lifecycleStages.slice(4).map(({ label, icon: Icon }) => (
             <div
               key={label}
-              className="flex items-center gap-1.5 rounded-lg border border-white/80 bg-white/85 px-2 py-1.5 shadow-sm backdrop-blur-md"
+              className="flex items-center gap-1.5 rounded-lg border border-[var(--border-soft)] bg-bg-primary/80 px-2 py-1.5"
             >
               <Icon className="h-3.5 w-3.5 shrink-0 text-tech-blue" aria-hidden />
               <span className="truncate text-[0.65rem] font-semibold text-navy sm:text-xs">
@@ -319,11 +322,12 @@ function LifecycleInfinityHero() {
           Telemetry &amp; feedback
         </span>
       </div>
-    </GlassCard>
+    </div>
   );
 }
 
 export default async function AIGovernancePage() {
+  const copy = await getGovernancePageContent();
   return (
     <>
       <script
@@ -340,16 +344,16 @@ export default async function AIGovernancePage() {
 
       <PageHero
         eyebrow="AI Governance"
-        title="AI Governance"
-        subtitle="Responsible AI, made operational"
-        description="Inventory AI systems, classify risk, enforce lifecycle controls and preserve evidence for leadership and audit."
+        title={copy.hero.title}
+        subtitle={copy.hero.subtitle}
+        description={copy.hero.description}
         primaryCta={{
-          href: "/contact?interest=consultation",
-          label: "Book a Consultation",
+          href: copy.hero.primaryCtaHref,
+          label: copy.hero.primaryCtaLabel,
         }}
         secondaryCta={{
-          href: "#pillars",
-          label: "Explore Governance",
+          href: copy.hero.secondaryCtaHref,
+          label: copy.hero.secondaryCtaLabel,
         }}
         visual={<LifecycleInfinityHero />}
       />
@@ -360,7 +364,7 @@ export default async function AIGovernancePage() {
         className="scroll-mt-28 border-b border-[var(--border-soft)] py-16 md:py-24"
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading title="Governance framework pillars" />
+          <SectionHeading title={copy.pillarsTitle} />
           <RevealGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
             {pillars.map((pillar) => {
               const Icon = pillar.icon;
@@ -394,8 +398,8 @@ export default async function AIGovernancePage() {
       <section className="bg-bg-secondary/50 py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
-            title="Operating model: Who does what"
-            description="Clear ownership across the AI lifecycle — from ideation through retirement — so policy, delivery and control functions stay aligned."
+            title={copy.raciTitle}
+            description={copy.raciDescription}
           />
           <Reveal>
             <GlassCard className="overflow-hidden p-0">
@@ -459,13 +463,14 @@ export default async function AIGovernancePage() {
       </section>
 
       {/* Command centre */}
-      <section className="border-y border-[var(--border-soft)] py-16 md:py-24">
+      <section className="border-y border-[var(--border-soft)] py-10 md:py-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
-            title="AI Governance command centre"
-            description="A shared operating surface for inventory, risk posture, assessments and incidents."
+            className="mb-4 md:mb-5"
+            title={copy.commandTitle}
+            description={copy.commandDescription}
           />
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--border-light)] bg-white/80 px-3 py-1 font-tech text-[0.6rem] uppercase tracking-[0.16em] text-muted-light">
+          <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-[var(--border-light)] bg-white/80 px-3 py-1 font-tech text-[0.6rem] uppercase tracking-[0.16em] text-muted-light">
             Illustrative preview · sample data only
           </p>
           <div className="on-dark-surface">
@@ -478,8 +483,8 @@ export default async function AIGovernancePage() {
       <section className="bg-bg-secondary/40 py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
-            title="Engagement model"
-            description="Whether you need a diagnostic, a full framework or an operating command centre, Agrayian structures governance work as a practical delivery programme."
+            title={copy.engagementTitle}
+            description={copy.engagementDescription}
           />
           <RevealGroup className="grid gap-4 md:grid-cols-5">
             {engagementSteps.map((step, index) => {
@@ -513,8 +518,8 @@ export default async function AIGovernancePage() {
       </section>
 
       <LightCtaBar
-        title="Make responsible AI measurable, reviewable and operable."
-        description="Strengthen trust, reduce risk and scale AI with confidence."
+        title={copy.ctaTitle}
+        description={copy.ctaDescription}
       />
     </>
   );

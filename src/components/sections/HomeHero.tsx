@@ -6,7 +6,25 @@ import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import { OriginalSculpture } from "@/components/visualisations/glass/OriginalSculpture";
 
-export function HomeHero() {
+type HomeHeroCopy = {
+  headline?: string;
+  supporting?: string;
+  primaryCta?: string;
+  primaryCtaHref?: string;
+  secondaryCta?: string;
+  secondaryCtaHref?: string;
+  trustStatement?: string;
+};
+
+export function HomeHero({
+  headline = brandCopy.headline,
+  supporting = "We help enterprises and governments turn complex data into responsible AI systems, measurable decisions and action.",
+  primaryCta = brandCopy.primaryCta,
+  primaryCtaHref = "/contact?interest=consultation",
+  secondaryCta = brandCopy.secondaryCta,
+  secondaryCtaHref = "/capabilities",
+  trustStatement = brandCopy.trustStatement,
+}: HomeHeroCopy) {
   return (
     <section
       className="scene-hero relative isolate overflow-hidden bg-white"
@@ -20,24 +38,23 @@ export function HomeHero() {
       <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-8 px-4 py-14 sm:px-6 md:py-16 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-2 lg:px-8 lg:py-16">
         <div className="relative z-20 max-w-xl">
           <h1 className="font-heading text-[clamp(2.4rem,5vw,3.75rem)] font-semibold leading-[1.05] tracking-tight text-navy text-balance">
-            <span className="block">{brandCopy.headline}</span>
+            <span className="block">{headline}</span>
           </h1>
 
           <p className="mt-6 max-w-md text-base leading-relaxed text-navy/70 md:text-lg">
-            We help enterprises and governments turn complex data into
-            responsible AI systems, measurable decisions and action.
+            {supporting}
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">
-            <PrimaryButton href="/contact?interest=consultation">
-              {brandCopy.primaryCta}
+            <PrimaryButton href={primaryCtaHref}>
+              {primaryCta}
             </PrimaryButton>
-            <SecondaryButton href="/capabilities">
-              {brandCopy.secondaryCta}
+            <SecondaryButton href={secondaryCtaHref}>
+              {secondaryCta}
             </SecondaryButton>
           </div>
           <p className="mt-4 max-w-md text-xs leading-relaxed text-muted-light md:text-sm">
-            {brandCopy.trustStatement}
+            {trustStatement}
           </p>
         </div>
 

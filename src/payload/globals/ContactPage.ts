@@ -2,6 +2,7 @@ import type { GlobalConfig } from "payload";
 import { globalRead, contentUpdate } from "../access";
 import { editorialStatusFields } from "../fields/editorial";
 import { seoFields } from "../fields/seo";
+import { globalPreviewUrl } from "../lib/preview-url";
 
 export const ContactPage: GlobalConfig = {
   slug: "contact-page",
@@ -10,25 +11,44 @@ export const ContactPage: GlobalConfig = {
     read: globalRead,
     update: contentUpdate,
   },
+  admin: {
+    preview: () => globalPreviewUrl("contact-page"),
+  },
   fields: [
-    { name: "title", type: "text" },
-    { name: "description", type: "textarea" },
-    { name: "enquiryThemes", type: "text", hasMany: true },
     {
-      name: "consultationFlow",
-      type: "array",
-      fields: [
-        { name: "title", type: "text", required: true },
-        { name: "description", type: "textarea" },
+      type: "tabs",
+      tabs: [
+        {
+          label: "Overview",
+          fields: [
+            { name: "title", type: "text" },
+            { name: "description", type: "textarea" },
+            { name: "enquiryThemes", type: "text", hasMany: true },
+            {
+              name: "consultationFlow",
+              type: "array",
+              fields: [
+                { name: "title", type: "text", required: true },
+                { name: "description", type: "textarea" },
+              ],
+            },
+            {
+              name: "faqs",
+              type: "relationship",
+              relationTo: "faqs",
+              hasMany: true,
+            },
+          ],
+        },
+        {
+          label: "SEO",
+          fields: [seoFields],
+        },
+        {
+          label: "Publishing",
+          fields: [...editorialStatusFields],
+        },
       ],
     },
-    {
-      name: "faqs",
-      type: "relationship",
-      relationTo: "faqs",
-      hasMany: true,
-    },
-    ...editorialStatusFields,
-    seoFields,
   ],
 };

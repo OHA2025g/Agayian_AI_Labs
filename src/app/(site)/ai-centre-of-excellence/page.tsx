@@ -1,15 +1,19 @@
 import { CmsBlocksOrFallback } from "@/components/cms/CmsBlocksOrFallback";
+import { getCoePageContent } from "@/lib/cms/page-content";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 import { CoeExperience } from "./CoeExperience";
 
-export const metadata = buildMetadata({
-  title: "AI Centre of Excellence",
-  description:
-    "An operating model that makes AI repeatable — connect strategy, governance, platforms, talent and delivery so every use case stops restarting from zero.",
-  path: "/ai-centre-of-excellence",
-});
+export async function generateMetadata() {
+  const copy = await getCoePageContent();
+  return buildMetadata({
+    title: copy.seo.title,
+    description: copy.seo.description,
+    path: "/ai-centre-of-excellence",
+  });
+}
 
-export default function AICentreOfExcellencePage() {
+export default async function AICentreOfExcellencePage() {
+  const copy = await getCoePageContent();
   return (
     <CmsBlocksOrFallback slug="coe-page" preferCms={false}>
       <>
@@ -27,7 +31,7 @@ export default function AICentreOfExcellencePage() {
             ),
           }}
         />
-        <CoeExperience />
+        <CoeExperience copy={copy} />
       </>
     </CmsBlocksOrFallback>
   );

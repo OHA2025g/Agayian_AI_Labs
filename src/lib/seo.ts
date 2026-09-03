@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/config/site";
+import { siteConfig, type SiteConfig } from "@/config/site";
+
+type SiteLike = Pick<
+  SiteConfig,
+  "name" | "websiteUrl" | "description" | "contactEmail" | "socialLinks"
+>;
 
 type BuildMetadataInput = {
   title: string;
@@ -7,6 +12,7 @@ type BuildMetadataInput = {
   path?: string;
   image?: string;
   type?: "website" | "article";
+  site?: SiteLike;
 };
 
 export function buildMetadata({
@@ -15,11 +21,14 @@ export function buildMetadata({
   path = "",
   image = "/og-default.png",
   type = "website",
+  site = siteConfig,
 }: BuildMetadataInput): Metadata {
-  const url = `${siteConfig.websiteUrl}${path}`;
-  const brandSuffix = `| ${siteConfig.name}`;
+  const url = `${site.websiteUrl}${path}`;
+  const brandSuffix = `| ${site.name}`;
   const fullTitle =
-    title === siteConfig.name || title.endsWith(brandSuffix)
+    title === site.name ||
+    title.endsWith(brandSuffix) ||
+    title.startsWith(site.name)
       ? title
       : `${title} ${brandSuffix}`;
 
@@ -31,9 +40,9 @@ export function buildMetadata({
       title: fullTitle,
       description,
       url,
-      siteName: siteConfig.name,
+      siteName: site.name,
       type,
-      images: [{ url: image, width: 1200, height: 630, alt: siteConfig.name }],
+      images: [{ url: image, width: 1200, height: 630, alt: site.name }],
     },
     twitter: {
       card: "summary_large_image",
@@ -44,30 +53,31 @@ export function buildMetadata({
   };
 }
 
-export function organisationSchema() {
+export function organisationSchema(site: SiteLike = siteConfig) {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: siteConfig.name,
-    url: siteConfig.websiteUrl,
-    description: siteConfig.description,
-    email: siteConfig.contactEmail,
-    sameAs: Object.values(siteConfig.socialLinks).filter(Boolean),
+    name: site.name,
+    url: site.websiteUrl,
+    description: site.description,
+    email: site.contactEmail,
+    sameAs: Object.values(site.socialLinks).filter(Boolean),
   };
 }
 
-export function websiteSchema() {
+export function websiteSchema(site: SiteLike = siteConfig) {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: siteConfig.name,
-    url: siteConfig.websiteUrl,
-    description: siteConfig.description,
+    name: site.name,
+    url: site.websiteUrl,
+    description: site.description,
   };
 }
 
 export function breadcrumbSchema(
   items: { name: string; path: string }[],
+  site: SiteLike = siteConfig,
 ) {
   return {
     "@context": "https://schema.org",
@@ -76,7 +86,7 @@ export function breadcrumbSchema(
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: `${siteConfig.websiteUrl}${item.path}`,
+      item: `${site.websiteUrl}${item.path}`,
     })),
   };
 }

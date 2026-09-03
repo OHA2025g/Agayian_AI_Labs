@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { mainNavigation } from "@/data/navigation";
+import { defaultHeaderCta, headerContactItem, mainNavigation } from "@/data/navigation";
 import { brandCopy } from "@/config/site";
 import { LogoMark } from "@/components/layout/LogoMark";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
@@ -14,15 +14,26 @@ import type { NavItem } from "@/types";
 
 type Props = {
   items?: NavItem[];
+  ctaLabel?: string;
+  ctaHref?: string;
 };
 
-export function SiteHeader({ items = mainNavigation }: Props) {
+export function SiteHeader({
+  items = mainNavigation,
+  ctaLabel = brandCopy.primaryCta,
+  ctaHref = defaultHeaderCta.href,
+}: Props) {
   const pathname = usePathname();
   const reduce = useReducedMotion();
   const drawerId = "mobile-navigation";
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [menuPath, setMenuPath] = useState(pathname);
+  const navReady = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   if (menuPath !== pathname) {
     setMenuPath(pathname);
@@ -55,8 +66,14 @@ export function SiteHeader({ items = mainNavigation }: Props) {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  const desktopItems = items.filter((item) => item.href !== "/contact");
+  const mobileItems = items.some((item) => item.href === "/contact")
+    ? items
+    : [...items, headerContactItem];
+
   return (
     <header
+      data-nav-ready={navReady ? "true" : "false"}
       className={cn(
         "sticky top-0 z-50 w-full transition-[height,background-color,backdrop-filter,border-color,box-shadow] duration-300",
         scrolled || open
@@ -76,14 +93,14 @@ export function SiteHeader({ items = mainNavigation }: Props) {
           aria-label="Primary"
           className="hidden items-center gap-0.5 lg:flex"
         >
-          {items.map((item) => {
+          {desktopItems.map((item) => {
             const active = isActive(item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "relative rounded-md px-2 py-2 text-[0.72rem] font-medium transition-colors xl:px-2.5 xl:text-[0.78rem]",
+                  "relative rounded-md px-1.5 py-2 text-[0.68rem] font-medium transition-colors xl:px-2 xl:text-[0.74rem]",
                   active
                     ? "text-navy"
                     : "text-muted-light hover:text-navy",
@@ -106,11 +123,11 @@ export function SiteHeader({ items = mainNavigation }: Props) {
 
         <div className="flex items-center gap-2 sm:gap-3">
           <PrimaryButton
-            href="/contact?interest=consultation"
+            href={ctaHref}
             className="hidden h-10 rounded-full px-5 text-xs md:inline-flex"
             showArrow={false}
           >
-            {brandCopy.primaryCta}
+            {ctaLabel}
           </PrimaryButton>
           <button
             type="button"
@@ -140,7 +157,7 @@ export function SiteHeader({ items = mainNavigation }: Props) {
               aria-label="Mobile primary"
               className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6"
             >
-              {items.map((item) => (
+              {mobileItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -155,10 +172,10 @@ export function SiteHeader({ items = mainNavigation }: Props) {
                 </Link>
               ))}
               <PrimaryButton
-                href="/contact?interest=consultation"
+                href={ctaHref}
                 className="mt-3 w-full rounded-full"
               >
-                {brandCopy.primaryCta}
+                {ctaLabel}
               </PrimaryButton>
             </nav>
           </motion.div>

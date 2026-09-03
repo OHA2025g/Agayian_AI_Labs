@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { permanentRedirect, redirect } from "next/navigation";
 import { IBM_Plex_Mono, Inter, Space_Grotesk } from "next/font/google";
+import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { BackToTop } from "@/components/layout/BackToTop";
 import { CookieBanner } from "@/components/layout/CookieBanner";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/navigation/SiteHeader";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { ConsentAnalytics } from "@/components/analytics/ConsentAnalytics";
-import { brandCopy, siteConfig } from "@/config/site";
-import { mainNavigation } from "@/data/navigation";
+import { matchRedirect } from "@/lib/cms/redirects";
+import { getResolvedNav, getResolvedSite } from "@/lib/cms/site";
 import { buildMetadata, organisationSchema, websiteSchema } from "@/lib/seo";
 import "../globals.css";
 
@@ -30,32 +33,54 @@ const ibmPlexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.websiteUrl),
-  ...buildMetadata({
-    title: `${siteConfig.name} | Growth reimagined with AI`,
-    description: brandCopy.supporting,
-    path: "",
-  }),
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getResolvedSite();
+  return {
+    metadataBase: new URL(site.websiteUrl),
+    ...buildMetadata({
+      title: site.seo.title,
+      description: site.seo.description,
+      path: "",
+      image: site.seo.image,
+      site,
+    }),
+  };
+}
 
 export default async function SiteLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const navItems = mainNavigation;
+  const pathname = (await headers()).get("x-ag-pathname");
+  if (pathname) {
+    const hit = await matchRedirect(pathname);
+    if (hit) {
+      if (hit.type === "301") permanentRedirect(hit.toPath);
+      redirect(hit.toPath);
+    }
+  }
+
+  const site = await getResolvedSite();
+  const nav = await getResolvedNav();
 
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${inter.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-bg-primary text-text-light">
+      <body
+        suppressHydrationWarning
+        className="flex min-h-full flex-col bg-bg-primary text-text-light"
+      >
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify([organisationSchema(), websiteSchema()]),
+            __html: JSON.stringify([
+              organisationSchema(site),
+              websiteSchema(site),
+            ]),
           }}
         />
         <a
@@ -64,13 +89,21 @@ export default async function SiteLayout({
         >
           Skip to main content
         </a>
-        <SiteHeader items={navItems} />
+        <AnnouncementBar announcement={site.announcement} />
+        <SiteHeader
+          items={nav.main}
+          ctaLabel={nav.headerCta.label || site.brand.primaryCta}
+          ctaHref={nav.headerCta.href}
+        />
         <main id="main-content" className="flex-1">
           <PageTransition>{children}</PageTransition>
         </main>
-        <SiteFooter />
-        <CookieBanner />
-        <ConsentAnalytics />
+        <SiteFooter site={site} nav={nav} />
+        <CookieBanner
+          title={site.cookie.title}
+          description={site.cookie.description}
+        />
+        <ConsentAnalytics marketing={site.marketing} />
         <BackToTop />
       </body>
     </html>
