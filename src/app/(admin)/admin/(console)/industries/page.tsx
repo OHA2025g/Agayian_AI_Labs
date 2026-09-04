@@ -1,5 +1,7 @@
 import { CollectionIndex } from "@/components/admin/CollectionModule";
 
+export const dynamic = "force-dynamic";
+
 export default function AdminIndustriesPage() {
   return (
     <CollectionIndex

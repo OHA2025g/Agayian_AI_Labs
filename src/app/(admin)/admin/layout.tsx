@@ -23,6 +23,8 @@ const ibmPlexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Agrayian Admin",
   robots: { index: false, follow: false },

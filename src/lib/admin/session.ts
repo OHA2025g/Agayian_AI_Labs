@@ -1,14 +1,15 @@
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getAdminPayload } from "@/lib/payload";
+import { getAdminPayload, isPayloadSkipped } from "@/lib/payload";
 import { mapAdminUser, type AdminUser } from "@/lib/admin/rbac";
 
 const COOKIE_NAME = "payload-token";
 
 export async function getAdminUser(): Promise<AdminUser | null> {
+  const hdrs = await headers();
+  if (isPayloadSkipped()) return null;
   try {
     const payload = await getAdminPayload();
-    const hdrs = await headers();
     const auth = await payload.auth({ headers: hdrs });
     if (!auth.user || auth.user.collection !== "users") return null;
     return mapAdminUser(auth.user);

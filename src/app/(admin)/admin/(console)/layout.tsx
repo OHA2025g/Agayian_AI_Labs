@@ -2,6 +2,8 @@ import { AdminShell } from "@/components/admin/AdminShell";
 import { adminCanOpenCms } from "@/lib/admin/rbac";
 import { requireAdminUser } from "@/lib/admin/session";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminConsoleLayout({
   children,
 }: {

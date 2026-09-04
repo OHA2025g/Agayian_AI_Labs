@@ -1,5 +1,14 @@
 import type { EditableCollection } from "@/lib/admin/content-actions";
-import { getAdminPayload } from "@/lib/payload";
+import { getAdminPayload, isPayloadSkipped } from "@/lib/payload";
+
+async function adminPayloadOrNull() {
+  if (isPayloadSkipped()) return null;
+  try {
+    return await getAdminPayload();
+  } catch {
+    return null;
+  }
+}
 
 function versionPreview(version: unknown) {
   if (!version || typeof version !== "object") return "";
@@ -20,7 +29,8 @@ function versionPreview(version: unknown) {
 }
 
 export async function loadGlobal(slug: string) {
-  const payload = await getAdminPayload();
+  const payload = await adminPayloadOrNull();
+  if (!payload) return {};
   const doc = await payload.findGlobal({
     slug: slug as "home-page",
     depth: 1,
@@ -34,7 +44,8 @@ export async function loadCollectionList(
   collection: EditableCollection,
   options?: { limit?: number; where?: Record<string, unknown>; sort?: string },
 ) {
-  const payload = await getAdminPayload();
+  const payload = await adminPayloadOrNull();
+  if (!payload) return { docs: [], total: 0 };
   const result = await payload.find({
     collection,
     depth: 0,
@@ -54,7 +65,8 @@ export async function loadCollectionDoc(
   collection: EditableCollection,
   id: string,
 ) {
-  const payload = await getAdminPayload();
+  const payload = await adminPayloadOrNull();
+  if (!payload) return {};
   const doc = await payload.findByID({
     collection,
     id,
@@ -70,7 +82,8 @@ export async function loadVersions(
   slug: string,
   id?: string,
 ) {
-  const payload = await getAdminPayload();
+  const payload = await adminPayloadOrNull();
+  if (!payload) return [];
   try {
     if (kind === "global") {
       const result = await payload.findGlobalVersions({
