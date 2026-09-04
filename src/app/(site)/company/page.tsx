@@ -288,7 +288,8 @@ export default async function CompanyPage() {
       />
 
       <PageHero
-        title="Company"
+        eyebrow="Company"
+        title="Agrayian AI Labs"
         subtitle="Responsible intelligence for stronger organisations and public systems."
         description={intro.introduction}
         primaryCta={{
@@ -486,7 +487,7 @@ export default async function CompanyPage() {
                     Leadership
                   </Link>
                 ) : null}
-                <p className="mt-5 inline-flex items-start gap-2 rounded-full border border-[var(--border-soft)] bg-white/70 px-3.5 py-2 text-xs text-muted-light shadow-sm">
+                <p className="mt-5 flex items-start gap-2 rounded-xl bg-[#f3f6f9] px-4 py-3 text-xs leading-relaxed text-muted-light">
                   <Bell className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand" />
                   Opportunities appear only when verified openings are available.
                 </p>
@@ -503,7 +504,7 @@ export default async function CompanyPage() {
                 <p className="mt-4 flex-1 text-sm leading-relaxed text-muted-light">
                   {intro.partnerEcosystem}
                 </p>
-                <p className="mt-5 inline-flex items-start gap-2 rounded-full border border-[var(--border-soft)] bg-white/70 px-3.5 py-2 text-xs text-muted-light shadow-sm">
+                <p className="mt-5 flex items-start gap-2 rounded-xl bg-[#f3f6f9] px-4 py-3 text-xs leading-relaxed text-muted-light">
                   <Bell className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand" />
                   Partnerships appear only when verified collaborations are
                   active.

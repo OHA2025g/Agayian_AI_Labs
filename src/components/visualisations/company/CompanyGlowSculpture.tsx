@@ -25,7 +25,7 @@ export function CompanyGlowSculpture({
       sizes={sizes}
       style={{ backgroundColor: "transparent" }}
       className={cn(
-        "h-auto w-full bg-transparent object-contain opacity-[0.78] saturate-[0.58]",
+        "h-auto w-full bg-transparent object-contain opacity-[0.78] saturate-[0.75]",
         className,
       )}
     />
