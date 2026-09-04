@@ -240,7 +240,7 @@ export async function saveCollectionAction(
     });
     assertNoResources(next);
 
-    const draft =
+    const isDraft =
       collection !== "enquiries" &&
       collection !== "newsletter-subscribers" &&
       collection !== "redirects" &&
@@ -248,12 +248,20 @@ export async function saveCollectionAction(
       collection !== "media" &&
       status !== "published";
 
+    if (collection !== "enquiries" &&
+      collection !== "newsletter-subscribers" &&
+      collection !== "redirects" &&
+      collection !== "users" &&
+      collection !== "media") {
+      next._status = isDraft ? "draft" : "published";
+    }
+
     if (id) {
       await payload.update({
         collection,
         id,
         data: next as never,
-        draft: draft || undefined,
+        draft: isDraft,
         overrideAccess: true,
         user: asPayloadActor(user),
       });
@@ -261,7 +269,7 @@ export async function saveCollectionAction(
       const created = await payload.create({
         collection,
         data: next as never,
-        draft: draft || undefined,
+        draft: isDraft,
         overrideAccess: true,
         user: asPayloadActor(user),
       });
@@ -277,6 +285,9 @@ export async function saveCollectionAction(
     });
     if (status === "published" || collection === "redirects") {
       revalidateCollection(collection, typeof data.slug === "string" ? data.slug : undefined);
+    }
+    if (collection === "products") {
+      revalidatePath("/products");
     }
     revalidatePath("/admin", "layout");
     return { ok: true, id, data: next };

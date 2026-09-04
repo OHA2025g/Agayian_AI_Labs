@@ -113,28 +113,32 @@ function visualForSlug(slug: string): ProductVisual {
 }
 
 export function catalogFromCms(items: Product[]): CatalogProduct[] {
-  const seen = new Set<string>();
-  const merged: CatalogProduct[] = items.map((item) => {
-    seen.add(item.slug);
-    const fallback = productsCatalog.find((product) => product.slug === item.slug);
+  const liveBySlug = new Map(items.map((item) => [item.slug, item]));
+
+  const fromCatalog = productsCatalog.map((product) => {
+    const live = liveBySlug.get(product.slug);
     const categories = normalizeProductCategories(
-      item.categories?.length ? item.categories : item.category,
-      item.slug,
+      live?.categories?.length ? live.categories : live?.category,
     );
     return {
-      slug: item.slug,
-      name: fallback?.name ?? item.name,
-      description: fallback?.description ?? item.shortDescription,
-      visual: fallback?.visual ?? visualForSlug(item.slug),
-      categories: categories.length ? categories : (fallback?.categories ?? []),
+      ...product,
+      categories: categories.length ? categories : product.categories,
     };
   });
 
-  for (const product of productsCatalog) {
-    if (!seen.has(product.slug)) merged.push(product);
-  }
+  const extras = items
+    .filter((item) => !productsCatalog.some((product) => product.slug === item.slug))
+    .map((item) => ({
+      slug: item.slug,
+      name: item.name,
+      description: item.shortDescription,
+      visual: visualForSlug(item.slug),
+      categories: normalizeProductCategories(
+        item.categories?.length ? item.categories : item.category,
+      ),
+    }));
 
-  return merged;
+  return [...fromCatalog, ...extras];
 }
 
 export function catalogForCategory(

@@ -2,7 +2,7 @@ import type { Where } from "payload";
 import { isPreviewMode } from "@/lib/cms/preview-mode";
 import { getPayloadClient, isPayloadSkipped } from "@/lib/payload";
 
-const CMS_BUDGET_MS = 1200;
+const CMS_BUDGET_MS = 8000;
 
 type PublishedCollection =
   | "products"

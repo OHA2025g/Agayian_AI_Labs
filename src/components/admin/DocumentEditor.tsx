@@ -164,7 +164,13 @@ export function DocumentEditor({
             type="button"
             className="admin-btn"
             disabled={!canEdit || pending}
-            onClick={() => run("draft", null, "Draft saved")}
+            onClick={() =>
+              run(
+                status === "published" ? "published" : "draft",
+                null,
+                status === "published" ? "Saved to the live page" : "Draft saved",
+              )
+            }
           >
             Save
           </button>

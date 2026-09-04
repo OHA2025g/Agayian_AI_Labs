@@ -56,4 +56,36 @@ describe("catalogFromCms", () => {
       "Government",
     ]);
   });
+
+  it("shows Document Intelligence under Government when CMS says so", () => {
+    const catalog = catalogFromCms([
+      {
+        id: "1",
+        name: "Document Intelligence Copilot",
+        slug: "document-intelligence-copilot",
+        category: "AI Products",
+        categories: ["Decision Intelligence", "Government"],
+        industries: [],
+        technologies: [],
+        shortDescription: "Reads documents.",
+        valueProposition: "",
+        businessProblem: "",
+        solutionOverview: "",
+        targetUsers: [],
+        modules: [],
+        capabilities: [],
+        workflow: [],
+        outcomes: [],
+        featured: false,
+        status: "Available for demonstration",
+      },
+    ]);
+    const government = catalog.filter((item) =>
+      item.categories.includes("Government"),
+    );
+    expect(government.map((item) => item.slug)).toContain(
+      "document-intelligence-copilot",
+    );
+    expect(government.map((item) => item.slug)).toContain("wcd-intelligence");
+  });
 });

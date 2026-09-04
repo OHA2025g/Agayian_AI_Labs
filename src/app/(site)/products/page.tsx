@@ -1,4 +1,6 @@
 import { Suspense } from "react";
+
+export const dynamic = "force-dynamic";
 import { ProductsArchitecture } from "@/components/products/ProductsArchitecture";
 import { ProductsLaboratory } from "@/components/sections/ProductsLaboratory";
 import { LoadingState } from "@/components/states/LoadingState";
