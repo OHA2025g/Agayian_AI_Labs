@@ -21,14 +21,16 @@ import { consultationFlow } from "@/lib/contact-schema";
 import { legalByGlobal } from "@/data/legal";
 import { importHardcodedPageCopy } from "../../scripts/import-page-copy";
 
+type CatalogCollection =
+  | "products"
+  | "capabilities"
+  | "industries"
+  | "impact-stories"
+  | "insights";
+
 async function upsertBySlug(
   payload: Payload,
-  collection:
-    | "products"
-    | "capabilities"
-    | "industries"
-    | "impact-stories"
-    | "insights",
+  collection: CatalogCollection,
   slug: string,
   data: Record<string, unknown>,
 ) {
@@ -44,15 +46,17 @@ async function upsertBySlug(
       id: existing.docs[0].id,
       data,
       overrideAccess: true,
-    });
+    } as Parameters<Payload["update"]>[0]);
     return;
   }
+
+  // Shared helper spans five collections; Payload's create union needs a concrete data shape.
   await payload.create({
     collection,
     data: { slug, ...data },
     draft: false,
     overrideAccess: true,
-  });
+  } as Parameters<Payload["create"]>[0]);
 }
 
 export function publicWebsiteUrl() {
@@ -258,7 +262,10 @@ export async function seedSiteContent(payload: Payload) {
         "Government and enterprise programmes",
         "Partnership discussions",
       ],
-      consultationFlow,
+      consultationFlow: consultationFlow.map((step) => ({
+        title: step.title,
+        description: step.description,
+      })),
       status: "published",
     },
     overrideAccess: true,
