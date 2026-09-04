@@ -59,7 +59,7 @@ export async function CollectionIndex({
     <section className="admin-panel">
       <div className="admin-panel-head">
         <div>
-          <p className="admin-kicker">Records</p>
+          <p className="admin-kicker">Items</p>
           <h1 className="admin-title">{title}</h1>
           {description ? (
             <p className="admin-lede">{description}</p>

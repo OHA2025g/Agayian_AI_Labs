@@ -56,11 +56,9 @@ const NAV_ICONS = {
 
 export function AdminShell({
   user,
-  cmsHref,
   children,
 }: {
   user: AdminUser;
-  cmsHref?: string | null;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -149,11 +147,6 @@ export function AdminShell({
               <span className="truncate">{user.name || user.email}</span>
               <StatusBadge value={user.uiRole} />
             </div>
-            {cmsHref ? (
-              <Link href={cmsHref} className="admin-btn admin-btn-quiet">
-                CMS
-              </Link>
-            ) : null}
             <form action={logoutAction}>
               <button type="submit" className="admin-btn">
                 Sign out

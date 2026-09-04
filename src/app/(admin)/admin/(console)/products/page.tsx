@@ -11,12 +11,14 @@ export default async function AdminProductsPage() {
         user={user}
         slug="products-page"
         title="Products page"
+        description="Change the heading and search text. The page layout stays the same."
         tabs={productsPageTabs}
         previewPath="/products"
       />
       <CollectionIndex
         collection="products"
-        title="Product records"
+        title="Products"
+        description="Open a product to change its name, categories, and short description."
         createHref="/admin/products/new"
         columns={[
           { key: "name", label: "Name" },

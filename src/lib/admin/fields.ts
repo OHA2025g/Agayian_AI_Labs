@@ -117,41 +117,15 @@ export const homeTabs: EditorTab[] = [
 
 export const capabilitiesPageTabs: EditorTab[] = [
   {
-    id: "hero",
-    label: "Hero",
+    id: "copy",
+    label: "Page text",
     fields: [
       { kind: "text", name: "hero.title", label: "Title" },
-      { kind: "text", name: "hero.subheadLine1", label: "Subhead line 1" },
-      { kind: "text", name: "hero.subheadLine2", label: "Subhead line 2" },
-      { kind: "textarea", name: "hero.body", label: "Body" },
-      { kind: "text", name: "hero.primaryCtaLabel", label: "Primary CTA label" },
-      { kind: "text", name: "hero.primaryCtaHref", label: "Primary CTA href" },
-      { kind: "text", name: "hero.secondaryCtaLabel", label: "Secondary CTA label" },
-      { kind: "text", name: "hero.secondaryCtaHref", label: "Secondary CTA href" },
-    ],
-  },
-  {
-    id: "activities",
-    label: "Activities",
-    fields: [
-      {
-        kind: "repeatable",
-        name: "stackActivities",
-        label: "Hero stack activities",
-        fields: [
-          { kind: "text", name: "label", label: "Label", required: true },
-          { kind: "text", name: "mark", label: "Mark id" },
-        ],
-      },
-      {
-        kind: "repeatable",
-        name: "journeyLabels",
-        label: "On this page labels",
-        fields: [
-          { kind: "text", name: "label", label: "Label", required: true },
-          { kind: "text", name: "href", label: "Href", required: true },
-        ],
-      },
+      { kind: "text", name: "hero.subheadLine1", label: "Subtitle line 1" },
+      { kind: "text", name: "hero.subheadLine2", label: "Subtitle line 2" },
+      { kind: "textarea", name: "hero.body", label: "Description" },
+      { kind: "text", name: "hero.primaryCtaLabel", label: "Main button" },
+      { kind: "text", name: "hero.secondaryCtaLabel", label: "Second button" },
     ],
   },
   { id: "seo", label: "SEO", fields: [seo] },
@@ -159,22 +133,13 @@ export const capabilitiesPageTabs: EditorTab[] = [
 
 export const productsPageTabs: EditorTab[] = [
   {
-    id: "hero",
-    label: "Hero",
+    id: "copy",
+    label: "Page text",
     fields: [
-      { kind: "text", name: "hero.eyebrow", label: "Eyebrow" },
+      { kind: "text", name: "hero.eyebrow", label: "Small label" },
       { kind: "textarea", name: "hero.title", label: "Title" },
       { kind: "textarea", name: "hero.description", label: "Description" },
-      { kind: "text", name: "hero.searchPlaceholder", label: "Search placeholder" },
-    ],
-  },
-  {
-    id: "architecture",
-    label: "Architecture",
-    fields: [
-      { kind: "text", name: "architecture.title", label: "Section title" },
-      { kind: "text", name: "architecture.coreTitle", label: "Core title" },
-      { kind: "text", name: "architecture.coreSubtitle", label: "Core subtitle" },
+      { kind: "text", name: "hero.searchPlaceholder", label: "Search box text" },
     ],
   },
   { id: "seo", label: "SEO", fields: [seo] },
@@ -530,7 +495,7 @@ export const settingsTabs: EditorTab[] = [
 
 export const productRecordFields: AdminField[] = [
   { kind: "text", name: "name", label: "Name", required: true },
-  { kind: "text", name: "slug", label: "Slug", required: true },
+  { kind: "text", name: "slug", label: "Page URL", required: true },
   {
     kind: "select",
     name: "categories",
@@ -538,47 +503,18 @@ export const productRecordFields: AdminField[] = [
     required: true,
     multiple: true,
     options: [...PRODUCT_CATEGORY_OPTIONS],
-    hint: "Select every filter this product should appear under on the Products page.",
+    hint: "Tick every Products-page filter this item should appear in.",
   },
   { kind: "textarea", name: "shortDescription", label: "Short description", required: true },
-  { kind: "checkbox", name: "featured", label: "Featured" },
+  { kind: "checkbox", name: "featured", label: "Show in spotlight" },
   { kind: "text", name: "productStatus", label: "Availability" },
-  { kind: "textarea", name: "valueProposition", label: "Value proposition" },
-  { kind: "textarea", name: "businessProblem", label: "Business problem" },
-  { kind: "textarea", name: "solutionOverview", label: "Solution overview" },
-  { kind: "stringList", name: "industries", label: "Industries" },
-  { kind: "stringList", name: "technologies", label: "Technologies" },
-  { kind: "stringList", name: "targetUsers", label: "Target users" },
-  { kind: "stringList", name: "outcomes", label: "Outcomes" },
-  { kind: "stringList", name: "dataSources", label: "Data sources" },
-  { kind: "stringList", name: "aiCapabilities", label: "AI capabilities" },
-  { kind: "stringList", name: "governance", label: "Governance" },
-  { kind: "stringList", name: "architecture", label: "Architecture" },
-  { kind: "stringList", name: "deploymentOptions", label: "Deployment options" },
-  titled("modules"),
-  titled("workflow"),
-  { kind: "stringList", name: "capabilities", label: "Capability slugs" },
-  { kind: "stringList", name: "relatedCapabilities", label: "Related capabilities" },
-  seo,
   STATUS,
 ];
 
 export const capabilityRecordFields: AdminField[] = [
   { kind: "text", name: "name", label: "Name", required: true },
-  { kind: "text", name: "slug", label: "Slug", required: true },
-  { kind: "text", name: "shortName", label: "Short name" },
-  { kind: "text", name: "icon", label: "Icon" },
+  { kind: "text", name: "slug", label: "Page URL", required: true },
   { kind: "textarea", name: "summary", label: "Summary", required: true },
-  { kind: "textarea", name: "description", label: "Description" },
-  { kind: "textarea", name: "businessChallenge", label: "Business challenge" },
-  { kind: "stringList", name: "deliverables", label: "Deliverables" },
-  { kind: "stringList", name: "engagementActivities", label: "Engagement activities" },
-  { kind: "stringList", name: "typicalDeliverables", label: "Typical deliverables" },
-  { kind: "stringList", name: "useCases", label: "Use cases" },
-  { kind: "stringList", name: "outcomes", label: "Outcomes" },
-  { kind: "stringList", name: "relatedProducts", label: "Related products" },
-  { kind: "stringList", name: "topics", label: "Topics" },
-  seo,
   STATUS,
 ];
 

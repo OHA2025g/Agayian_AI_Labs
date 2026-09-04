@@ -222,11 +222,9 @@ function CopyCol({
 
 const JOURNEY_ROW = 232;
 const JOURNEY_GAP = 18;
-const JOURNEY_WIDTH = 1105;
+const SPINE_WIDTH = 140;
 const WAVE_PEAK_X = 124;
 const WAVE_VALLEY_X = 92;
-const FRAME_RADIUS = 22;
-const FRAME_INSET = 3;
 const DOT_OFFSET_Y = 28;
 
 function journeyHeight(count: number) {
@@ -244,45 +242,25 @@ function peakY(index: number) {
   return index * (JOURNEY_ROW + JOURNEY_GAP) + DOT_OFFSET_Y;
 }
 
-/** Dotted frame: wavy left spine, rounded turns at 01 and 07, box around all rows. */
-function journeyFramePath(count: number) {
-  const height = journeyHeight(count);
-  const top = FRAME_INSET;
-  const bottom = height - FRAME_INSET;
-  const right = JOURNEY_WIDTH - FRAME_INSET;
-  const r = FRAME_RADIUS;
+function journeySpinePath(count: number) {
   const firstY = peakY(0);
-  const steps = 24;
-
-  const pts: string[] = [];
-  pts.push(`M ${WAVE_PEAK_X + r} ${top}`);
-  pts.push(
-    `C ${WAVE_PEAK_X} ${top}, ${WAVE_PEAK_X} ${top + r}, ${WAVE_PEAK_X} ${firstY}`,
-  );
-
+  const lastY = peakY(count - 1);
+  const pts: string[] = [`M ${WAVE_PEAK_X} ${firstY}`];
   for (let i = 0; i < count - 1; i += 1) {
     const y0 = peakY(i);
     const y1 = peakY(i + 1);
-    for (let s = 1; s <= steps; s += 1) {
-      const t = s / steps;
+    for (let s = 1; s <= 24; s += 1) {
+      const t = s / 24;
       pts.push(`L ${waveX(t).toFixed(2)} ${(y0 + (y1 - y0) * t).toFixed(2)}`);
     }
   }
-
-  pts.push(
-    `C ${WAVE_PEAK_X} ${bottom - r}, ${WAVE_PEAK_X} ${bottom}, ${WAVE_PEAK_X + r} ${bottom}`,
-  );
-  pts.push(`L ${right - r} ${bottom}`);
-  pts.push(`Q ${right} ${bottom} ${right} ${bottom - r}`);
-  pts.push(`L ${right} ${top + r}`);
-  pts.push(`Q ${right} ${top} ${right - r} ${top}`);
-  pts.push("Z");
+  if (count < 2) pts.push(`L ${WAVE_PEAK_X} ${lastY}`);
   return pts.join(" ");
 }
 
 function JourneyFrame({ count }: { count: number }) {
   const height = journeyHeight(count);
-  const path = journeyFramePath(count);
+  const path = journeySpinePath(count);
   const dots = Array.from({ length: count }, (_, index) => ({
     cx: WAVE_PEAK_X,
     cy: peakY(index),
@@ -291,13 +269,13 @@ function JourneyFrame({ count }: { count: number }) {
   return (
     <svg
       aria-hidden
-      viewBox={`0 0 ${JOURNEY_WIDTH} ${height}`}
+      viewBox={`0 0 ${SPINE_WIDTH} ${height}`}
       preserveAspectRatio="none"
-      className="capabilities-frame pointer-events-none absolute inset-0 hidden min-[1200px]:block"
+      className="capabilities-frame pointer-events-none absolute top-0 hidden min-[1200px]:block"
     >
       <path
         d={path}
-        fill="#fff"
+        fill="none"
         stroke="#7ad2f2"
         strokeWidth="1.15"
         strokeDasharray="1.7 5.2"

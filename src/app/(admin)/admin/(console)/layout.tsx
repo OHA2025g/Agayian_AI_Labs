@@ -1,5 +1,4 @@
 import { AdminShell } from "@/components/admin/AdminShell";
-import { adminCanOpenCms } from "@/lib/admin/rbac";
 import { requireAdminUser } from "@/lib/admin/session";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +10,7 @@ export default async function AdminConsoleLayout({
 }) {
   const user = await requireAdminUser();
   return (
-    <AdminShell user={user} cmsHref={adminCanOpenCms(user) ? "/cms" : null}>
+    <AdminShell user={user}>
       <div id="admin-main">{children}</div>
     </AdminShell>
   );

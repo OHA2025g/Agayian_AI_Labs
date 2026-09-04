@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import type { AdminField } from "@/lib/admin/fields";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { asString, asStringList, getPath, setPath } from "./form-utils";
@@ -47,13 +47,30 @@ export function FieldControl({
 
   if (field.kind === "select") {
     if (field.multiple) {
+      const selected = asStringList(value);
       return (
-        <MultiSelectField
-          field={field}
-          selected={asStringList(value)}
-          disabled={disabled}
-          onChange={set}
-        />
+        <div className="admin-field">
+          <span>{field.label}</span>
+          <div className="admin-check-list">
+            {field.options.map((option) => (
+              <label key={option.value}>
+                <input
+                  type="checkbox"
+                  disabled={disabled}
+                  checked={selected.includes(option.value)}
+                  onChange={(event) => {
+                    const next = event.target.checked
+                      ? [...selected, option.value]
+                      : selected.filter((item) => item !== option.value);
+                    set(next);
+                  }}
+                />
+                {option.label}
+              </label>
+            ))}
+          </div>
+          {field.hint ? <small>{field.hint}</small> : null}
+        </div>
       );
     }
     return (
@@ -188,104 +205,6 @@ export function FieldControl({
       />
       {"hint" in field && field.hint ? <small>{field.hint}</small> : null}
     </label>
-  );
-}
-
-function MultiSelectField({
-  field,
-  selected,
-  disabled,
-  onChange,
-}: {
-  field: Extract<AdminField, { kind: "select" }>;
-  selected: string[];
-  disabled?: boolean;
-  onChange: (next: string[]) => void;
-}) {
-  const [open, setOpen] = useState(false);
-  const rootRef = useRef<HTMLDivElement>(null);
-  const labels = selected.map(
-    (value) => field.options.find((option) => option.value === value)?.label ?? value,
-  );
-
-  useEffect(() => {
-    if (!open) return;
-    const onPointer = (event: MouseEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    };
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("mousedown", onPointer);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onPointer);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
-
-  return (
-    <div className="admin-field admin-multiselect" ref={rootRef}>
-      <span>{field.label}</span>
-      {field.required ? (
-        <input
-          tabIndex={-1}
-          required
-          value={selected[0] ?? ""}
-          onChange={() => undefined}
-          className="sr-only"
-          aria-hidden
-        />
-      ) : null}
-      <button
-        type="button"
-        className="admin-multiselect-trigger"
-        disabled={disabled}
-        aria-expanded={open}
-        aria-haspopup="listbox"
-        onClick={() => setOpen((current) => !current)}
-      >
-        <span
-          className={
-            selected.length ? undefined : "admin-multiselect-placeholder"
-          }
-        >
-          {labels.length ? labels.join(", ") : "Select…"}
-        </span>
-      </button>
-      {open ? (
-        <ul
-          className="admin-multiselect-menu"
-          role="listbox"
-          aria-multiselectable
-        >
-          {field.options.map((option) => {
-            const checked = selected.includes(option.value);
-            return (
-              <li key={option.value} role="option" aria-selected={checked}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={checked}
-                    disabled={disabled}
-                    onChange={(event) => {
-                      const next = event.target.checked
-                        ? [...selected, option.value]
-                        : selected.filter((item) => item !== option.value);
-                      onChange(next);
-                    }}
-                  />
-                  {option.label}
-                </label>
-              </li>
-            );
-          })}
-        </ul>
-      ) : null}
-      {field.hint ? <small>{field.hint}</small> : null}
-    </div>
   );
 }
 

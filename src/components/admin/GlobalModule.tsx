@@ -28,7 +28,10 @@ export async function GlobalModule({
   return (
     <DocumentEditor
       title={title}
-      description={description}
+      description={
+        description ??
+        "Change the words on this page. The layout stays the same."
+      }
       tabs={tabs}
       initial={initial}
       canEdit={adminCanEdit(user)}

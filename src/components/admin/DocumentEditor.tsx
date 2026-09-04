@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { EditorTab } from "@/lib/admin/fields";
 import {
-  enablePreviewAction,
   resetGlobalToSiteCopyAction,
   restoreVersionAction,
   saveCollectionAction,
@@ -49,11 +48,6 @@ export function DocumentEditor({
   const [values, setValues] = useState(initial);
   const [tab, setTab] = useState(tabs[0]?.id ?? "content");
   const [pending, start] = useTransition();
-  const [schedule, setSchedule] = useState(
-    typeof initial.scheduledPublishAt === "string"
-      ? initial.scheduledPublishAt.slice(0, 16)
-      : "",
-  );
   const [confirm, setConfirm] = useState<null | "publish" | "restore" | "reset">(
     null,
   );
@@ -65,11 +59,6 @@ export function DocumentEditor({
 
   useEffect(() => {
     setValues(initial);
-    setSchedule(
-      typeof initial.scheduledPublishAt === "string"
-        ? initial.scheduledPublishAt.slice(0, 16)
-        : "",
-    );
   }, [initial]);
 
   useEffect(() => {
@@ -152,7 +141,7 @@ export function DocumentEditor({
     <section className="admin-panel">
       <div className="admin-panel-head">
         <div>
-          <p className="admin-kicker">Page editor</p>
+          <p className="admin-kicker">Edit text</p>
           <div className="admin-title-row">
             <h1 className="admin-title">{title}</h1>
             <StatusBadge value={status} />
@@ -162,33 +151,14 @@ export function DocumentEditor({
         </div>
         <div className="admin-toolbar">
           {previewPath ? (
-            <>
-              <a
-                href={previewPath}
-                target="_blank"
-                rel="noreferrer"
-                className="admin-btn admin-btn-quiet"
-              >
-                View live
-              </a>
-              <button
-                type="button"
-                className="admin-btn"
-                disabled={pending}
-                onClick={() =>
-                  start(async () => {
-                    const result = await enablePreviewAction(previewPath);
-                    if (result.ok && result.href) {
-                      window.open(result.href, "_blank", "noopener,noreferrer");
-                    } else if (!result.ok) {
-                      toast(result.error);
-                    }
-                  })
-                }
-              >
-                Preview draft
-              </button>
-            </>
+            <a
+              href={previewPath}
+              target="_blank"
+              rel="noreferrer"
+              className="admin-btn admin-btn-quiet"
+            >
+              View page
+            </a>
           ) : null}
           <button
             type="button"
@@ -196,7 +166,7 @@ export function DocumentEditor({
             disabled={!canEdit || pending}
             onClick={() => run("draft", null, "Draft saved")}
           >
-            Save draft
+            Save
           </button>
           {!canPublish ? (
             <button
@@ -209,41 +179,13 @@ export function DocumentEditor({
             </button>
           ) : null}
           {canPublish ? (
-            <>
-              <label className="admin-field admin-field-inline">
-                <span className="sr-only">Schedule</span>
-                <input
-                  type="datetime-local"
-                  value={schedule}
-                  onChange={(event) => setSchedule(event.target.value)}
-                />
-              </label>
-              <button
-                type="button"
-                className="admin-btn"
-                disabled={!canEdit || pending || !schedule}
-                onClick={() => run("approved", schedule, "Scheduled")}
-              >
-                Schedule
-              </button>
-              <button
-                type="button"
-                className="admin-btn admin-btn-primary"
-                disabled={!canEdit || pending}
-                onClick={() => setConfirm("publish")}
-              >
-                Publish
-              </button>
-            </>
-          ) : null}
-          {resettable && canPublish ? (
             <button
               type="button"
-              className="admin-btn admin-btn-accent"
-              disabled={pending}
-              onClick={() => setConfirm("reset")}
+              className="admin-btn admin-btn-primary"
+              disabled={!canEdit || pending}
+              onClick={() => setConfirm("publish")}
             >
-              Restore original
+              Publish
             </button>
           ) : null}
         </div>
@@ -276,50 +218,49 @@ export function DocumentEditor({
         ))}
       </div>
 
-      {versions?.length ? (
-        <div className="admin-card admin-history">
-          <div className="admin-repeatable-head">
-            <div>
-              <h2 className="admin-card-title">Revision history</h2>
-              <p className="admin-lede">
-                Restore replaces the current draft and publishes it to the live
-                site when you have publish access.
-              </p>
-            </div>
-          </div>
-          <ul className="admin-history-list">
-            {versions.map((version) => (
-              <li key={version.id}>
-                <div>
-                  <strong>
-                    {new Date(version.updatedAt).toLocaleString()}
-                  </strong>
-                  <p>
-                    <StatusBadge value={version.status || "revision"} />
-                    {version.preview ? (
-                      <span className="admin-history-preview">
-                        {version.preview}
-                      </span>
-                    ) : null}
-                  </p>
-                </div>
-                {canRestore ? (
-                  <button
-                    type="button"
-                    className="admin-btn"
-                    disabled={!canEdit || pending}
-                    onClick={() => {
-                      setRestoreId(version.id);
-                      setConfirm("restore");
-                    }}
-                  >
-                    Restore & publish
-                  </button>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-        </div>
+      {versions?.length || resettable ? (
+        <details className="admin-card admin-history">
+          <summary>More options</summary>
+          {resettable && canPublish ? (
+            <button
+              type="button"
+              className="admin-btn admin-btn-accent mb-4"
+              disabled={pending}
+              onClick={() => setConfirm("reset")}
+            >
+              Restore original text
+            </button>
+          ) : null}
+          {versions?.length ? (
+            <ul className="admin-history-list">
+              {versions.map((version) => (
+                <li key={version.id}>
+                  <div>
+                    <strong>
+                      {new Date(version.updatedAt).toLocaleString()}
+                    </strong>
+                    <p>
+                      <StatusBadge value={version.status || "revision"} />
+                    </p>
+                  </div>
+                  {canRestore ? (
+                    <button
+                      type="button"
+                      className="admin-btn"
+                      disabled={!canEdit || pending}
+                      onClick={() => {
+                        setRestoreId(version.id);
+                        setConfirm("restore");
+                      }}
+                    >
+                      Restore
+                    </button>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </details>
       ) : null}
 
       <ConfirmDialog
