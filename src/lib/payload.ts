@@ -21,6 +21,25 @@ export function isPayloadSkipped() {
  * static catalog data instead of waiting on Mongo. A failed connect
  * cools down briefly so every request does not reopen a 30s socket.
  */
+let adminCached: Promise<Payload> | null = null;
+
+/** Admin mutations need a real Mongo connection, not the public 2s budget. */
+export async function getAdminPayload() {
+  if (isPayloadSkipped()) {
+    throw new Error("Payload unavailable");
+  }
+
+  if (!adminCached) {
+    const request = getPayload({ config });
+    adminCached = request;
+    request.catch(() => {
+      if (adminCached === request) adminCached = null;
+    });
+  }
+
+  return adminCached;
+}
+
 export async function getPayloadClient() {
   if (isPayloadSkipped()) {
     throw new Error("Payload unavailable");

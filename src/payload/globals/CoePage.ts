@@ -65,6 +65,94 @@ export const CoePage: GlobalConfig = {
               relationTo: "faqs",
               hasMany: true,
             },
+            {
+              name: "layers",
+              type: "array",
+              fields: [
+                { name: "number", type: "text" },
+                { name: "title", type: "text", required: true },
+                { name: "description", type: "textarea" },
+                { name: "icon", type: "text" },
+              ],
+            },
+            {
+              name: "outcomes",
+              type: "text",
+              hasMany: true,
+            },
+            {
+              name: "whatFeatures",
+              type: "array",
+              fields: [
+                { name: "title", type: "text", required: true },
+                { name: "detail", type: "text" },
+                { name: "icon", type: "text" },
+              ],
+            },
+            {
+              name: "whyFeatures",
+              type: "array",
+              fields: [
+                { name: "title", type: "text", required: true },
+                { name: "detail", type: "textarea" },
+                { name: "icon", type: "text" },
+              ],
+            },
+            {
+              name: "intakeSteps",
+              type: "array",
+              fields: [
+                { name: "title", type: "text", required: true },
+                { name: "description", type: "textarea" },
+                { name: "icon", type: "text" },
+              ],
+            },
+            {
+              name: "pillars",
+              type: "array",
+              fields: [
+                { name: "title", type: "text", required: true },
+                { name: "description", type: "textarea" },
+                { name: "icon", type: "text" },
+              ],
+            },
+            {
+              name: "foundations",
+              type: "array",
+              fields: [
+                { name: "title", type: "text", required: true },
+                { name: "description", type: "textarea" },
+                { name: "icon", type: "text" },
+                { name: "sculpture", type: "text" },
+                { name: "items", type: "text", hasMany: true },
+              ],
+            },
+            {
+              name: "maturity",
+              type: "array",
+              fields: [
+                { name: "name", type: "text", required: true },
+                { name: "description", type: "textarea" },
+                { name: "icon", type: "text" },
+              ],
+            },
+            {
+              name: "roadmap",
+              type: "array",
+              fields: [
+                { name: "name", type: "text", required: true },
+                { name: "description", type: "textarea" },
+                { name: "icon", type: "text" },
+              ],
+            },
+            {
+              name: "faqItems",
+              type: "array",
+              fields: [
+                { name: "question", type: "text", required: true },
+                { name: "answer", type: "textarea", required: true },
+              ],
+            },
           ],
         },
         {

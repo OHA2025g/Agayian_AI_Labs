@@ -265,7 +265,11 @@ function SectionHeading({
   );
 }
 
-function LifecycleInfinityHero() {
+function LifecycleInfinityHero({
+  stages = lifecycleStages,
+}: {
+  stages?: { label: string; icon: LucideIcon }[];
+}) {
   return (
     <div className="relative bg-transparent">
       <div className="relative aspect-[5/4] w-full bg-transparent sm:aspect-[4/3]">
@@ -281,7 +285,7 @@ function LifecycleInfinityHero() {
         />
 
         <div className="absolute inset-x-3 top-3 grid grid-cols-4 gap-1.5 sm:inset-x-4 sm:top-4 sm:gap-2">
-          {lifecycleStages.slice(0, 4).map(({ label, icon: Icon }) => (
+          {stages.slice(0, 4).map(({ label, icon: Icon }) => (
             <div
               key={label}
               className="flex items-center gap-1.5 rounded-lg border border-[var(--border-soft)] bg-bg-primary/80 px-2 py-1.5"
@@ -295,7 +299,7 @@ function LifecycleInfinityHero() {
         </div>
 
         <div className="absolute inset-x-3 bottom-3 grid grid-cols-4 gap-1.5 sm:inset-x-4 sm:bottom-4 sm:gap-2">
-          {lifecycleStages.slice(4).map(({ label, icon: Icon }) => (
+          {stages.slice(4).map(({ label, icon: Icon }) => (
             <div
               key={label}
               className="flex items-center gap-1.5 rounded-lg border border-[var(--border-soft)] bg-bg-primary/80 px-2 py-1.5"
@@ -326,8 +330,34 @@ function LifecycleInfinityHero() {
   );
 }
 
+function mergeByKey<T extends { title?: string; label?: string }>(
+  cms: { title?: string; label?: string; description?: string }[],
+  fallback: T[],
+  key: "title" | "label",
+): T[] {
+  if (!cms.length) return fallback;
+  return cms.map((item, index) => {
+    const match =
+      fallback.find((row) => String(row[key]) === String(item[key])) ??
+      fallback[index];
+    return {
+      ...match,
+      ...item,
+      icon: match && "icon" in match ? match.icon : undefined,
+    } as T;
+  });
+}
+
 export default async function AIGovernancePage() {
   const copy = await getGovernancePageContent();
+  const resolvedLifecycle = mergeByKey(copy.lifecycle, lifecycleStages, "label");
+  const resolvedPillars = mergeByKey(copy.pillars, pillars, "title");
+  const resolvedEngagement = mergeByKey(
+    copy.engagementSteps,
+    engagementSteps,
+    "title",
+  );
+  const resolvedRaci = copy.raciRows.length ? copy.raciRows : raciRows;
   return (
     <>
       <script
@@ -355,7 +385,7 @@ export default async function AIGovernancePage() {
           href: copy.hero.secondaryCtaHref,
           label: copy.hero.secondaryCtaLabel,
         }}
-        visual={<LifecycleInfinityHero />}
+        visual={<LifecycleInfinityHero stages={resolvedLifecycle} />}
       />
 
       {/* 10 pillars */}
@@ -366,7 +396,7 @@ export default async function AIGovernancePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading title={copy.pillarsTitle} />
           <RevealGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
-            {pillars.map((pillar) => {
+            {resolvedPillars.map((pillar) => {
               const Icon = pillar.icon;
               return (
                 <RevealItem key={pillar.title}>
@@ -421,7 +451,7 @@ export default async function AIGovernancePage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {raciRows.map((row, rowIndex) => (
+                    {resolvedRaci.map((row, rowIndex) => (
                       <tr
                         key={row.role}
                         className={cn(
@@ -487,12 +517,12 @@ export default async function AIGovernancePage() {
             description={copy.engagementDescription}
           />
           <RevealGroup className="grid gap-4 md:grid-cols-5">
-            {engagementSteps.map((step, index) => {
+            {resolvedEngagement.map((step, index) => {
               const Icon = step.icon;
               return (
                 <RevealItem key={step.title}>
                   <div className="relative h-full">
-                    {index < engagementSteps.length - 1 ? (
+                    {index < resolvedEngagement.length - 1 ? (
                       <span
                         aria-hidden
                         className="absolute -right-2 top-8 hidden h-px w-4 border-t border-dashed border-tech-blue/40 md:block"

@@ -3,15 +3,17 @@ import { WhiteSculpture } from "@/components/visualisations/glass/WhiteSculpture
 import { mockupAssets } from "@/config/mockup-assets";
 import type { CoePageContent } from "@/lib/cms/page-content";
 import {
-  foundations,
-  intakeSteps,
-  layers,
-  maturity,
-  outcomes,
-  pillars,
-  roadmap,
-  whatFeatures,
-  whyFeatures,
+  foundations as fallbackFoundations,
+  intakeSteps as fallbackIntake,
+  layers as fallbackLayers,
+  maturity as fallbackMaturity,
+  outcomes as fallbackOutcomes,
+  pillars as fallbackPillars,
+  roadmap as fallbackRoadmap,
+  whatFeatures as fallbackWhat,
+  whyFeatures as fallbackWhy,
+  type IconName,
+  type Layer,
 } from "./coe-content";
 import { CoeFaq } from "./CoeFaq";
 import {
@@ -25,6 +27,49 @@ import {
   OutcomeCheck,
 } from "./CoeVisuals";
 import styles from "./ai-coe.module.css";
+
+function asIcon(value: string | undefined): IconName {
+  return (value || "blocks") as IconName;
+}
+
+function resolveCoeModel(copy: CoePageContent) {
+  return {
+    layers: (copy.layers.length ? copy.layers : fallbackLayers).map((item) => ({
+      ...item,
+      icon: asIcon(item.icon),
+    })) as Layer[],
+    outcomes: copy.outcomes.length ? copy.outcomes : fallbackOutcomes,
+    whatFeatures: (copy.whatFeatures.length ? copy.whatFeatures : fallbackWhat).map(
+      (item) => ({ ...item, icon: asIcon(item.icon) }),
+    ),
+    whyFeatures: (copy.whyFeatures.length ? copy.whyFeatures : fallbackWhy).map(
+      (item) => ({ ...item, icon: asIcon(item.icon) }),
+    ),
+    intakeSteps: (copy.intakeSteps.length ? copy.intakeSteps : fallbackIntake).map(
+      (item) => ({ ...item, icon: asIcon(item.icon) }),
+    ),
+    pillars: (copy.pillars.length ? copy.pillars : fallbackPillars).map((item) => ({
+      ...item,
+      icon: asIcon(item.icon),
+    })),
+    foundations: (copy.foundations.length
+      ? copy.foundations
+      : fallbackFoundations
+    ).map((item) => ({
+      ...item,
+      icon: asIcon(item.icon),
+      sculpture: item.sculpture || "direct",
+    })),
+    maturity: (copy.maturity.length ? copy.maturity : fallbackMaturity).map(
+      (item) => ({ ...item, icon: asIcon(item.icon) }),
+    ),
+    roadmap: (copy.roadmap.length ? copy.roadmap : fallbackRoadmap).map((item) => ({
+      ...item,
+      icon: asIcon(item.icon),
+    })),
+    faqItems: copy.faqItems,
+  };
+}
 
 function Hero({ copy }: { copy: CoePageContent }) {
   return (
@@ -59,12 +104,12 @@ function Hero({ copy }: { copy: CoePageContent }) {
           </div>
         </div>
         <div className={styles.heroArchitecture}>
-          <HeroStack items={layers} priority />
+          <HeroStack items={resolveCoeModel(copy).layers} priority />
         </div>
         <aside className={styles.outcomes}>
           <h3>{copy.outcomesTitle}</h3>
           <ul>
-            {outcomes.map((item) => (
+            {resolveCoeModel(copy).outcomes.map((item) => (
               <li key={item}>
                 <OutcomeCheck />
                 {item}
@@ -84,7 +129,7 @@ function DefinitionSection({ copy }: { copy: CoePageContent }) {
         <h2>{copy.whatTitle}</h2>
         <p>{copy.whatBody}</p>
         <div className={styles.definitionFeatures}>
-          {whatFeatures.map((feature) => (
+          {resolveCoeModel(copy).whatFeatures.map((feature) => (
             <div className={styles.miniFeature} key={feature.title}>
               <span className={styles.roundIcon}>
                 <CoeIcon name={feature.icon} size={22} />
@@ -99,7 +144,7 @@ function DefinitionSection({ copy }: { copy: CoePageContent }) {
         <h2>{copy.whyTitle}</h2>
         <p>{copy.whyBody}</p>
         <div className={styles.needFeatures}>
-          {whyFeatures.map((feature) => (
+          {resolveCoeModel(copy).whyFeatures.map((feature) => (
             <div className={styles.miniFeature} key={feature.title}>
               <span className={styles.roundIcon}>
                 <CoeIcon name={feature.icon} size={22} />
@@ -115,6 +160,7 @@ function DefinitionSection({ copy }: { copy: CoePageContent }) {
 }
 
 function OperatingModel({ copy }: { copy: CoePageContent }) {
+  const layers = resolveCoeModel(copy).layers;
   const left = layers.slice(0, 5);
   const right = layers.slice(5);
 
@@ -164,14 +210,14 @@ function IdeaToImpact({ copy }: { copy: CoePageContent }) {
         <p>{copy.ideaDescription}</p>
       </div>
       <div className={styles.stepFlow}>
-        {intakeSteps.map((step, index) => (
+        {resolveCoeModel(copy).intakeSteps.map((step, index) => (
           <div className={styles.step} key={step.title}>
             <span className={styles.roundIcon}>
               <CoeIcon name={step.icon} />
             </span>
             <strong>{step.title}</strong>
             <small>{step.description}</small>
-            {index < intakeSteps.length - 1 ? (
+            {index < resolveCoeModel(copy).intakeSteps.length - 1 ? (
               <i className={styles.stepLine} aria-hidden />
             ) : null}
           </div>
@@ -201,7 +247,7 @@ function Pillars({ copy }: { copy: CoePageContent }) {
           Learn more <span aria-hidden>→</span>
         </Link>
       </div>
-      {pillars.map((pillar) => (
+      {resolveCoeModel(copy).pillars.map((pillar) => (
         <article key={pillar.title}>
           <span className={styles.pillarIcon}>
             <CoeIcon name={pillar.icon} size={38} />
@@ -216,10 +262,10 @@ function Pillars({ copy }: { copy: CoePageContent }) {
   );
 }
 
-function Foundations() {
+function Foundations({ copy }: { copy: CoePageContent }) {
   return (
     <section className={styles.foundations} id="foundations">
-      {foundations.map((column) => (
+      {resolveCoeModel(copy).foundations.map((column) => (
         <article key={column.title}>
           <h3>{column.title}</h3>
           <p>{column.description}</p>
@@ -228,7 +274,33 @@ function Foundations() {
               <li key={item}>{item}</li>
             ))}
           </ul>
-          <FoundationSculpture name={column.sculpture} />
+          <FoundationSculpture
+            name={
+              (
+                [
+                  "governance",
+                  "factory",
+                  "platform",
+                  "talent",
+                  "value",
+                ] as const
+              ).includes(
+                column.sculpture as
+                  | "governance"
+                  | "factory"
+                  | "platform"
+                  | "talent"
+                  | "value",
+              )
+                ? (column.sculpture as
+                    | "governance"
+                    | "factory"
+                    | "platform"
+                    | "talent"
+                    | "value")
+                : "governance"
+            }
+          />
         </article>
       ))}
     </section>
@@ -244,7 +316,7 @@ function JourneyRow({
   id: string;
   title: string;
   subtitle: string;
-  items: typeof maturity | typeof roadmap;
+  items: { name: string; description: string; icon: IconName }[];
 }) {
   return (
     <section className={styles.journeyRow} id={id}>
@@ -311,20 +383,20 @@ export function CoeExperience({ copy }: { copy: CoePageContent }) {
         <OperatingModel copy={copy} />
         <IdeaToImpact copy={copy} />
         <Pillars copy={copy} />
-        <Foundations />
+        <Foundations copy={copy} />
         <JourneyRow
           id="maturity"
           title={copy.maturityTitle}
           subtitle={copy.maturityDescription}
-          items={maturity}
+          items={resolveCoeModel(copy).maturity}
         />
         <JourneyRow
           id="roadmap"
           title={copy.roadmapTitle}
           subtitle={copy.roadmapDescription}
-          items={roadmap}
+          items={resolveCoeModel(copy).roadmap}
         />
-        <CoeFaq />
+        <CoeFaq items={copy.faqItems} />
         <FinalCta copy={copy} />
       </div>
     </div>

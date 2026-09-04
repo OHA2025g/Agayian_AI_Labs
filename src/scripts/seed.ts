@@ -20,6 +20,7 @@ import {
 import { brandCopy, siteConfig } from "../config/site";
 import { consultationFlow } from "../lib/contact-schema";
 import { legalByGlobal } from "../data/legal";
+import { importHardcodedPageCopy } from "./import-page-copy";
 
 async function upsertBySlug(
   payload: Awaited<ReturnType<typeof getPayload>>,
@@ -313,16 +314,7 @@ async function run() {
 
   // Publish CoE / governance globals without layout blocks so rich page JSX remains
   // until editors add controlled blocks in admin.
-  await payload.updateGlobal({
-    slug: "coe-page",
-    data: { status: "published", layout: [] },
-    overrideAccess: true,
-  });
-  await payload.updateGlobal({
-    slug: "governance-page",
-    data: { status: "published", layout: [] },
-    overrideAccess: true,
-  });
+  await importHardcodedPageCopy(payload);
 
   const campaignExisting = await payload.find({
     collection: "campaigns",
@@ -368,7 +360,7 @@ async function run() {
   }
 
   console.log(
-    "Seed complete. Team/partners/careers/resources left empty by design.",
+    "Seed complete. Team/partners/careers left empty by design. Resources collection removed.",
   );
   process.exit(0);
 }

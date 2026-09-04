@@ -15,7 +15,7 @@ export async function generateMetadata() {
 export default async function AICentreOfExcellencePage() {
   const copy = await getCoePageContent();
   return (
-    <CmsBlocksOrFallback slug="coe-page" preferCms={false}>
+    <CmsBlocksOrFallback slug="coe-page" preferCms>
       <>
         <script
           type="application/ld+json"

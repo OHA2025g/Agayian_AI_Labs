@@ -6,7 +6,6 @@ import type {
   Industry,
   Insight,
   Product,
-  Resource,
   TeamMember,
 } from "@/types";
 import { capabilities as staticCapabilities } from "@/data/capabilities";
@@ -14,7 +13,6 @@ import { impactStories as staticStories } from "@/data/impactStories";
 import { industries as staticIndustries } from "@/data/industries";
 import { insights as staticInsights } from "@/data/insights";
 import { products as staticProducts } from "@/data/products";
-import { resources as staticResources } from "@/data/resources";
 import { findPublished, findPublishedBySlug } from "./published";
 
 type CmsDoc = Record<string, unknown> & { id?: string | number; slug?: string };
@@ -84,18 +82,6 @@ export async function getInsight(slug: string): Promise<Insight | undefined> {
   const doc = await findPublishedBySlug<CmsDoc>("insights", slug);
   if (doc) return mapInsight(doc);
   return staticInsights.find((item) => item.slug === slug);
-}
-
-export async function getResources(): Promise<Resource[]> {
-  const docs = await findPublished<CmsDoc>("resources", { depth: 1 });
-  if (!docs.length) return staticResources;
-  return docs.map(mapResource);
-}
-
-export async function getResource(slug: string): Promise<Resource | undefined> {
-  const doc = await findPublishedBySlug<CmsDoc>("resources", slug);
-  if (doc) return mapResource(doc);
-  return staticResources.find((item) => item.slug === slug);
 }
 
 export async function getFaqs(placement?: string): Promise<FaqItem[]> {
@@ -241,37 +227,6 @@ function mapInsight(doc: CmsDoc): Insight {
     readingTime: String(doc.readingTime ?? "1 min"),
     featured: Boolean(doc.featured),
     body: paragraphs,
-  };
-}
-
-function mapResource(doc: CmsDoc): Resource {
-  const file = doc.file;
-  let mappedFile: Resource["file"];
-  if (file && typeof file === "object" && "url" in file) {
-    const media = file as {
-      url?: string;
-      filename?: string;
-      mimeType?: string;
-      filesize?: number;
-    };
-    if (media.url) {
-      mappedFile = {
-        url: media.url,
-        filename: media.filename,
-        mimeType: media.mimeType,
-        filesize: media.filesize,
-      };
-    }
-  }
-  return {
-    id: String(doc.id ?? doc.slug),
-    slug: String(doc.slug ?? ""),
-    title: String(doc.title ?? ""),
-    description: String(doc.description ?? ""),
-    category: String(doc.category ?? "Guide"),
-    publishedAt: String(doc.publishedAt ?? new Date().toISOString()).slice(0, 10),
-    featured: Boolean(doc.featured),
-    file: mappedFile,
   };
 }
 

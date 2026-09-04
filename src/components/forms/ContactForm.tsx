@@ -111,10 +111,18 @@ export function ContactForm({
   defaultProduct,
   defaultCapability,
   utm,
+  copy,
 }: {
   defaultInterest?: string | null;
   defaultProduct?: string | null;
   defaultCapability?: string | null;
+  copy?: {
+    heading?: string;
+    successMessage?: string;
+    errorMessage?: string;
+    consentText?: string;
+    submitLabel?: string;
+  };
   utm?: {
     source?: string | null;
     medium?: string | null;
@@ -218,7 +226,8 @@ export function ContactForm({
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : "We could not submit your request. Please try again or email hello@agrayian.ai.",
+          : copy?.errorMessage ||
+            "We could not submit your request. Please try again or email hello@agrayian.ai.",
       );
     }
   });
@@ -233,8 +242,8 @@ export function ContactForm({
           Thank you — request received
         </h3>
         <p className="mt-2 text-sm text-muted-light">
-          Our team will review your requirement and follow up using your
-          preferred contact method.
+          {copy?.successMessage ||
+            "Our team will review your requirement and follow up using your preferred contact method."}
         </p>
         <PrimaryButton
           type="button"
@@ -519,7 +528,7 @@ export function ContactForm({
         </Field>
       </FormStep>
 
-      <FormStep step={3} title="Submit enquiry">
+      <FormStep step={3} title={copy?.heading || "Submit enquiry"}>
         <div className="space-y-2">
           <div className="flex items-start gap-3">
             <Checkbox
@@ -537,8 +546,8 @@ export function ContactForm({
               htmlFor="consent"
               className="text-sm leading-relaxed text-muted-light"
             >
-              I consent to Agrayian AI Labs contacting me about this enquiry and
-              processing my details as described in the Privacy Policy.
+              {copy?.consentText ||
+                "I consent to Agrayian AI Labs contacting me about this enquiry and processing my details as described in the Privacy Policy."}
             </Label>
           </div>
           {form.formState.errors.consent && (
@@ -573,7 +582,7 @@ export function ContactForm({
           disabled={status === "loading"}
           className="w-full"
         >
-          {status === "loading" ? "Submitting…" : "Submit enquiry"}
+          {status === "loading" ? "Submitting…" : copy?.submitLabel || "Submit enquiry"}
         </PrimaryButton>
 
         <p className="flex items-start gap-2 text-xs text-muted-light">

@@ -21,13 +21,13 @@ import {
   Partners,
   Products,
   Redirects,
-  Resources,
   TeamMembers,
   Testimonials,
   Users,
 } from "./payload/collections";
 import {
   AccessibilityStatement,
+  CapabilitiesPage,
   CoePage,
   CompanyPage,
   ContactPage,
@@ -36,9 +36,11 @@ import {
   HomePage,
   Navigation,
   PrivacyPolicy,
+  ProductsPage,
   ResponsibleAi,
   SiteSettings,
   TermsOfUse,
+  TrustPage,
 } from "./payload/globals";
 
 const filename = fileURLToPath(import.meta.url);
@@ -92,7 +94,7 @@ export default buildConfig({
     theme: "light",
   },
   routes: {
-    admin: "/admin",
+    admin: "/cms",
     api: "/cms-api",
   },
   collections: [
@@ -111,7 +113,6 @@ export default buildConfig({
     Careers,
     Partners,
     Testimonials,
-    Resources,
     Enquiries,
     NewsletterSubscribers,
     AuditLogs,
@@ -124,6 +125,9 @@ export default buildConfig({
     GovernancePage,
     CompanyPage,
     ContactPage,
+    CapabilitiesPage,
+    ProductsPage,
+    TrustPage,
     PrivacyPolicy,
     TermsOfUse,
     ResponsibleAi,

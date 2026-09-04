@@ -34,7 +34,7 @@ export function canAccessAdmin(user: UserWithRole | null | undefined) {
 }
 
 export function canManageUsers(user: UserWithRole | null | undefined) {
-  return hasRole(user, ["super_admin"]);
+  return hasRole(user, ["super_admin", "administrator"]);
 }
 
 export function canPublish(user: UserWithRole | null | undefined) {

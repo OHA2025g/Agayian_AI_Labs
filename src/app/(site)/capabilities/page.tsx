@@ -4,6 +4,7 @@ import { RelatedProductsRow } from "@/components/sections/RelatedProductsRow";
 import { OnThisPageNav } from "@/components/ui/OnThisPageNav";
 import { flagshipProducts } from "@/config/flagship-products";
 import { getCapabilities, getProducts } from "@/lib/cms/catalog";
+import { getCapabilitiesPageContent } from "@/lib/cms/page-content";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 import type { Capability } from "@/types";
 
@@ -27,19 +28,20 @@ const navLabels: Record<(typeof journeyOrder)[number], string> = {
   "managed-services": "AI Managed Services",
 };
 
-export function generateMetadata() {
+export async function generateMetadata() {
+  const page = await getCapabilitiesPageContent();
   return buildMetadata({
-    title: "Capabilities",
-    description:
-      "Explore Agrayian AI Labs capabilities spanning AI strategy, Centres of Excellence, governance, generative and agentic AI, data and analytics, product engineering and managed services.",
+    title: page.seo.title,
+    description: page.seo.description,
     path: "/capabilities",
   });
 }
 
 export default async function CapabilitiesPage() {
-  const [capabilities, products] = await Promise.all([
+  const [capabilities, products, page] = await Promise.all([
     getCapabilities(),
     getProducts(),
+    getCapabilitiesPageContent(),
   ]);
 
   const journeyLayers = journeyOrder
@@ -59,13 +61,19 @@ export default async function CapabilitiesPage() {
     })
     .filter((item): item is NonNullable<typeof item> => Boolean(item));
 
-  const onThisPageItems = journeyLayers.map((capability) => ({
-    id: capability.slug,
-    label:
-      navLabels[capability.slug as (typeof journeyOrder)[number]] ??
-      capability.name,
-    href: `#${capability.slug}`,
-  }));
+  const onThisPageItems = journeyLayers.map((capability) => {
+    const cmsLabel = page.journeyLabels.find(
+      (item) => item.href === `#${capability.slug}` || item.href.endsWith(capability.slug),
+    );
+    return {
+      id: capability.slug,
+      label:
+        cmsLabel?.label ??
+        navLabels[capability.slug as (typeof journeyOrder)[number]] ??
+        capability.name,
+      href: `#${capability.slug}`,
+    };
+  });
 
   return (
     <>
@@ -85,7 +93,17 @@ export default async function CapabilitiesPage() {
         <div className="capabilities-main">
           <div className="capabilities-stage">
             <div>
-              <CapabilitiesHero />
+              <CapabilitiesHero
+                title={page.hero.title}
+                subheadLine1={page.hero.subheadLine1}
+                subheadLine2={page.hero.subheadLine2}
+                body={page.hero.body}
+                primaryCtaLabel={page.hero.primaryCtaLabel}
+                primaryCtaHref={page.hero.primaryCtaHref}
+                secondaryCtaLabel={page.hero.secondaryCtaLabel}
+                secondaryCtaHref={page.hero.secondaryCtaHref}
+                stackLabels={page.stackActivities}
+              />
               <CapabilityJourney layers={journeyLayers} />
             </div>
 

@@ -15,6 +15,7 @@ const memoryStore = new Map<string, MemoryEntry>();
 let redisSingleton: Redis | null | undefined;
 let contactLimiter: Ratelimit | null | undefined;
 let newsletterLimiter: Ratelimit | null | undefined;
+let adminLoginLimiter: Ratelimit | null | undefined;
 let warnedMissingUpstash = false;
 
 function isProductionRuntime() {
@@ -74,6 +75,22 @@ function getNewsletterLimiter(): Ratelimit | null {
   return newsletterLimiter;
 }
 
+function getAdminLoginLimiter(): Ratelimit | null {
+  if (adminLoginLimiter !== undefined) return adminLoginLimiter;
+  const redis = getRedis();
+  if (!redis) {
+    adminLoginLimiter = null;
+    return null;
+  }
+  adminLoginLimiter = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(5, "10 m"),
+    analytics: false,
+    prefix: "agrayian:admin-login",
+  });
+  return adminLoginLimiter;
+}
+
 function getClientIp(request: Request): string {
   const forwarded = request.headers.get("x-forwarded-for");
   if (forwarded) {
@@ -113,6 +130,15 @@ export async function limitContactRequest(
     return { success: result.success, remaining: result.remaining };
   }
   return memoryLimit(`contact:${ip}`, 5, 10 * 60 * 1000);
+}
+
+export async function limitAdminLogin(ip: string): Promise<LimitResult> {
+  const limiter = getAdminLoginLimiter();
+  if (limiter) {
+    const result = await limiter.limit(ip || "unknown");
+    return { success: result.success, remaining: result.remaining };
+  }
+  return memoryLimit(`admin-login:${ip || "unknown"}`, 5, 10 * 60 * 1000);
 }
 
 export async function limitNewsletterRequest(

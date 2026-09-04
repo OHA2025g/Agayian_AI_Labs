@@ -82,7 +82,6 @@ export interface Config {
     careers: Career;
     partners: Partner;
     testimonials: Testimonial;
-    resources: Resource;
     enquiries: Enquiry;
     'newsletter-subscribers': NewsletterSubscriber;
     'audit-logs': AuditLog;
@@ -108,7 +107,6 @@ export interface Config {
     careers: CareersSelect<false> | CareersSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
-    resources: ResourcesSelect<false> | ResourcesSelect<true>;
     enquiries: EnquiriesSelect<false> | EnquiriesSelect<true>;
     'newsletter-subscribers': NewsletterSubscribersSelect<false> | NewsletterSubscribersSelect<true>;
     'audit-logs': AuditLogsSelect<false> | AuditLogsSelect<true>;
@@ -129,6 +127,9 @@ export interface Config {
     'governance-page': GovernancePage;
     'company-page': CompanyPage;
     'contact-page': ContactPage;
+    'capabilities-page': CapabilitiesPage;
+    'products-page': ProductsPage;
+    'trust-page': TrustPage;
     'privacy-policy': PrivacyPolicy;
     'terms-of-use': TermsOfUse;
     'responsible-ai': ResponsibleAi;
@@ -143,6 +144,9 @@ export interface Config {
     'governance-page': GovernancePageSelect<false> | GovernancePageSelect<true>;
     'company-page': CompanyPageSelect<false> | CompanyPageSelect<true>;
     'contact-page': ContactPageSelect<false> | ContactPageSelect<true>;
+    'capabilities-page': CapabilitiesPageSelect<false> | CapabilitiesPageSelect<true>;
+    'products-page': ProductsPageSelect<false> | ProductsPageSelect<true>;
+    'trust-page': TrustPageSelect<false> | TrustPageSelect<true>;
     'privacy-policy': PrivacyPolicySelect<false> | PrivacyPolicySelect<true>;
     'terms-of-use': TermsOfUseSelect<false> | TermsOfUseSelect<true>;
     'responsible-ai': ResponsibleAiSelect<false> | ResponsibleAiSelect<true>;
@@ -184,6 +188,10 @@ export interface UserAuthOperations {
 export interface User {
   id: string;
   name?: string | null;
+  /**
+   * Disabled accounts cannot sign in to /admin.
+   */
+  disabled?: boolean | null;
   role:
     | 'super_admin'
     | 'administrator'
@@ -684,42 +692,12 @@ export interface Testimonial {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "resources".
- */
-export interface Resource {
-  id: string;
-  title: string;
-  description?: string | null;
-  category?: ('Guide' | 'Framework' | 'Briefing' | 'Checklist' | 'Research') | null;
-  featured?: boolean | null;
-  /**
-   * Optional download. Leave empty if the resource is a page only — never invent a file.
-   */
-  file?: (string | null) | Media;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    ogImage?: (string | null) | Media;
-  };
-  slug: string;
-  status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
-  publishedAt?: string | null;
-  /**
-   * When set in the future, a secured cron can promote to published.
-   */
-  scheduledPublishAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "enquiries".
  */
 export interface Enquiry {
   id: string;
   type: 'contact' | 'demo' | 'consultation' | 'career';
-  status?: ('new' | 'in_progress' | 'waiting' | 'closed' | 'spam') | null;
+  status?: ('new' | 'in_progress' | 'waiting' | 'replied' | 'closed' | 'spam') | null;
   reference?: string | null;
   fullName: string;
   workEmail: string;
@@ -741,6 +719,10 @@ export interface Enquiry {
   utmTerm?: string | null;
   landingPath?: string | null;
   campaign?: (string | null) | Campaign;
+  /**
+   * Soft-archive. Hidden from the default inbox.
+   */
+  archived?: boolean | null;
   notes?:
     | {
         body: string;
@@ -870,10 +852,6 @@ export interface PayloadLockedDocument {
         value: string | Testimonial;
       } | null)
     | ({
-        relationTo: 'resources';
-        value: string | Resource;
-      } | null)
-    | ({
         relationTo: 'enquiries';
         value: string | Enquiry;
       } | null)
@@ -933,6 +911,7 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  disabled?: T;
   role?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1336,31 +1315,6 @@ export interface TestimonialsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "resources_select".
- */
-export interface ResourcesSelect<T extends boolean = true> {
-  title?: T;
-  description?: T;
-  category?: T;
-  featured?: T;
-  file?: T;
-  seo?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        ogImage?: T;
-      };
-  slug?: T;
-  status?: T;
-  publishedAt?: T;
-  scheduledPublishAt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "enquiries_select".
  */
 export interface EnquiriesSelect<T extends boolean = true> {
@@ -1387,6 +1341,7 @@ export interface EnquiriesSelect<T extends boolean = true> {
   utmTerm?: T;
   landingPath?: T;
   campaign?: T;
+  archived?: T;
   notes?:
     | T
     | {
@@ -1571,6 +1526,9 @@ export interface Navigation {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Insights and Impact links only. Do not add a Resources page or /resources href.
+   */
   footerResources?:
     | {
         label: string;
@@ -1620,6 +1578,17 @@ export interface HomePage {
     title?: string | null;
     description?: string | null;
   };
+  /**
+   * Display names for homepage flagship cards. Use existing product slugs only.
+   */
+  flagshipOverrides?:
+    | {
+        slug: string;
+        displayName: string;
+        displayDescription?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   seo?: {
     title?: string | null;
     description?: string | null;
@@ -1818,6 +1787,81 @@ export interface CoePage {
   ctaTitle?: string | null;
   ctaDescription?: string | null;
   faqs?: (string | Faq)[] | null;
+  layers?:
+    | {
+        number?: string | null;
+        title: string;
+        description?: string | null;
+        icon?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  outcomes?: string[] | null;
+  whatFeatures?:
+    | {
+        title: string;
+        detail?: string | null;
+        icon?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  whyFeatures?:
+    | {
+        title: string;
+        detail?: string | null;
+        icon?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  intakeSteps?:
+    | {
+        title: string;
+        description?: string | null;
+        icon?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  pillars?:
+    | {
+        title: string;
+        description?: string | null;
+        icon?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  foundations?:
+    | {
+        title: string;
+        description?: string | null;
+        icon?: string | null;
+        sculpture?: string | null;
+        items?: string[] | null;
+        id?: string | null;
+      }[]
+    | null;
+  maturity?:
+    | {
+        name: string;
+        description?: string | null;
+        icon?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  roadmap?:
+    | {
+        name: string;
+        description?: string | null;
+        icon?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  faqItems?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
   seo?: {
     title?: string | null;
     description?: string | null;
@@ -2024,6 +2068,36 @@ export interface GovernancePage {
   engagementDescription?: string | null;
   ctaTitle?: string | null;
   ctaDescription?: string | null;
+  lifecycle?:
+    | {
+        label: string;
+        icon?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  pillars?:
+    | {
+        title: string;
+        description?: string | null;
+        icon?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  raciRows?:
+    | {
+        role: string;
+        cells?: string[] | null;
+        id?: string | null;
+      }[]
+    | null;
+  engagementSteps?:
+    | {
+        title: string;
+        description?: string | null;
+        icon?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   seo?: {
     title?: string | null;
     description?: string | null;
@@ -2225,6 +2299,13 @@ export interface CompanyPage {
   technologyPhilosophy?: string | null;
   careersCopy?: string | null;
   partnerEcosystemCopy?: string | null;
+  howWeWork?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   seo?: {
     title?: string | null;
     description?: string | null;
@@ -2398,6 +2479,13 @@ export interface ContactPage {
       }[]
     | null;
   faqs?: (string | Faq)[] | null;
+  form?: {
+    heading?: string | null;
+    successMessage?: string | null;
+    errorMessage?: string | null;
+    consentText?: string | null;
+    submitLabel?: string | null;
+  };
   seo?: {
     title?: string | null;
     description?: string | null;
@@ -2409,6 +2497,119 @@ export interface ContactPage {
    * When set in the future, a secured cron can promote to published.
    */
   scheduledPublishAt?: string | null;
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "capabilities-page".
+ */
+export interface CapabilitiesPage {
+  id: string;
+  hero?: {
+    title?: string | null;
+    subheadLine1?: string | null;
+    subheadLine2?: string | null;
+    body?: string | null;
+    primaryCtaLabel?: string | null;
+    primaryCtaHref?: string | null;
+    secondaryCtaLabel?: string | null;
+    secondaryCtaHref?: string | null;
+  };
+  stackActivities?:
+    | {
+        label: string;
+        mark?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  journeyLabels?:
+    | {
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
+  publishedAt?: string | null;
+  /**
+   * When set in the future, a secured cron can promote to published.
+   */
+  scheduledPublishAt?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products-page".
+ */
+export interface ProductsPage {
+  id: string;
+  hero?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    description?: string | null;
+    searchPlaceholder?: string | null;
+  };
+  architecture?: {
+    title?: string | null;
+    coreTitle?: string | null;
+    coreSubtitle?: string | null;
+  };
+  status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
+  publishedAt?: string | null;
+  /**
+   * When set in the future, a secured cron can promote to published.
+   */
+  scheduledPublishAt?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "trust-page".
+ */
+export interface TrustPage {
+  id: string;
+  title?: string | null;
+  description?: string | null;
+  intro?: string | null;
+  principles?:
+    | {
+        title: string;
+        description?: string | null;
+        icon?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  ctaTitle?: string | null;
+  ctaDescription?: string | null;
+  ctaLabel?: string | null;
+  ctaHref?: string | null;
+  status: 'draft' | 'in_review' | 'approved' | 'published' | 'archived';
+  publishedAt?: string | null;
+  /**
+   * When set in the future, a secured cron can promote to published.
+   */
+  scheduledPublishAt?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    ogImage?: (string | null) | Media;
+  };
   _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -2806,6 +3007,14 @@ export interface HomePageSelect<T extends boolean = true> {
         title?: T;
         description?: T;
       };
+  flagshipOverrides?:
+    | T
+    | {
+        slug?: T;
+        displayName?: T;
+        displayDescription?: T;
+        id?: T;
+      };
   seo?:
     | T
     | {
@@ -2974,6 +3183,81 @@ export interface CoePageSelect<T extends boolean = true> {
   ctaTitle?: T;
   ctaDescription?: T;
   faqs?: T;
+  layers?:
+    | T
+    | {
+        number?: T;
+        title?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
+  outcomes?: T;
+  whatFeatures?:
+    | T
+    | {
+        title?: T;
+        detail?: T;
+        icon?: T;
+        id?: T;
+      };
+  whyFeatures?:
+    | T
+    | {
+        title?: T;
+        detail?: T;
+        icon?: T;
+        id?: T;
+      };
+  intakeSteps?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
+  pillars?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
+  foundations?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        sculpture?: T;
+        items?: T;
+        id?: T;
+      };
+  maturity?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
+  roadmap?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
+  faqItems?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
   seo?:
     | T
     | {
@@ -3136,6 +3420,36 @@ export interface GovernancePageSelect<T extends boolean = true> {
   engagementDescription?: T;
   ctaTitle?: T;
   ctaDescription?: T;
+  lifecycle?:
+    | T
+    | {
+        label?: T;
+        icon?: T;
+        id?: T;
+      };
+  pillars?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
+  raciRows?:
+    | T
+    | {
+        role?: T;
+        cells?: T;
+        id?: T;
+      };
+  engagementSteps?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
   seo?:
     | T
     | {
@@ -3294,6 +3608,13 @@ export interface CompanyPageSelect<T extends boolean = true> {
   technologyPhilosophy?: T;
   careersCopy?: T;
   partnerEcosystemCopy?: T;
+  howWeWork?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
   seo?:
     | T
     | {
@@ -3442,6 +3763,15 @@ export interface ContactPageSelect<T extends boolean = true> {
         id?: T;
       };
   faqs?: T;
+  form?:
+    | T
+    | {
+        heading?: T;
+        successMessage?: T;
+        errorMessage?: T;
+        consentText?: T;
+        submitLabel?: T;
+      };
   seo?:
     | T
     | {
@@ -3452,6 +3782,122 @@ export interface ContactPageSelect<T extends boolean = true> {
   status?: T;
   publishedAt?: T;
   scheduledPublishAt?: T;
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "capabilities-page_select".
+ */
+export interface CapabilitiesPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T;
+        subheadLine1?: T;
+        subheadLine2?: T;
+        body?: T;
+        primaryCtaLabel?: T;
+        primaryCtaHref?: T;
+        secondaryCtaLabel?: T;
+        secondaryCtaHref?: T;
+      };
+  stackActivities?:
+    | T
+    | {
+        label?: T;
+        mark?: T;
+        id?: T;
+      };
+  journeyLabels?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  status?: T;
+  publishedAt?: T;
+  scheduledPublishAt?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products-page_select".
+ */
+export interface ProductsPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+        searchPlaceholder?: T;
+      };
+  architecture?:
+    | T
+    | {
+        title?: T;
+        coreTitle?: T;
+        coreSubtitle?: T;
+      };
+  status?: T;
+  publishedAt?: T;
+  scheduledPublishAt?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "trust-page_select".
+ */
+export interface TrustPageSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  intro?: T;
+  principles?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
+  ctaTitle?: T;
+  ctaDescription?: T;
+  ctaLabel?: T;
+  ctaHref?: T;
+  status?: T;
+  publishedAt?: T;
+  scheduledPublishAt?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ogImage?: T;
+      };
   _status?: T;
   updatedAt?: T;
   createdAt?: T;

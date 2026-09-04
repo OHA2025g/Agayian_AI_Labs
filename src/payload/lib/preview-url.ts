@@ -3,7 +3,6 @@ const PREVIEW_ROUTES: Record<string, (slug: string) => string> = {
   insights: (slug) => `/insights/${slug}`,
   "impact-stories": (slug) => `/impact-stories/${slug}`,
   industries: (slug) => `/industries/${slug}`,
-  resources: () => `/insights`,
   capabilities: (slug) => `/capabilities#${slug}`,
 };
 
@@ -13,6 +12,9 @@ const GLOBAL_PREVIEW: Record<string, string> = {
   "governance-page": "/ai-governance",
   "company-page": "/company",
   "contact-page": "/contact",
+  "trust-page": "/trust",
+  "capabilities-page": "/capabilities",
+  "products-page": "/products",
 };
 
 export function collectionPreviewUrl(

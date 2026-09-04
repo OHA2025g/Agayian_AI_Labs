@@ -45,6 +45,14 @@ export const CompanyPage: GlobalConfig = {
             { name: "technologyPhilosophy", type: "textarea" },
             { name: "careersCopy", type: "textarea" },
             { name: "partnerEcosystemCopy", type: "textarea" },
+            {
+              name: "howWeWork",
+              type: "array",
+              fields: [
+                { name: "title", type: "text", required: true },
+                { name: "description", type: "textarea" },
+              ],
+            },
           ],
         },
         {

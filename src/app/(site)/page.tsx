@@ -14,6 +14,16 @@ import { flagshipProducts } from "@/config/flagship-products";
 import { getInsights, getProducts } from "@/lib/cms/catalog";
 import { getHomePageContent } from "@/lib/cms/page-content";
 import type { Insight } from "@/types";
+import { buildMetadata } from "@/lib/seo";
+
+export async function generateMetadata() {
+  const home = await getHomePageContent();
+  return buildMetadata({
+    title: home.seo.title,
+    description: home.seo.description,
+    path: "/",
+  });
+}
 
 export default async function HomePage() {
   const [home, products, insights] = await Promise.all([
@@ -30,7 +40,9 @@ export default async function HomePage() {
     .map((slug) => {
       const product = products.find((item) => item.slug === slug);
       if (!product) return null;
-      const entry = flagshipProducts.find((item) => item.slug === slug);
+      const entry =
+        home.flagshipOverrides.find((item) => item.slug === slug) ??
+        flagshipProducts.find((item) => item.slug === slug);
       return {
         ...product,
         name: entry?.displayName ?? product.name,

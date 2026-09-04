@@ -21,7 +21,6 @@ import { NewsletterSubscribers as NewsletterSubscribersBase } from "./Newsletter
 import { Partners as PartnersBase } from "./Partners";
 import { Products as ProductsBase } from "./Products";
 import { Redirects as RedirectsBase } from "./Redirects";
-import { Resources as ResourcesBase } from "./Resources";
 import { TeamMembers as TeamMembersBase } from "./TeamMembers";
 import { Testimonials as TestimonialsBase } from "./Testimonials";
 import { Users as UsersBase } from "./Users";
@@ -94,11 +93,6 @@ export const Insights = withAdminGroup(
   withPublishableHooks(InsightsBase),
   WEBSITE,
   { labels: { singular: "Insight", plural: "Insights" }, hidden: hideWebsiteFromSpecialists },
-);
-export const Resources = withAdminGroup(
-  withPublishableHooks(ResourcesBase),
-  WEBSITE,
-  { labels: { singular: "Resource", plural: "Resources" }, hidden: hideWebsiteFromSpecialists },
 );
 
 export const Faqs = withAdminGroup(withPublishableHooks(FaqsBase), PEOPLE, {

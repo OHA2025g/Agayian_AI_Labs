@@ -38,6 +38,17 @@ export const ContactPage: GlobalConfig = {
               relationTo: "faqs",
               hasMany: true,
             },
+            {
+              name: "form",
+              type: "group",
+              fields: [
+                { name: "heading", type: "text" },
+                { name: "successMessage", type: "textarea" },
+                { name: "errorMessage", type: "textarea" },
+                { name: "consentText", type: "textarea" },
+                { name: "submitLabel", type: "text" },
+              ],
+            },
           ],
         },
         {

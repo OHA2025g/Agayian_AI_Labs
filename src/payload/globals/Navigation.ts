@@ -49,7 +49,16 @@ export const Navigation: GlobalConfig = {
             { name: "footerProducts", type: "array", fields: linkFields },
             { name: "footerIndustries", type: "array", fields: linkFields },
             { name: "footerCompany", type: "array", fields: linkFields },
-            { name: "footerResources", type: "array", fields: linkFields },
+            {
+              name: "footerResources",
+              label: "Insights and Impact",
+              type: "array",
+              admin: {
+                description:
+                  "Insights and Impact links only. Do not add a Resources page or /resources href.",
+              },
+              fields: linkFields,
+            },
           ],
         },
         {

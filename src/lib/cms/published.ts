@@ -1,4 +1,5 @@
 import type { Where } from "payload";
+import { isPreviewMode } from "@/lib/cms/preview-mode";
 import { getPayloadClient, isPayloadSkipped } from "@/lib/payload";
 
 const CMS_BUDGET_MS = 1200;
@@ -13,8 +14,7 @@ type PublishedCollection =
   | "team-members"
   | "careers"
   | "partners"
-  | "testimonials"
-  | "resources";
+  | "testimonials";
 
 type SlugCollection =
   | "products"
@@ -24,8 +24,7 @@ type SlugCollection =
   | "insights"
   | "careers"
   | "partners"
-  | "team-members"
-  | "resources";
+  | "team-members";
 
 type GlobalSlug =
   | "site-settings"
@@ -39,7 +38,10 @@ type GlobalSlug =
   | "terms-of-use"
   | "responsible-ai"
   | "cookie-policy"
-  | "accessibility-statement";
+  | "accessibility-statement"
+  | "trust-page"
+  | "capabilities-page"
+  | "products-page";
 
 function withCmsBudget<T>(work: Promise<T>, fallback: T): Promise<T> {
   return new Promise((resolve) => {
@@ -93,15 +95,17 @@ async function queryPublished<T>(
   },
 ): Promise<T[]> {
   const payload = await getPayloadClient();
-  const clauses: Where[] = [{ status: { equals: "published" } }];
+  const preview = await isPreviewMode();
+  const clauses: Where[] = preview ? [] : [{ status: { equals: "published" } }];
   if (options?.where) clauses.push(options.where);
   const result = await payload.find({
     collection,
     depth: options?.depth ?? 0,
     limit: options?.limit ?? 100,
     sort: options?.sort,
-    where: { and: clauses },
-    overrideAccess: false,
+    where: clauses.length ? { and: clauses } : undefined,
+    draft: preview,
+    overrideAccess: preview,
   });
   return result.docs as T[];
 }
@@ -119,12 +123,17 @@ async function queryPublishedBySlug<T>(
   slug: string,
 ): Promise<T | null> {
   const payload = await getPayloadClient();
+  const preview = await isPreviewMode();
   const result = await payload.find({
     collection,
     depth: 1,
     limit: 1,
+    draft: preview,
+    overrideAccess: preview,
     where: {
-      and: [{ slug: { equals: slug } }, { status: { equals: "published" } }],
+      and: preview
+        ? [{ slug: { equals: slug } }]
+        : [{ slug: { equals: slug } }, { status: { equals: "published" } }],
     },
   });
   return (result.docs[0] as T) ?? null;
@@ -139,17 +148,15 @@ export async function getPublishedGlobal<T = Record<string, unknown>>(
 
 async function queryPublishedGlobal<T>(slug: GlobalSlug): Promise<T | null> {
   const payload = await getPayloadClient();
+  const preview = await isPreviewMode();
   const doc = await payload.findGlobal({
-    slug,
+    slug: slug as "home-page",
     depth: 1,
+    draft: preview,
+    overrideAccess: preview,
   });
-  if (
-    doc &&
-    typeof doc === "object" &&
-    "status" in doc &&
-    doc.status &&
-    doc.status !== "published"
-  ) {
+  const record = doc as { status?: string } | null;
+  if (!preview && record?.status && record.status !== "published") {
     return null;
   }
   return doc as T;

@@ -389,7 +389,16 @@ export default async function CompanyPage() {
             </h2>
           </Reveal>
           <div className="mt-12">
-            <ProcessFlow steps={[...howWeWork]} />
+            <ProcessFlow
+              steps={(company.howWeWork.length
+                ? company.howWeWork.map((item, index) => ({
+                    ...howWeWork[index % howWeWork.length],
+                    title: item.title,
+                    description: item.description,
+                  }))
+                : howWeWork
+              ).map((item) => item)}
+            />
           </div>
         </div>
       </section>

@@ -5,7 +5,7 @@ Corporate website for Agrayian AI Labs — responsible AI strategy, Centres of E
 ## Stack
 
 - Next.js (App Router) + TypeScript
-- Payload CMS 3 (embedded admin at `/admin`) + MongoDB
+- Payload CMS 3 (custom admin at `/admin`, native UI at `/cms`) + MongoDB
 - Tailwind CSS
 - Framer Motion / GSAP / React Three Fiber
 - React Hook Form + Zod
@@ -24,7 +24,7 @@ npm run payload:seed   # seed CMS collections / admin user
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) and [http://localhost:3000/admin](http://localhost:3000/admin).
+Open [http://localhost:3000](http://localhost:3000) and [http://localhost:3000/admin](http://localhost:3000/admin). Native Payload (super admin only) is at [http://localhost:3000/cms](http://localhost:3000/cms).
 
 - Admin setup: [docs/ADMIN.md](docs/ADMIN.md)
 - Docker / EasyPanel deploy: [docs/DEPLOY.md](docs/DEPLOY.md)

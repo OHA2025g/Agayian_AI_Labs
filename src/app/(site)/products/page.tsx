@@ -4,19 +4,23 @@ import { ProductsLaboratory } from "@/components/sections/ProductsLaboratory";
 import { LoadingState } from "@/components/states/LoadingState";
 import { LightCtaBar } from "@/components/ui/DarkCtaBand";
 import { getProducts } from "@/lib/cms/catalog";
+import { getProductsPageContent } from "@/lib/cms/page-content";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 
-export function generateMetadata() {
+export async function generateMetadata() {
+  const page = await getProductsPageContent();
   return buildMetadata({
-    title: "Products",
-    description:
-      "Explore Agrayian AI Labs' enterprise platforms, government solutions, governance systems and AI-powered decision tools.",
+    title: page.seo.title,
+    description: page.seo.description,
     path: "/products",
   });
 }
 
 export default async function ProductsPage() {
-  const items = await getProducts();
+  const [items, page] = await Promise.all([
+    getProducts(),
+    getProductsPageContent(),
+  ]);
 
   return (
     <>
@@ -40,11 +44,21 @@ export default async function ProductsPage() {
             </div>
           }
         >
-          <ProductsLaboratory items={items} />
+          <ProductsLaboratory
+            items={items}
+            eyebrow={page.hero.eyebrow}
+            title={page.hero.title}
+            description={page.hero.description}
+            searchPlaceholder={page.hero.searchPlaceholder}
+          />
         </Suspense>
 
         <div className="products-main">
-          <ProductsArchitecture />
+          <ProductsArchitecture
+            title={page.architecture.title}
+            coreTitle={page.architecture.coreTitle}
+            coreSubtitle={page.architecture.coreSubtitle}
+          />
         </div>
 
         <LightCtaBar

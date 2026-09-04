@@ -3,10 +3,14 @@
 import { useState } from "react";
 import { WhiteSculpture } from "@/components/visualisations/glass/WhiteSculpture";
 import { mockupAssets } from "@/config/mockup-assets";
-import { faqItems } from "./coe-content";
+import { faqItems as fallbackFaqs } from "./coe-content";
 import styles from "./ai-coe.module.css";
 
-export function CoeFaq() {
+export function CoeFaq({
+  items,
+}: {
+  items?: { question: string; answer: string }[];
+}) {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
@@ -23,7 +27,7 @@ export function CoeFaq() {
         />
       </div>
       <div className={styles.accordion}>
-        {faqItems.map((item, index) => {
+        {(items?.length ? items : fallbackFaqs).map((item, index) => {
           const isOpen = open === index;
           const panelId = `coe-faq-panel-${index}`;
           const buttonId = `coe-faq-button-${index}`;

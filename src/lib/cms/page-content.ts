@@ -2,6 +2,10 @@ import { cache } from "react";
 import { brandCopy } from "@/config/site";
 import { companyIntro, companyValues } from "@/data/company";
 import { consultationFlow } from "@/lib/contact-schema";
+import {
+  CAPABILITIES_JOURNEY_LABELS,
+  CAPABILITIES_STACK_ACTIVITIES,
+} from "@/lib/cms/canonical-copy";
 import { getPublishedGlobal } from "@/lib/cms/published";
 import type { CompanyValue, FaqItem } from "@/types";
 
@@ -38,6 +42,22 @@ function relationSlugs(value: unknown): string[] {
     .filter(Boolean);
 }
 
+function asObjectArray<T>(
+  value: unknown,
+  fallback: T[],
+  map: (item: Record<string, unknown>) => T | null,
+): T[] {
+  if (!Array.isArray(value) || value.length === 0) return fallback;
+  const mapped = value
+    .map((item) =>
+      item && typeof item === "object"
+        ? map(item as Record<string, unknown>)
+        : null,
+    )
+    .filter((item): item is T => Boolean(item));
+  return mapped.length ? mapped : fallback;
+}
+
 function asSeo(
   value: unknown,
   fallback: { title: string; description: string },
@@ -70,6 +90,11 @@ export type HomePageContent = {
   featuredProductSlugs: string[];
   featuredInsightSlugs: string[];
   cta: { title: string; description: string };
+  flagshipOverrides: {
+    slug: string;
+    displayName: string;
+    displayDescription?: string;
+  }[];
   seo: { title: string; description: string };
 };
 
@@ -122,6 +147,20 @@ export const getHomePageContent = cache(async (): Promise<HomePageContent> => {
         "Strategy to scale. Governance by design. Human accountability throughout.",
       ),
     },
+    flagshipOverrides: asObjectArray(
+      doc?.flagshipOverrides,
+      [],
+      (item) => {
+        const slug = asOptional(item.slug);
+        const displayName = asOptional(item.displayName);
+        if (!slug || !displayName) return null;
+        return {
+          slug,
+          displayName,
+          displayDescription: asOptional(item.displayDescription),
+        };
+      },
+    ),
     seo: asSeo(doc?.seo, {
       title: "Agrayian AI Labs",
       description: brandCopy.supporting,
@@ -156,6 +195,27 @@ export type CoePageContent = {
   roadmapDescription: string;
   ctaTitle: string;
   ctaDescription: string;
+  layers: {
+    number: string;
+    title: string;
+    description: string;
+    icon: string;
+  }[];
+  outcomes: string[];
+  whatFeatures: { title: string; detail: string; icon: string }[];
+  whyFeatures: { title: string; detail: string; icon: string }[];
+  intakeSteps: { title: string; description: string; icon: string }[];
+  pillars: { title: string; description: string; icon: string }[];
+  foundations: {
+    title: string;
+    description: string;
+    icon: string;
+    sculpture: string;
+    items: string[];
+  }[];
+  maturity: { name: string; description: string; icon: string }[];
+  roadmap: { name: string; description: string; icon: string }[];
+  faqItems: { question: string; answer: string }[];
   seo: { title: string; description: string };
 };
 
@@ -228,6 +288,124 @@ export const getCoePageContent = cache(async (): Promise<CoePageContent> => {
       doc?.ctaDescription,
       "Partner with Agrayian AI Labs to design, build and scale your Centre of Excellence.",
     ),
+    layers: asObjectArray(
+      doc?.layers,
+      [],
+      (item) => {
+        const title = asOptional(item.title);
+        if (!title) return null;
+        return {
+          number: asText(item.number, ""),
+          title,
+          description: asText(item.description, ""),
+          icon: asText(item.icon, "blocks"),
+        };
+      },
+    ),
+    outcomes: asStringList(doc?.outcomes, []),
+    whatFeatures: asObjectArray(
+      doc?.whatFeatures,
+      [],
+      (item) => {
+        const title = asOptional(item.title);
+        if (!title) return null;
+        return {
+          title,
+          detail: asText(item.detail, ""),
+          icon: asText(item.icon, "blocks"),
+        };
+      },
+    ),
+    whyFeatures: asObjectArray(
+      doc?.whyFeatures,
+      [],
+      (item) => {
+        const title = asOptional(item.title);
+        if (!title) return null;
+        return {
+          title,
+          detail: asText(item.detail, ""),
+          icon: asText(item.icon, "blocks"),
+        };
+      },
+    ),
+    intakeSteps: asObjectArray(
+      doc?.intakeSteps,
+      [],
+      (item) => {
+        const title = asOptional(item.title);
+        if (!title) return null;
+        return {
+          title,
+          description: asText(item.description, ""),
+          icon: asText(item.icon, "idea"),
+        };
+      },
+    ),
+    pillars: asObjectArray(
+      doc?.pillars,
+      [],
+      (item) => {
+        const title = asOptional(item.title);
+        if (!title) return null;
+        return {
+          title,
+          description: asText(item.description, ""),
+          icon: asText(item.icon, "direct"),
+        };
+      },
+    ),
+    foundations: asObjectArray(
+      doc?.foundations,
+      [],
+      (item) => {
+        const title = asOptional(item.title);
+        if (!title) return null;
+        return {
+          title,
+          description: asText(item.description, ""),
+          icon: asText(item.icon, "blocks"),
+          sculpture: asText(item.sculpture, ""),
+          items: asStringList(item.items, []),
+        };
+      },
+    ),
+    maturity: asObjectArray(
+      doc?.maturity,
+      [],
+      (item) => {
+        const name = asOptional(item.name);
+        if (!name) return null;
+        return {
+          name,
+          description: asText(item.description, ""),
+          icon: asText(item.icon, "score"),
+        };
+      },
+    ),
+    roadmap: asObjectArray(
+      doc?.roadmap,
+      [],
+      (item) => {
+        const name = asOptional(item.name);
+        if (!name) return null;
+        return {
+          name,
+          description: asText(item.description, ""),
+          icon: asText(item.icon, "scale"),
+        };
+      },
+    ),
+    faqItems: asObjectArray(
+      doc?.faqItems,
+      [],
+      (item) => {
+        const question = asOptional(item.question);
+        const answer = asOptional(item.answer);
+        if (!question || !answer) return null;
+        return { question, answer };
+      },
+    ),
     seo: asSeo(doc?.seo, seoFallback),
   };
 });
@@ -251,6 +429,10 @@ export type GovernancePageContent = {
   engagementDescription: string;
   ctaTitle: string;
   ctaDescription: string;
+  lifecycle: { label: string; icon: string }[];
+  pillars: { title: string; description: string; icon: string }[];
+  raciRows: { role: string; cells: string[] }[];
+  engagementSteps: { title: string; description: string; icon: string }[];
   seo: { title: string; description: string };
 };
 
@@ -301,6 +483,50 @@ export const getGovernancePageContent = cache(
         doc?.ctaDescription,
         "Strengthen trust, reduce risk and scale AI with confidence.",
       ),
+      lifecycle: asObjectArray(
+        doc?.lifecycle,
+        [],
+        (item) => {
+          const label = asOptional(item.label);
+          if (!label) return null;
+          return { label, icon: asText(item.icon, "") };
+        },
+      ),
+      pillars: asObjectArray(
+        doc?.pillars,
+        [],
+        (item) => {
+          const title = asOptional(item.title);
+          if (!title) return null;
+          return {
+            title,
+            description: asText(item.description, ""),
+            icon: asText(item.icon, ""),
+          };
+        },
+      ),
+      raciRows: asObjectArray(
+        doc?.raciRows,
+        [],
+        (item) => {
+          const role = asOptional(item.role);
+          if (!role) return null;
+          return { role, cells: asStringList(item.cells, []) };
+        },
+      ),
+      engagementSteps: asObjectArray(
+        doc?.engagementSteps,
+        [],
+        (item) => {
+          const title = asOptional(item.title);
+          if (!title) return null;
+          return {
+            title,
+            description: asText(item.description, ""),
+            icon: asText(item.icon, ""),
+          };
+        },
+      ),
       seo: asSeo(doc?.seo, seoFallback),
     };
   },
@@ -317,6 +543,7 @@ export type CompanyPageContent = {
   careersCopy: string;
   partnerEcosystemCopy: string;
   values: CompanyValue[];
+  howWeWork: { title: string; description: string }[];
   seo: { title: string; description: string };
 };
 
@@ -355,6 +582,15 @@ export const getCompanyPageContent = cache(
         companyIntro.partnerEcosystem,
       ),
       values: values.length ? values : companyValues,
+      howWeWork: asObjectArray(
+        doc?.howWeWork,
+        [],
+        (item) => {
+          const title = asOptional(item.title);
+          if (!title) return null;
+          return { title, description: asText(item.description, "") };
+        },
+      ),
       seo: asSeo(doc?.seo, {
         title: "Company",
         description:
@@ -370,6 +606,13 @@ export type ContactPageContent = {
   enquiryThemes: string[];
   consultationFlow: { title: string; description: string }[];
   faqIds: string[];
+  form: {
+    heading: string;
+    successMessage: string;
+    errorMessage: string;
+    consentText: string;
+    submitLabel: string;
+  };
   seo: { title: string; description: string };
 };
 
@@ -386,6 +629,7 @@ const defaultThemes = [
 export const getContactPageContent = cache(
   async (): Promise<ContactPageContent> => {
     const doc = await getPublishedGlobal<Record<string, unknown>>("contact-page");
+    const form = (doc?.form as Record<string, unknown> | undefined) ?? {};
     const flow = Array.isArray(doc?.consultationFlow)
       ? (doc.consultationFlow as { title?: string; description?: string }[])
           .filter((step) => step.title)
@@ -410,6 +654,22 @@ export const getContactPageContent = cache(
               : String(item),
           )
         : [],
+      form: {
+        heading: asText(form.heading, "Submit enquiry"),
+        successMessage: asText(
+          form.successMessage,
+          "Our team will review your requirement and follow up using your preferred contact method.",
+        ),
+        errorMessage: asText(
+          form.errorMessage,
+          "We could not submit your request. Please try again or email hello@agrayian.ai.",
+        ),
+        consentText: asText(
+          form.consentText,
+          "I consent to Agrayian AI Labs contacting me about this enquiry and storing my details in line with the Privacy Policy.",
+        ),
+        submitLabel: asText(form.submitLabel, "Submit enquiry"),
+      },
       seo: asSeo(doc?.seo, {
         title: asText(doc?.title, "Contact"),
         description: asText(
@@ -420,6 +680,181 @@ export const getContactPageContent = cache(
     };
   },
 );
+
+export type CapabilitiesPageContent = {
+  hero: {
+    title: string;
+    subheadLine1: string;
+    subheadLine2: string;
+    body: string;
+    primaryCtaLabel: string;
+    primaryCtaHref: string;
+    secondaryCtaLabel: string;
+    secondaryCtaHref: string;
+  };
+  journeyLabels: { label: string; href: string }[];
+  stackActivities: { label: string; mark: string }[];
+  seo: { title: string; description: string };
+};
+
+export const getCapabilitiesPageContent = cache(
+  async (): Promise<CapabilitiesPageContent> => {
+    const doc = await getPublishedGlobal<Record<string, unknown>>(
+      "capabilities-page",
+    );
+    const hero = (doc?.hero as Record<string, unknown> | undefined) ?? {};
+    return {
+      hero: {
+        title: asText(hero.title, "Capabilities"),
+        subheadLine1: asText(hero.subheadLine1, "From strategy to governed"),
+        subheadLine2: asText(hero.subheadLine2, "production systems"),
+        body: asText(
+          hero.body,
+          "Seven integrated capability layers connect ambition, data foundations, AI modalities, governance, engineering and managed operations.",
+        ),
+        primaryCtaLabel: asText(hero.primaryCtaLabel, "Book a Consultation"),
+        primaryCtaHref: asText(
+          hero.primaryCtaHref,
+          "/contact?interest=consultation",
+        ),
+        secondaryCtaLabel: asText(
+          hero.secondaryCtaLabel,
+          "Explore Related Products",
+        ),
+        secondaryCtaHref: asText(hero.secondaryCtaHref, "/products"),
+      },
+      journeyLabels: asObjectArray(
+        doc?.journeyLabels,
+        CAPABILITIES_JOURNEY_LABELS.map((item) => ({ ...item })),
+        (item) => {
+          const label = asOptional(item.label);
+          const href = asOptional(item.href);
+          if (!label || !href) return null;
+          return { label, href };
+        },
+      ),
+      stackActivities: asObjectArray(
+        doc?.stackActivities,
+        CAPABILITIES_STACK_ACTIVITIES.map((item) => ({ ...item })),
+        (item) => {
+          const label = asOptional(item.label);
+          if (!label) return null;
+          return { label, mark: asOptional(item.mark) ?? "" };
+        },
+      ),
+      seo: asSeo(doc?.seo, {
+        title: "Capabilities",
+        description:
+          "Explore Agrayian AI Labs capabilities spanning AI strategy, Centres of Excellence, governance, generative and agentic AI, data and analytics, product engineering and managed services.",
+      }),
+    };
+  },
+);
+
+export type ProductsPageContent = {
+  hero: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    searchPlaceholder: string;
+  };
+  architecture: {
+    title: string;
+    coreTitle: string;
+    coreSubtitle: string;
+  };
+  seo: { title: string; description: string };
+};
+
+export const getProductsPageContent = cache(
+  async (): Promise<ProductsPageContent> => {
+    const doc = await getPublishedGlobal<Record<string, unknown>>("products-page");
+    const hero = (doc?.hero as Record<string, unknown> | undefined) ?? {};
+    const architecture =
+      (doc?.architecture as Record<string, unknown> | undefined) ?? {};
+    return {
+      hero: {
+        eyebrow: asText(hero.eyebrow, "Products"),
+        title: asText(
+          hero.title,
+          "AI products built\nfor real-world\ndecisions",
+        ),
+        description: asText(
+          hero.description,
+          "Governed intelligence systems designed for complex operating environments.",
+        ),
+        searchPlaceholder: asText(
+          hero.searchPlaceholder,
+          "Search products, capabilities, modules...",
+        ),
+      },
+      architecture: {
+        title: asText(
+          architecture.title,
+          "Built to integrate. Designed to scale.",
+        ),
+        coreTitle: asText(architecture.coreTitle, "Governance & Security Core"),
+        coreSubtitle: asText(
+          architecture.coreSubtitle,
+          "Policy · Privacy · Compliance · Audit",
+        ),
+      },
+      seo: asSeo(doc?.seo, {
+        title: "Products",
+        description:
+          "Explore Agrayian AI Labs' enterprise platforms, government solutions, governance systems and AI-powered decision tools.",
+      }),
+    };
+  },
+);
+
+export type TrustPageContent = {
+  title: string;
+  description: string;
+  intro: string;
+  principles: { title: string; description: string }[];
+  ctaTitle: string;
+  ctaDescription: string;
+  ctaLabel: string;
+  ctaHref: string;
+  seo: { title: string; description: string };
+};
+
+export const getTrustPageContent = cache(async (): Promise<TrustPageContent> => {
+  const doc = await getPublishedGlobal<Record<string, unknown>>("trust-page");
+  return {
+    title: asText(doc?.title, "Responsible AI you can explain and defend"),
+    description: asText(
+      doc?.description,
+      "How Agrayian AI Labs approaches accountability, transparency, privacy, fairness and continuous oversight for responsible AI systems.",
+    ),
+    intro: asText(
+      doc?.intro,
+      "This centre summarises how we approach accountability, transparency, privacy, fairness and continuous oversight. It links to our Responsible AI statement and legal documents. We do not claim certifications unless independently verifiable evidence is published here.",
+    ),
+    principles: asObjectArray(
+      doc?.principles,
+      [],
+      (item) => {
+        const title = asOptional(item.title);
+        if (!title) return null;
+        return { title, description: asText(item.description, "") };
+      },
+    ),
+    ctaTitle: asText(
+      doc?.ctaTitle,
+      "Questions about responsible AI or governance?",
+    ),
+    ctaDescription: asText(doc?.ctaDescription, ""),
+    ctaLabel: asText(doc?.ctaLabel, "Discuss governance"),
+    ctaHref: asText(doc?.ctaHref, "/contact?interest=governance"),
+    seo: asSeo(doc?.seo, {
+      title: "Trust & Legal Centre",
+      description:
+        "How Agrayian AI Labs approaches accountability, transparency, privacy, fairness and continuous oversight for responsible AI systems.",
+    }),
+  };
+});
 
 export function mapFaqsFromDocs(
   docs: Array<Record<string, unknown>>,

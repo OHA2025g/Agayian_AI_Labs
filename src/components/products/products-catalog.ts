@@ -30,7 +30,7 @@ export const productsCatalog: CatalogProduct[] = [
     description:
       "AI-powered audit automation for smarter, faster and evidence-driven assurance.",
     visual: "audit",
-    categories: ["Financial Services", "Governance"],
+    categories: ["Financial Services"],
   },
   {
     slug: "smart-hiring",
@@ -38,7 +38,7 @@ export const productsCatalog: CatalogProduct[] = [
     description:
       "AI-driven hiring intelligence for talent discovery, screening and fitment.",
     visual: "vedhire",
-    categories: ["Talent", "Decision Intelligence"],
+    categories: ["Talent"],
   },
   {
     slug: "wcd-intelligence",
@@ -46,7 +46,7 @@ export const productsCatalog: CatalogProduct[] = [
     description:
       "Data-driven programmes that enable targeted interventions and measurable impact.",
     visual: "social",
-    categories: ["Government", "Decision Intelligence"],
+    categories: ["Government"],
   },
   {
     slug: "ai-governance-command-centre",
@@ -54,7 +54,7 @@ export const productsCatalog: CatalogProduct[] = [
     description:
       "Real-time visibility, policy enforcement and risk oversight at enterprise scale.",
     visual: "governance",
-    categories: ["Government", "Financial Services", "Governance"],
+    categories: ["Governance"],
   },
   {
     slug: "enterprise-decision-intelligence",
@@ -62,7 +62,7 @@ export const productsCatalog: CatalogProduct[] = [
     description:
       "Unified data intelligence that powers confident, timely and accountable decisions.",
     visual: "decision",
-    categories: ["Government", "Financial Services", "Decision Intelligence"],
+    categories: ["Decision Intelligence"],
   },
   {
     slug: "document-intelligence-copilot",
@@ -70,7 +70,7 @@ export const productsCatalog: CatalogProduct[] = [
     description:
       "AI copilot that reads, understands and acts on documents across formats.",
     visual: "document",
-    categories: ["Government", "Financial Services", "Decision Intelligence"],
+    categories: ["Decision Intelligence"],
   },
 ];
 
@@ -82,3 +82,28 @@ export const productCategories: ProductCategory[] = [
   "Governance",
   "Decision Intelligence",
 ];
+
+/** First slide when a category has more than one product. */
+export const categorySpotlights = {
+  All: "onetouch-audit",
+  Government: "wcd-intelligence",
+  "Financial Services": "onetouch-audit",
+  Talent: "smart-hiring",
+  Governance: "ai-governance-command-centre",
+  "Decision Intelligence": "enterprise-decision-intelligence",
+} as const satisfies Record<ProductCategory, string>;
+
+export const SPOTLIGHT_CAROUSEL_MS = 5500;
+
+export function catalogForCategory(category: ProductCategory) {
+  const filtered =
+    category === "All"
+      ? productsCatalog
+      : productsCatalog.filter((product) =>
+          product.categories.includes(category),
+        );
+  const preferred = categorySpotlights[category];
+  const lead = filtered.filter((product) => product.slug === preferred);
+  const rest = filtered.filter((product) => product.slug !== preferred);
+  return [...lead, ...rest];
+}

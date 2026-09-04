@@ -1,10 +1,13 @@
 import { withGlobalGroup } from "../admin/withAdminGroup";
 import { hideWebsiteFromSpecialists } from "../admin/visibility";
+import { CapabilitiesPage as CapabilitiesPageBase } from "./CapabilitiesPage";
 import { CoePage as CoePageBase } from "./CoePage";
 import { CompanyPage as CompanyPageBase } from "./CompanyPage";
 import { ContactPage as ContactPageBase } from "./ContactPage";
 import { GovernancePage as GovernancePageBase } from "./GovernancePage";
 import { HomePage as HomePageBase } from "./HomePage";
+import { ProductsPage as ProductsPageBase } from "./ProductsPage";
+import { TrustPage as TrustPageBase } from "./TrustPage";
 import {
   AccessibilityStatement as AccessibilityStatementBase,
   CookiePolicy as CookiePolicyBase,
@@ -46,6 +49,18 @@ export const CompanyPage = withGlobalGroup(CompanyPageBase, WEBSITE, {
 });
 export const ContactPage = withGlobalGroup(ContactPageBase, WEBSITE, {
   label: "Contact page",
+  hidden: hideWebsiteFromSpecialists,
+});
+export const CapabilitiesPage = withGlobalGroup(CapabilitiesPageBase, WEBSITE, {
+  label: "Capabilities page",
+  hidden: hideWebsiteFromSpecialists,
+});
+export const ProductsPage = withGlobalGroup(ProductsPageBase, WEBSITE, {
+  label: "Products page",
+  hidden: hideWebsiteFromSpecialists,
+});
+export const TrustPage = withGlobalGroup(TrustPageBase, WEBSITE, {
+  label: "Trust Centre",
   hidden: hideWebsiteFromSpecialists,
 });
 export const PrivacyPolicy = withGlobalGroup(PrivacyPolicyBase, SETTINGS, {

@@ -49,6 +49,7 @@ export const Enquiries: CollectionConfig = {
         { label: "New", value: "new" },
         { label: "In progress", value: "in_progress" },
         { label: "Waiting on client", value: "waiting" },
+        { label: "Replied", value: "replied" },
         { label: "Closed", value: "closed" },
         { label: "Spam", value: "spam" },
       ],
@@ -88,6 +89,14 @@ export const Enquiries: CollectionConfig = {
           relationTo: "campaigns",
         },
       ],
+    },
+    {
+      name: "archived",
+      type: "checkbox",
+      defaultValue: false,
+      admin: {
+        description: "Soft-archive. Hidden from the default inbox.",
+      },
     },
     {
       name: "notes",

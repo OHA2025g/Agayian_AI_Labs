@@ -75,6 +75,19 @@ export const HomePage: GlobalConfig = {
                 { name: "description", type: "textarea" },
               ],
             },
+            {
+              name: "flagshipOverrides",
+              type: "array",
+              admin: {
+                description:
+                  "Display names for homepage flagship cards. Use existing product slugs only.",
+              },
+              fields: [
+                { name: "slug", type: "text", required: true },
+                { name: "displayName", type: "text", required: true },
+                { name: "displayDescription", type: "textarea" },
+              ],
+            },
           ],
         },
         {

@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { getPayloadClient } from "@/lib/payload";
+import { getAdminPayload } from "@/lib/payload";
 import { canManageEnquiries, type UserWithRole } from "@/payload/access/roles";
 import { logAudit } from "@/payload/hooks/audit";
 
 export async function GET() {
   try {
-    const payload = await getPayloadClient();
+    const payload = await getAdminPayload();
     const headerStore = await headers();
     const { user } = await payload.auth({ headers: headerStore });
     if (!canManageEnquiries(user as UserWithRole)) {

@@ -12,7 +12,6 @@ const COLLECTIONS = [
   "careers",
   "partners",
   "testimonials",
-  "resources",
 ] as const;
 
 export async function POST(request: Request) {
@@ -47,6 +46,41 @@ export async function POST(request: Request) {
           status: "published",
           publishedAt: now,
         },
+      });
+      published += 1;
+    }
+  }
+
+  const globals = [
+    "home-page",
+    "capabilities-page",
+    "products-page",
+    "coe-page",
+    "governance-page",
+    "company-page",
+    "contact-page",
+    "trust-page",
+  ] as const;
+
+  for (const slug of globals) {
+    const doc = await payload.findGlobal({
+      slug: slug as never,
+      overrideAccess: true,
+      draft: true,
+    });
+    const scheduled = (doc as { scheduledPublishAt?: string; status?: string })
+      .scheduledPublishAt;
+    const status = (doc as { status?: string }).status;
+    if (
+      scheduled &&
+      scheduled <= now &&
+      status &&
+      status !== "published"
+    ) {
+      await payload.updateGlobal({
+        slug: slug as never,
+        overrideAccess: true,
+        data: { status: "published", publishedAt: now } as never,
       });
       published += 1;
     }

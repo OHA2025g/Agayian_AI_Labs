@@ -6,7 +6,6 @@ import Link from "next/link";
 type Counts = {
   products: number;
   insights: number;
-  resources: number;
   drafts: number;
   enquiries: number;
 };
@@ -26,17 +25,16 @@ type EditRow = {
 };
 
 const pageSurfaces = [
-  { href: "/admin/globals/home-page", label: "Home" },
-  { href: "/admin/globals/coe-page", label: "AI CoE" },
-  { href: "/admin/globals/governance-page", label: "Governance" },
-  { href: "/admin/globals/company-page", label: "Company" },
-  { href: "/admin/globals/contact-page", label: "Contact" },
-  { href: "/admin/collections/products", label: "Products" },
-  { href: "/admin/collections/capabilities", label: "Capabilities" },
-  { href: "/admin/collections/industries", label: "Industries" },
-  { href: "/admin/collections/impact-stories", label: "Impact stories" },
-  { href: "/admin/collections/insights", label: "Insights" },
-  { href: "/admin/collections/resources", label: "Resources" },
+  { href: "/cms/globals/home-page", label: "Home" },
+  { href: "/cms/globals/coe-page", label: "AI CoE" },
+  { href: "/cms/globals/governance-page", label: "Governance" },
+  { href: "/cms/globals/company-page", label: "Company" },
+  { href: "/cms/globals/contact-page", label: "Contact" },
+  { href: "/cms/collections/products", label: "Products" },
+  { href: "/cms/collections/capabilities", label: "Capabilities" },
+  { href: "/cms/collections/industries", label: "Industries" },
+  { href: "/cms/collections/impact-stories", label: "Impact stories" },
+  { href: "/cms/collections/insights", label: "Insights" },
 ] as const;
 
 async function countPublished(collection: string) {
@@ -68,11 +66,10 @@ export default function DashboardWelcome() {
     let cancelled = false;
     async function load() {
       try {
-        const [products, insights, resources, productDrafts, insightDrafts, enquiryRes, insightEdits] =
+        const [products, insights, productDrafts, insightDrafts, enquiryRes, insightEdits] =
           await Promise.all([
             countPublished("products"),
             countPublished("insights"),
-            countPublished("resources"),
             countDrafts("products"),
             countDrafts("insights"),
             fetch("/cms-api/enquiries?limit=5&sort=-createdAt", {
@@ -94,7 +91,6 @@ export default function DashboardWelcome() {
         setCounts({
           products,
           insights,
-          resources,
           drafts: productDrafts + insightDrafts,
           enquiries: enquiryJson.totalDocs ?? enquiryJson.docs?.length ?? 0,
         });
@@ -103,12 +99,12 @@ export default function DashboardWelcome() {
           (insightJson.docs ?? []).map((doc) => ({
             id: doc.id,
             title: doc.title || doc.slug || "Insight",
-            href: `/admin/collections/insights/${doc.id}`,
+            href: `/cms/collections/insights/${doc.id}`,
             updatedAt: doc.updatedAt,
           })),
         );
       } catch {
-        if (!cancelled) setCounts({ products: 0, insights: 0, resources: 0, drafts: 0, enquiries: 0 });
+        if (!cancelled) setCounts({ products: 0, insights: 0, drafts: 0, enquiries: 0 });
       }
     }
     void load();
@@ -132,7 +128,7 @@ export default function DashboardWelcome() {
           <Link className="agrayian-dash__btn agrayian-dash__btn--primary" href="/" target="_blank">
             View website
           </Link>
-          <Link className="agrayian-dash__btn agrayian-dash__btn--ghost" href="/admin/collections/enquiries">
+          <Link className="agrayian-dash__btn agrayian-dash__btn--ghost" href="/cms/collections/enquiries">
             Review enquiries
           </Link>
         </div>
@@ -143,7 +139,6 @@ export default function DashboardWelcome() {
         <div className="agrayian-dash__grid agrayian-dash__grid--stats">
           <Stat label="Published products" value={counts?.products} />
           <Stat label="Published insights" value={counts?.insights} />
-          <Stat label="Published resources" value={counts?.resources} />
           <Stat label="Drafts in review" value={counts?.drafts} />
           <Stat label="Enquiries" value={counts?.enquiries} />
         </div>

@@ -197,6 +197,7 @@ export default async function ContactPage({
                   defaultInterest={params.interest}
                   defaultProduct={params.product}
                   defaultCapability={params.capability}
+                  copy={page.form}
                   utm={{
                     source: params.utm_source,
                     medium: params.utm_medium,

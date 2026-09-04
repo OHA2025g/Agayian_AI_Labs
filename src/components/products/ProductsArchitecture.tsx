@@ -77,10 +77,18 @@ function ArchitectureGroup({
   );
 }
 
-export function ProductsArchitecture() {
+export function ProductsArchitecture({
+  title = "Built to integrate. Designed to scale.",
+  coreTitle = "Governance & Security Core",
+  coreSubtitle = "Policy · Privacy · Compliance · Audit",
+}: {
+  title?: string;
+  coreTitle?: string;
+  coreSubtitle?: string;
+}) {
   return (
     <section className="products-architecture">
-      <h2>Built to integrate. Designed to scale.</h2>
+      <h2>{title}</h2>
       <span className="products-title-rule" />
       <div className="products-arch-flow">
         {groups.slice(0, 3).map((group, index) => (
@@ -97,8 +105,8 @@ export function ProductsArchitecture() {
             loading="eager"
             className="products-arch-infinity"
           />
-          <strong>Governance &amp; Security Core</strong>
-          <small>Policy · Privacy · Compliance · Audit</small>
+          <strong>{coreTitle}</strong>
+          <small>{coreSubtitle}</small>
         </div>
         {groups.slice(3).map((group) => (
           <div key={group.title} className="contents">

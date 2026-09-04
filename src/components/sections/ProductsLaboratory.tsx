@@ -1,10 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Building2,
+  ChevronLeft,
+  ChevronRight,
   Landmark,
   Scale,
   Search,
@@ -17,14 +19,14 @@ import { OneTouchDashboard } from "@/components/products/OneTouchDashboard";
 import { ProductSculpture } from "@/components/products/ProductSculptures";
 import { ProductsInfinityGraphic } from "@/components/products/ProductsInfinityGraphic";
 import {
+  catalogForCategory,
   productCategories,
-  productsCatalog,
+  SPOTLIGHT_CAROUSEL_MS,
   type ProductCategory,
 } from "@/components/products/products-catalog";
 import { ProductDetailView } from "@/components/products/ProductDetailView";
 import { AccessibleModal } from "@/components/ui/AccessibleModal";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
-import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import type { Product } from "@/types";
 
 const categoryIcons: Record<ProductCategory, LucideIcon> = {
@@ -36,7 +38,9 @@ const categoryIcons: Record<ProductCategory, LucideIcon> = {
   "Decision Intelligence": Sparkles,
 };
 
-const spotlightFeatures = [
+const featureIcons = [Scale, Search, Sparkles, Building2] as const;
+
+const onetouchSpotlightFeatures = [
   {
     title: "Risk-based planning",
     body: "Focus audits where risk is highest and impact is greatest.",
@@ -59,7 +63,7 @@ const spotlightFeatures = [
   },
 ] as const;
 
-const spotlightTags = [
+const onetouchSpotlightTags = [
   "Audit Planning",
   "Evidence Hub",
   "Control Testing",
@@ -67,9 +71,23 @@ const spotlightTags = [
   "Reporting",
 ] as const;
 
-export function ProductsLaboratory({ items }: { items: Product[] }) {
+export function ProductsLaboratory({
+  items,
+  eyebrow = "Products",
+  title = "AI products built\nfor real-world\ndecisions",
+  description = "Governed intelligence systems designed for complex operating environments.",
+  searchPlaceholder = "Search products, capabilities, modules...",
+}: {
+  items: Product[];
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  searchPlaceholder?: string;
+}) {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState<ProductCategory>("All");
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [carouselPaused, setCarouselPaused] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
   const querySlug = searchParams.get("product");
@@ -112,10 +130,7 @@ export function ProductsLaboratory({ items }: { items: Product[] }) {
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return productsCatalog.filter((product) => {
-      if (active !== "All" && !product.categories.includes(active)) {
-        return false;
-      }
+    return catalogForCategory(active).filter((product) => {
       if (!q) return true;
       const live = liveBySlug.get(product.slug);
       const haystack = [
@@ -133,29 +148,85 @@ export function ProductsLaboratory({ items }: { items: Product[] }) {
     });
   }, [active, liveBySlug, query]);
 
+  useEffect(() => {
+    setCarouselIndex(0);
+  }, [active, query]);
+
+  useEffect(() => {
+    if (carouselPaused || visible.length < 2) {
+      return;
+    }
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    const timer = window.setInterval(() => {
+      setCarouselIndex((index) => (index + 1) % visible.length);
+    }, SPOTLIGHT_CAROUSEL_MS);
+
+    return () => window.clearInterval(timer);
+  }, [active, carouselPaused, query, visible.length]);
+
+  const spotlight = useMemo(() => {
+    if (visible.length === 0) return undefined;
+    return visible[carouselIndex % visible.length];
+  }, [carouselIndex, visible]);
+
+  const spotlightLive = useMemo(() => {
+    if (!spotlight) return undefined;
+    return (
+      liveBySlug.get(spotlight.slug) ??
+      staticProducts.find((product) => product.slug === spotlight.slug)
+    );
+  }, [liveBySlug, spotlight]);
+
+  const spotlightFeatures =
+    spotlight?.slug === "onetouch-audit"
+      ? onetouchSpotlightFeatures.slice(0, 2)
+      : (spotlightLive?.modules.slice(0, 2).map((module, index) => ({
+          title: module.title,
+          body: module.description,
+          icon: featureIcons[index] ?? Sparkles,
+        })) ?? []);
+
+  const spotlightTags =
+    spotlight?.slug === "onetouch-audit"
+      ? onetouchSpotlightTags.slice(0, 3)
+      : (spotlightLive?.capabilities.slice(0, 3) ??
+        spotlight?.categories.filter((label) => label !== "All").slice(0, 3) ??
+        []);
+
+  const stepCarousel = (delta: number) => {
+    if (visible.length === 0) return;
+    setCarouselIndex(
+      (index) => (index + delta + visible.length) % visible.length,
+    );
+  };
+
   return (
     <>
       <section className="products-hero">
         <div className="products-hero-inner">
           <div className="products-hero-copy">
-            <span className="products-eyebrow">Products</span>
+            <span className="products-eyebrow">{eyebrow}</span>
             <h1>
-              AI products built
-              <br />
-              for real-world
-              <br />
-              decisions
+              {title.split("\n").map((line, index, all) => (
+                <span key={line}>
+                  {line}
+                  {index < all.length - 1 ? <br /> : null}
+                </span>
+              ))}
             </h1>
-            <p>
-              Governed intelligence systems designed for complex operating
-              environments.
-            </p>
+            <p>{description}</p>
             <label className="products-search">
               <span className="sr-only">Search products</span>
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search products, capabilities, modules..."
+                placeholder={searchPlaceholder}
               />
               <Search aria-hidden />
             </label>
@@ -189,46 +260,107 @@ export function ProductsLaboratory({ items }: { items: Product[] }) {
           })}
         </div>
 
-        <section className="products-featured">
-          <div className="products-featured-copy">
-            <span className="products-spotlight">Spotlight</span>
-            <h2>OneTouch Audit</h2>
-            <p>
-              AI-powered audit automation for smarter, faster and
-              evidence-driven assurance.
-            </p>
-            <div className="products-feature-list">
-              {spotlightFeatures.map((feature) => {
-                const Icon = feature.icon;
-                return (
-                  <div key={feature.title} className="products-feature-item">
-                    <span className="products-feature-icon">
-                      <Icon aria-hidden />
-                    </span>
-                    <span>
-                      <strong>{feature.title}</strong>
-                      <small>{feature.body}</small>
-                    </span>
-                  </div>
-                );
-              })}
+        {spotlight ? (
+          <section
+            className="products-featured"
+            aria-live="polite"
+            aria-roledescription={visible.length > 1 ? "carousel" : undefined}
+            onMouseEnter={() => setCarouselPaused(true)}
+            onMouseLeave={() => setCarouselPaused(false)}
+            onFocusCapture={() => setCarouselPaused(true)}
+            onBlurCapture={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+                setCarouselPaused(false);
+              }
+            }}
+          >
+            <div className="products-featured-copy">
+              <span className="products-spotlight">Spotlight</span>
+              <h2>{spotlight.name}</h2>
+              <p>{spotlight.description}</p>
+              <div className="products-feature-list">
+                {spotlightFeatures.map((feature) => {
+                  const Icon = feature.icon;
+                  return (
+                    <div key={feature.title} className="products-feature-item">
+                      <span className="products-feature-icon">
+                        <Icon aria-hidden />
+                      </span>
+                      <span>
+                        <strong>{feature.title}</strong>
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="products-tags">
+                {spotlightTags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+              <div className="products-feature-actions">
+                <PrimaryButton href={`/products/${spotlight.slug}`}>
+                  Explore Product
+                </PrimaryButton>
+              </div>
             </div>
-            <div className="products-tags">
-              {spotlightTags.map((tag) => (
-                <span key={tag}>{tag}</span>
-              ))}
+            <div className="products-featured-stage">
+              {visible.length > 1 ? (
+                <>
+                  <button
+                    type="button"
+                    className="products-carousel-arrow products-carousel-arrow-prev"
+                    aria-label="Previous product"
+                    onClick={() => stepCarousel(-1)}
+                  >
+                    <ChevronLeft aria-hidden />
+                  </button>
+                  <button
+                    type="button"
+                    className="products-carousel-arrow products-carousel-arrow-next"
+                    aria-label="Next product"
+                    onClick={() => stepCarousel(1)}
+                  >
+                    <ChevronRight aria-hidden />
+                  </button>
+                </>
+              ) : null}
+              <div className="products-featured-visual">
+                {spotlight.slug === "onetouch-audit" ? (
+                  <OneTouchDashboard />
+                ) : (
+                  <ProductSculpture
+                    type={spotlight.visual}
+                    name={spotlight.name}
+                  />
+                )}
+              </div>
+              {visible.length > 1 ? (
+                <div
+                  className="products-carousel-dots"
+                  role="tablist"
+                  aria-label="Spotlight products"
+                >
+                  {visible.map((product, index) => (
+                    <button
+                      key={product.slug}
+                      type="button"
+                      role="tab"
+                      aria-label={product.name}
+                      aria-selected={product.slug === spotlight.slug}
+                      className={
+                        product.slug === spotlight.slug
+                          ? "products-carousel-dot-active"
+                          : undefined
+                      }
+                      onClick={() => setCarouselIndex(index)}
+                    />
+                  ))}
+                </div>
+              ) : null}
             </div>
-            <div className="products-feature-actions">
-              <PrimaryButton href="/products/onetouch-audit">
-                Explore Product
-              </PrimaryButton>
-              <SecondaryButton href="/capabilities">
-                View Documentation
-              </SecondaryButton>
-            </div>
-          </div>
-          <OneTouchDashboard />
-        </section>
+          </section>
+        ) : null}
 
         <section className="products-explore">
           <h2>Explore our products</h2>
@@ -245,11 +377,10 @@ export function ProductsLaboratory({ items }: { items: Product[] }) {
                   <div className="products-card-body">
                     <h3>{product.name}</h3>
                     <p>{product.description}</p>
-                    <div className="mt-3 flex flex-wrap items-center gap-3">
+                    <div className="products-card-links">
                       <button
                         type="button"
                         onClick={() => openModal(product.slug)}
-                        className="text-sm font-semibold text-tech-blue"
                       >
                         View details
                       </button>

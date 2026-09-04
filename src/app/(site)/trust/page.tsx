@@ -17,15 +17,18 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { LightCtaBar } from "@/components/ui/DarkCtaBand";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { getTrustPageContent } from "@/lib/cms/page-content";
 import { getResolvedNav } from "@/lib/cms/site";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 
-export const metadata = buildMetadata({
-  title: "Trust & Legal Centre",
-  description:
-    "How Agrayian AI Labs approaches accountability, transparency, privacy, fairness and continuous oversight for responsible AI systems.",
-  path: "/trust",
-});
+export async function generateMetadata() {
+  const page = await getTrustPageContent();
+  return buildMetadata({
+    title: page.seo.title,
+    description: page.seo.description,
+    path: "/trust",
+  });
+}
 
 const principles: {
   title: string;
@@ -80,8 +83,18 @@ const principles: {
 ];
 
 export default async function TrustCentrePage() {
-  const nav = await getResolvedNav();
+  const [nav, page] = await Promise.all([
+    getResolvedNav(),
+    getTrustPageContent(),
+  ]);
   const legalLinks = nav.footerLegal;
+  const resolvedPrinciples = page.principles.length
+    ? page.principles.map((item, index) => ({
+        ...principles[index % principles.length],
+        title: item.title,
+        body: item.description || principles[index % principles.length].body,
+      }))
+    : principles;
   return (
     <>
       <script
@@ -106,14 +119,10 @@ export default async function TrustCentrePage() {
             Trust & Legal Centre
           </p>
           <h1 className="mt-3 max-w-3xl font-heading text-[clamp(2.2rem,4.5vw,3.5rem)] font-semibold leading-[1.05] tracking-tight text-navy text-balance">
-            Responsible AI you can explain and defend
+            {page.title}
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-light md:text-lg">
-            This centre summarises how we approach accountability, transparency,
-            privacy, fairness and continuous oversight. It links to our
-            Responsible AI statement and legal documents. We do not claim
-            certifications unless independently verifiable evidence is published
-            here.
+            {page.intro}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <PrimaryButton href="/responsible-ai">
@@ -136,7 +145,7 @@ export default async function TrustCentrePage() {
             <SectionTitle>Operating principles</SectionTitle>
           </Reveal>
           <RevealGroup className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {principles.map((item) => {
+            {resolvedPrinciples.map((item) => {
               const Icon = item.icon;
               return (
                 <RevealItem key={item.title}>
@@ -187,7 +196,7 @@ export default async function TrustCentrePage() {
         </div>
       </section>
 
-      <LightCtaBar title="Questions about responsible AI or governance?" />
+      <LightCtaBar title={page.ctaTitle} description={page.ctaDescription || undefined} />
     </>
   );
 }

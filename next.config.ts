@@ -66,7 +66,28 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        source: "/admin",
+        headers: [
+          ...securityHeaders,
+          { key: "Content-Security-Policy", value: adminCsp },
+        ],
+      },
+      {
         source: "/admin/:path*",
+        headers: [
+          ...securityHeaders,
+          { key: "Content-Security-Policy", value: adminCsp },
+        ],
+      },
+      {
+        source: "/cms",
+        headers: [
+          ...securityHeaders,
+          { key: "Content-Security-Policy", value: adminCsp },
+        ],
+      },
+      {
+        source: "/cms/:path*",
         headers: [
           ...securityHeaders,
           { key: "Content-Security-Policy", value: adminCsp },
@@ -80,7 +101,7 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/:path*",
+        source: "/((?!admin(?:/|$)|cms(?:/|$)|cms-api(?:/|$)).*)",
         headers: [
           ...securityHeaders,
           { key: "X-Frame-Options", value: "DENY" },

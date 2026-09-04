@@ -51,6 +51,40 @@ export const GovernancePage: GlobalConfig = {
             { name: "engagementDescription", type: "textarea" },
             { name: "ctaTitle", type: "text" },
             { name: "ctaDescription", type: "textarea" },
+            {
+              name: "lifecycle",
+              type: "array",
+              fields: [
+                { name: "label", type: "text", required: true },
+                { name: "icon", type: "text" },
+              ],
+            },
+            {
+              name: "pillars",
+              type: "array",
+              fields: [
+                { name: "title", type: "text", required: true },
+                { name: "description", type: "textarea" },
+                { name: "icon", type: "text" },
+              ],
+            },
+            {
+              name: "raciRows",
+              type: "array",
+              fields: [
+                { name: "role", type: "text", required: true },
+                { name: "cells", type: "text", hasMany: true },
+              ],
+            },
+            {
+              name: "engagementSteps",
+              type: "array",
+              fields: [
+                { name: "title", type: "text", required: true },
+                { name: "description", type: "textarea" },
+                { name: "icon", type: "text" },
+              ],
+            },
           ],
         },
         {
