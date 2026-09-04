@@ -277,7 +277,20 @@ export interface Media {
 export interface Product {
   id: string;
   name: string;
-  category: string;
+  /**
+   * A product can belong to more than one filter on the Products page.
+   */
+  categories: (
+    | 'Government'
+    | 'Financial Services'
+    | 'Talent'
+    | 'Governance'
+    | 'Decision Intelligence'
+  )[];
+  /**
+   * Optional badge label. Leave blank to use the first selected category.
+   */
+  category?: string | null;
   shortDescription: string;
   featured?: boolean | null;
   productStatus?: string | null;

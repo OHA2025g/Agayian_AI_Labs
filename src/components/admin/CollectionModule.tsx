@@ -40,7 +40,9 @@ export async function CollectionIndex({
       updatedAt: doc.updatedAt
         ? new Date(String(doc.updatedAt)).toLocaleString()
         : "",
-      category: String(doc.category ?? doc.type ?? ""),
+      category: Array.isArray(doc.categories) && doc.categories.length
+        ? doc.categories.join(", ")
+        : String(doc.category ?? doc.type ?? ""),
       actions: (
         <RecordActions
           href={href}

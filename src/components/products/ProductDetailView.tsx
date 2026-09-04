@@ -27,7 +27,13 @@ export function ProductDetailView({
         </nav>
       ) : null}
       <div className="flex flex-wrap gap-2">
-        <Badge variant="cyan">{product.category}</Badge>
+        {(product.categories?.length ? product.categories : [product.category])
+          .filter(Boolean)
+          .map((label) => (
+            <Badge key={label} variant="cyan">
+              {label}
+            </Badge>
+          ))}
         <Badge>{product.status}</Badge>
         {product.industries.map((industry) => (
           <Badge key={industry} variant="violet">

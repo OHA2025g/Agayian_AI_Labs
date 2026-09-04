@@ -329,6 +329,61 @@ section + .admin-panel {
   flex-direction: column;
   gap: 0.35rem;
   margin-bottom: 0.95rem;
+  position: relative;
+}
+
+.admin-multiselect-trigger {
+  width: 100%;
+  min-height: 2.6rem;
+  text-align: left;
+  border: 1px solid var(--admin-line);
+  border-radius: 0.7rem;
+  padding: 0.62rem 0.8rem;
+  background: #f8fbfe;
+  color: var(--admin-navy);
+}
+
+.admin-multiselect-trigger:focus {
+  outline: none;
+  border-color: rgba(36, 184, 239, 0.55);
+  box-shadow: 0 0 0 3px rgba(36, 184, 239, 0.14);
+  background: #fff;
+}
+
+.admin-multiselect-placeholder {
+  color: #7a8aa0;
+  font-weight: 400;
+}
+
+.admin-multiselect-menu {
+  position: absolute;
+  z-index: 30;
+  left: 0;
+  right: 0;
+  margin: 0.25rem 0 0;
+  padding: 0.4rem;
+  list-style: none;
+  border: 1px solid var(--admin-line);
+  border-radius: 0.7rem;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(7, 27, 64, 0.12);
+}
+
+.admin-multiselect-menu label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 0.45rem;
+  font-weight: 500;
+}
+
+.admin-multiselect-menu label:hover {
+  background: #f3f7fb;
+}
+
+.admin-multiselect-menu input {
+  width: auto;
 }
 
 .admin-field-inline {

@@ -10,10 +10,11 @@ html.capabilities-page body {
   overflow-x: clip;
   background: transparent;
   color: #071b40;
+  --site-max: min(110rem, calc(100vw - (var(--site-gutter) * 2)));
 }
 
 .capabilities-main {
-  width: var(--site-max);
+  width: min(100%, var(--site-max));
   max-width: var(--site-max);
   margin-inline: auto;
 }
@@ -215,9 +216,8 @@ html.capabilities-page body {
 @media (min-width: 1200px) {
   .capabilities-hero {
     position: relative;
-    height: 590px;
-    min-height: 590px;
-    max-height: 590px;
+    height: auto;
+    min-height: 520px;
     overflow: hidden;
     background-color: #fff;
     background-image:
@@ -229,7 +229,7 @@ html.capabilities-page body {
   .capabilities-hero::after {
     content: "";
     position: absolute;
-    inset: 8% 18% 10% 38%;
+    inset: 8% 8% 10% 32%;
     pointer-events: none;
     background: radial-gradient(
       ellipse at 45% 48%,
@@ -242,40 +242,45 @@ html.capabilities-page body {
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: 535px 540px;
-    height: 590px;
-    align-items: start;
+    grid-template-columns: minmax(280px, 0.92fr) minmax(340px, 1.15fr);
+    width: 100%;
+    min-height: 520px;
+    align-items: center;
+    column-gap: clamp(1.5rem, 3vw, 4rem);
   }
 
   .capabilities-hero-copy {
-    width: 470px;
-    max-width: 470px;
-    padding-top: 94px;
+    width: 100%;
+    max-width: 36rem;
+    padding-top: clamp(3.5rem, 7vw, 5.75rem);
+    padding-bottom: 2.5rem;
   }
 
   .capabilities-hero-copy h1 {
     margin: 0 0 20px;
-    font-size: 68px;
+    font-size: clamp(2.75rem, 4.2vw, 4.25rem);
     font-weight: 700;
     line-height: 0.98;
-    letter-spacing: -2.4px;
+    letter-spacing: -0.06em;
     color: #071b40;
   }
 
   .capabilities-hero-copy .capabilities-subhead {
     margin: 22px 0 0;
-    width: 460px;
-    font-size: 36px;
+    width: 100%;
+    max-width: 36rem;
+    font-size: clamp(1.65rem, 2.4vw, 2.25rem);
     font-weight: 700;
     line-height: 1.25;
-    letter-spacing: -0.8px;
+    letter-spacing: -0.03em;
     color: #071b40;
   }
 
   .capabilities-hero-copy .capabilities-body {
     margin: 22px 0 0;
-    width: 460px;
-    font-size: 18px;
+    width: 100%;
+    max-width: 36rem;
+    font-size: clamp(1rem, 1.15vw, 1.125rem);
     line-height: 1.7;
     color: #5d7394;
   }
@@ -283,13 +288,14 @@ html.capabilities-page body {
   .capabilities-hero-copy .capabilities-ctas {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 24px;
     margin-top: 48px;
   }
 
   .capabilities-hero-copy .capabilities-ctas a:first-child {
-    width: 205px;
+    width: auto;
+    min-width: 205px;
     height: 52px;
     border-radius: 27px;
     font-size: 14px;
@@ -297,7 +303,8 @@ html.capabilities-page body {
   }
 
   .capabilities-hero-copy .capabilities-ctas a:last-child {
-    width: 238px;
+    width: auto;
+    min-width: 238px;
     height: 52px;
     border-radius: 27px;
     font-size: 14px;
@@ -305,20 +312,24 @@ html.capabilities-page body {
 
   .capabilities-stack {
     position: relative;
-    width: 540px;
-    height: 575px;
-    margin-top: 8px;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    min-height: 28rem;
+    margin-top: 0;
   }
 
   .capabilities-stack > div:first-child {
-    width: 62%;
-    height: 575px;
+    width: min(62%, 28rem);
+    height: auto;
+    min-height: 28rem;
   }
 
   .capabilities-stack img {
-    height: 575px;
-    width: auto;
-    max-width: none;
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+    max-height: 36rem;
     object-fit: contain;
     object-position: left center;
   }
@@ -330,8 +341,8 @@ html.capabilities-page body {
   .capabilities-stage {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 168px;
-    column-gap: 18px;
+    grid-template-columns: minmax(0, 1fr) minmax(11.5rem, 14rem);
+    column-gap: clamp(1.25rem, 2.4vw, 2.75rem);
     align-items: start;
   }
 
@@ -354,8 +365,8 @@ html.capabilities-page body {
   }
 
   .capabilities-journey {
-    width: 1105px;
-    max-width: 100%;
+    width: 100%;
+    max-width: none;
     margin-top: 40px;
     padding-top: 0;
     padding-bottom: 0;

@@ -20,6 +20,7 @@ import { ProductSculpture } from "@/components/products/ProductSculptures";
 import { ProductsInfinityGraphic } from "@/components/products/ProductsInfinityGraphic";
 import {
   catalogForCategory,
+  catalogFromCms,
   productCategories,
   SPOTLIGHT_CAROUSEL_MS,
   type ProductCategory,
@@ -128,9 +129,11 @@ export function ProductsLaboratory({
     router.replace(`/products?${params.toString()}`, { scroll: false });
   };
 
+  const catalog = useMemo(() => catalogFromCms(items), [items]);
+
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return catalogForCategory(active).filter((product) => {
+    return catalogForCategory(active, catalog).filter((product) => {
       if (!q) return true;
       const live = liveBySlug.get(product.slug);
       const haystack = [
@@ -138,6 +141,8 @@ export function ProductsLaboratory({
         product.description,
         live?.shortDescription,
         live?.category,
+        ...product.categories,
+        ...(live?.categories ?? []),
         ...(live?.capabilities ?? []),
         ...(live?.modules.map((module) => module.title) ?? []),
       ]
@@ -146,7 +151,7 @@ export function ProductsLaboratory({
         .toLowerCase();
       return haystack.includes(q);
     });
-  }, [active, liveBySlug, query]);
+  }, [active, catalog, liveBySlug, query]);
 
   useEffect(() => {
     setCarouselIndex(0);

@@ -20,6 +20,7 @@ export type Product = {
   name: string;
   slug: string;
   category: string;
+  categories?: string[];
   industries: string[];
   technologies: string[];
   shortDescription: string;

@@ -13,6 +13,7 @@ import { impactStories as staticStories } from "@/data/impactStories";
 import { industries as staticIndustries } from "@/data/industries";
 import { insights as staticInsights } from "@/data/insights";
 import { products as staticProducts } from "@/data/products";
+import { normalizeProductCategories } from "@/lib/products/categories";
 import { findPublished, findPublishedBySlug } from "./published";
 
 type CmsDoc = Record<string, unknown> & { id?: string | number; slug?: string };
@@ -106,7 +107,15 @@ function mapProduct(doc: CmsDoc): Product {
     id: String(doc.id ?? doc.slug),
     name: String(doc.name ?? ""),
     slug: String(doc.slug ?? ""),
-    category: String(doc.category ?? ""),
+    category: String(
+      doc.category ??
+        normalizeProductCategories(doc.categories, String(doc.slug ?? ""))[0] ??
+        "",
+    ),
+    categories: normalizeProductCategories(
+      doc.categories ?? doc.category,
+      String(doc.slug ?? ""),
+    ),
     industries: asStringArray(doc.industries),
     technologies: asStringArray(doc.technologies),
     shortDescription: String(doc.shortDescription ?? ""),

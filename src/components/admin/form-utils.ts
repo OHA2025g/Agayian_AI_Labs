@@ -30,6 +30,7 @@ export function asString(value: unknown) {
 }
 
 export function asStringList(value: unknown): string[] {
+  if (typeof value === "string" && value.trim()) return [value];
   if (!Array.isArray(value)) return [];
   return value.map((item) => {
     if (typeof item === "string") return item;

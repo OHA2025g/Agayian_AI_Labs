@@ -143,8 +143,8 @@ export default buildConfig({
   db: mongooseAdapter({
     url: resolveMongoUri({ skipPayload: skipPayloadDb }),
     connectOptions: {
-      serverSelectionTimeoutMS: skipPayloadDb ? 300 : 8000,
-      connectTimeoutMS: skipPayloadDb ? 300 : 8000,
+      serverSelectionTimeoutMS: skipPayloadDb ? 300 : 20000,
+      connectTimeoutMS: skipPayloadDb ? 300 : 20000,
     },
   }),
   sharp,

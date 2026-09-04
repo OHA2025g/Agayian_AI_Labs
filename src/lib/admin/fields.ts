@@ -1,3 +1,5 @@
+import { PRODUCT_CATEGORY_OPTIONS } from "@/lib/products/categories";
+
 export type AdminField =
   | {
       kind: "text" | "textarea" | "email" | "date" | "password";
@@ -18,6 +20,8 @@ export type AdminField =
       label: string;
       options: { label: string; value: string }[];
       multiple?: boolean;
+      required?: boolean;
+      hint?: string;
     }
   | {
       kind: "stringList";
@@ -527,7 +531,15 @@ export const settingsTabs: EditorTab[] = [
 export const productRecordFields: AdminField[] = [
   { kind: "text", name: "name", label: "Name", required: true },
   { kind: "text", name: "slug", label: "Slug", required: true },
-  { kind: "text", name: "category", label: "Category", required: true },
+  {
+    kind: "select",
+    name: "categories",
+    label: "Categories",
+    required: true,
+    multiple: true,
+    options: [...PRODUCT_CATEGORY_OPTIONS],
+    hint: "Select every filter this product should appear under on the Products page.",
+  },
   { kind: "textarea", name: "shortDescription", label: "Short description", required: true },
   { kind: "checkbox", name: "featured", label: "Featured" },
   { kind: "text", name: "productStatus", label: "Availability" },

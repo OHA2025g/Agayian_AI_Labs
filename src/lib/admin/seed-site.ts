@@ -17,6 +17,7 @@ import {
 } from "@/data/navigation";
 import { brandCopy, siteConfig } from "@/config/site";
 import { mongoUrlMissingDatabasePath, rawMongoUrl } from "@/lib/cms/mongo-env";
+import { normalizeProductCategories } from "@/lib/products/categories";
 import { consultationFlow } from "@/lib/contact-schema";
 import { legalByGlobal } from "@/data/legal";
 import { importHardcodedPageCopy } from "../../scripts/import-page-copy";
@@ -77,6 +78,7 @@ export async function seedSiteContent(payload: Payload) {
     await upsertBySlug(payload, "products", product.slug, {
       name: product.name,
       category: product.category,
+      categories: normalizeProductCategories(product.categories, product.slug),
       shortDescription: product.shortDescription,
       valueProposition: product.valueProposition,
       businessProblem: product.businessProblem,

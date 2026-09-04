@@ -54,8 +54,11 @@ export function ProductsExplorer({
     const normalisedQuery = query.trim().toLowerCase();
 
     return items.filter((product) => {
-      if (productType !== "All" && product.category !== productType) {
-        return false;
+      if (productType !== "All") {
+        const labels = product.categories?.length
+          ? product.categories
+          : [product.category];
+        if (!labels.includes(productType)) return false;
       }
       if (industry !== "All" && !product.industries.includes(industry)) {
         return false;
