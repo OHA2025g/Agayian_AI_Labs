@@ -42,10 +42,6 @@ export async function loginAction(formData: FormData) {
     : { email: "", password: "" };
 
   const headerStore = await headers();
-  const limited = await limitAdminLogin(clientIp(headerStore));
-  if (!limited.success) {
-    fail("Too many sign-in attempts. Try again in a few minutes.");
-  }
 
   try {
     const payload = await getAdminPayload();
@@ -66,6 +62,10 @@ export async function loginAction(formData: FormData) {
     const expires = result.exp ? new Date(result.exp * 1000) : undefined;
     await setAdminSession(token, expires);
   } catch {
+    const limited = await limitAdminLogin(clientIp(headerStore));
+    if (!limited.success) {
+      fail("Too many sign-in attempts. Try again in a few minutes.");
+    }
     fail("Email or password is incorrect.");
   }
 

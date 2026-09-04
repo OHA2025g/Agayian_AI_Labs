@@ -84,7 +84,7 @@ function getAdminLoginLimiter(): Ratelimit | null {
   }
   adminLoginLimiter = new Ratelimit({
     redis,
-    limiter: Ratelimit.slidingWindow(5, "10 m"),
+    limiter: Ratelimit.slidingWindow(20, "15 m"),
     analytics: false,
     prefix: "agrayian:admin-login",
   });
@@ -138,7 +138,7 @@ export async function limitAdminLogin(ip: string): Promise<LimitResult> {
     const result = await limiter.limit(ip || "unknown");
     return { success: result.success, remaining: result.remaining };
   }
-  return memoryLimit(`admin-login:${ip || "unknown"}`, 5, 10 * 60 * 1000);
+  return memoryLimit(`admin-login:${ip || "unknown"}`, 20, 15 * 60 * 1000);
 }
 
 export async function limitNewsletterRequest(
