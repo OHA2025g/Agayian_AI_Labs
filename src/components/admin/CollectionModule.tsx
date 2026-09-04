@@ -76,7 +76,7 @@ export async function CollectionIndex({
         <DataTable
           columns={[...columns, { key: "actions", label: "Actions" }]}
           rows={rows}
-          empty="No records yet."
+          empty="No records in this database yet. Import original site content from the Dashboard."
         />
       </div>
     </section>

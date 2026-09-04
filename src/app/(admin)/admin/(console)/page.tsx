@@ -1,13 +1,15 @@
 import Link from "next/link";
+import { ImportSiteContent } from "@/components/admin/ImportSiteContent";
 import {
   getAttentionItems,
   getDashboardData,
   getRecentAudit,
 } from "@/lib/admin/dashboard";
+import { adminCanPublish } from "@/lib/admin/rbac";
 import { requireAdminUser } from "@/lib/admin/session";
 
 export default async function AdminDashboardPage() {
-  await requireAdminUser();
+  const user = await requireAdminUser();
   const [counts, attention, audit] = await Promise.all([
     getDashboardData(),
     getAttentionItems(),
@@ -42,11 +44,40 @@ export default async function AdminDashboardPage() {
           <Link href="/admin/enquiries" className="admin-btn">
             Open inbox
           </Link>
-          <Link href="/admin/capabilities" className="admin-btn admin-btn-primary">
-            Capabilities
-          </Link>
+          {adminCanPublish(user) ? <ImportSiteContent /> : null}
         </div>
       </div>
+      {counts.databaseOk && counts.catalogRecords === 0 ? (
+        <section className="admin-card mb-5">
+          <p className="admin-kicker">Empty database</p>
+          <h2 className="admin-card-title">Mongo is connected, but it has no catalog yet</h2>
+          <p className="admin-lede">
+            The public site still shows hardcoded fallback copy. Admin reads
+            live Mongo, so counts stay at 0 until the original catalog is
+            imported once.
+          </p>
+          {adminCanPublish(user) ? (
+            <div className="mt-4">
+              <ImportSiteContent />
+            </div>
+          ) : (
+            <p className="admin-lede">
+              Ask an Administrator to import original site content.
+            </p>
+          )}
+        </section>
+      ) : null}
+      {counts.databaseNameMissing ? (
+        <section className="admin-card mb-5">
+          <h2 className="admin-card-title">DB_NAME is missing</h2>
+          <p className="admin-lede">
+            Set <code>MONGO_URL</code> to the EasyPanel Mongo URL and a separate
+            <code>DB_NAME</code> (for example <code>agrayian</code>). Without
+            <code>DB_NAME</code> the app writes to Mongo&apos;s default{" "}
+            <code>test</code> database and the admin catalog looks empty.
+          </p>
+        </section>
+      ) : null}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => (
           <div

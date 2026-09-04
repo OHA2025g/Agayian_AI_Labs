@@ -31,7 +31,9 @@ services:
       HOSTNAME: "0.0.0.0"
       NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-http://localhost:3000}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET:-change-me-in-production}
-      DATABASE_URI: ${DATABASE_URI:-mongodb://mongo:27017/agrayian}
+      MONGO_URL: ${MONGO_URL:-mongodb://mongo:27017}
+      DB_NAME: ${DB_NAME:-agrayian}
+      DATABASE_URI: ${DATABASE_URI:-}
       PREVIEW_SECRET: ${PREVIEW_SECRET:-}
       CRON_SECRET: ${CRON_SECRET:-}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-}

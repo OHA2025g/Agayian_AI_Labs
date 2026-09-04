@@ -3,6 +3,7 @@ import {
   adminCanManageUsers,
   adminCanOpenCms,
   adminCanPublish,
+  assignableRoles,
   mapAdminUser,
   toUiRole,
 } from "./rbac";
@@ -41,5 +42,10 @@ describe("admin rbac", () => {
     });
     expect(adminCanOpenCms(superAdmin)).toBe(true);
     expect(adminCanOpenCms(admin)).toBe(false);
+  });
+
+  it("lets administrators assign Super Admin", () => {
+    expect(assignableRoles("administrator")).toContain("super_admin");
+    expect(assignableRoles("editor")).toEqual([]);
   });
 });

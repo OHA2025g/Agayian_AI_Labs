@@ -19,6 +19,7 @@ export default async function EditUserPage({
       <h1 className="mb-4 text-2xl font-semibold">Edit user</h1>
       <UserForm
         id={id}
+        actorRole={user.role}
         initial={{
           email: String(doc.email ?? ""),
           name: String(doc.name ?? ""),

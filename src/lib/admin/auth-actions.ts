@@ -31,7 +31,7 @@ export async function loginAction(formData: FormData) {
   };
 
   const parsed = loginSchema.safeParse({
-    email: String(formData.get("email") ?? ""),
+    email: String(formData.get("email") ?? "").trim().toLowerCase(),
     password: String(formData.get("password") ?? ""),
   });
   if (!parsed.success) {

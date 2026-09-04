@@ -7,8 +7,11 @@ import {
   adminCanManageMedia,
   adminCanManageUsers,
   adminCanPublish,
+  asPayloadActor,
+  assignableRoles,
   type AdminUser,
 } from "@/lib/admin/rbac";
+import type { Role } from "@/payload/access/roles";
 import { writeAdminAudit } from "@/lib/admin/audit";
 import { revalidateCollection, revalidateGlobal } from "@/lib/admin/revalidate";
 import { requireAdminUser } from "@/lib/admin/session";
@@ -17,6 +20,7 @@ import {
   detectRedirectLoop,
   rejectsResourcesLink,
 } from "@/lib/admin/validation";
+import { seedSiteContent } from "@/lib/admin/seed-site";
 import { canonicalGlobalCopy } from "@/lib/cms/canonical-copy";
 import { PREVIEW_COOKIE } from "@/lib/cms/preview-mode";
 import { getAdminPayload } from "@/lib/payload";
@@ -141,7 +145,7 @@ export async function saveGlobalAction(
       data: next as never,
       draft: editorial ? status !== "published" : false,
       overrideAccess: true,
-      user: { id: user.id, collection: "users" },
+      user: asPayloadActor(user),
     });
     await writeAdminAudit(payload, user, {
       action: status === "published" ? "global.publish" : "global.save",
@@ -251,7 +255,7 @@ export async function saveCollectionAction(
         data: next as never,
         draft: draft || undefined,
         overrideAccess: true,
-        user: { id: user.id, collection: "users" },
+        user: asPayloadActor(user),
       });
     } else {
       const created = await payload.create({
@@ -259,7 +263,7 @@ export async function saveCollectionAction(
         data: next as never,
         draft: draft || undefined,
         overrideAccess: true,
-        user: { id: user.id, collection: "users" },
+        user: asPayloadActor(user),
       });
       id = String(created.id);
     }
@@ -280,6 +284,87 @@ export async function saveCollectionAction(
     return {
       ok: false,
       error: error instanceof Error ? error.message : "Save failed.",
+    };
+  }
+}
+
+export async function saveUserAction(input: {
+  id?: string;
+  email: string;
+  name?: string;
+  role: string;
+  password?: string;
+  disabled?: boolean;
+}): Promise<ActionResult & { id?: string }> {
+  const user = await requireAdminUser();
+  const blocked = deny(user, "users");
+  if (blocked) return { ok: false, error: blocked };
+
+  const email = input.email.trim().toLowerCase();
+  const role = input.role.trim();
+  if (!email || !email.includes("@")) {
+    return { ok: false, error: "Enter a valid work email." };
+  }
+  if (!assignableRoles(user.role).includes(role as Role)) {
+    return { ok: false, error: "You cannot assign that role." };
+  }
+  if (!input.id && (!input.password || input.password.length < 8)) {
+    return { ok: false, error: "Password must be at least 8 characters." };
+  }
+
+  try {
+    const payload = await getAdminPayload();
+    const data: Record<string, unknown> = {
+      email,
+      name: input.name?.trim() || email,
+      role,
+      disabled: Boolean(input.disabled),
+    };
+    if (input.password) data.password = input.password;
+
+    let id = input.id;
+    if (id) {
+      await payload.update({
+        collection: "users",
+        id,
+        data: data as never,
+        overrideAccess: true,
+        user: asPayloadActor(user),
+      });
+    } else {
+      const created = await payload.create({
+        collection: "users",
+        data: data as never,
+        overrideAccess: true,
+        user: asPayloadActor(user),
+      });
+      id = String(created.id);
+    }
+
+    const stored = await payload.find({
+      collection: "users",
+      where: { email: { equals: email } },
+      limit: 1,
+      overrideAccess: true,
+    });
+    if (!stored.docs[0]) {
+      return { ok: false, error: "User was not written to the database." };
+    }
+
+    await writeAdminAudit(payload, user, {
+      action: input.id ? "users.update" : "users.create",
+      collection: "users",
+      documentId: id,
+      summary: `${input.id ? "Updated" : "Created"} user ${email}`,
+      meta: { role },
+    });
+    revalidatePath("/admin", "layout");
+    revalidatePath("/admin/users");
+    return { ok: true, id, data: { email, name: data.name, role } };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Could not save user.",
     };
   }
 }
@@ -320,7 +405,7 @@ export async function deleteCollectionAction(
       collection,
       id,
       overrideAccess: true,
-      user: { id: user.id, collection: "users" },
+      user: asPayloadActor(user),
     });
     await writeAdminAudit(payload, user, {
       action: `${collection}.delete`,
@@ -382,7 +467,7 @@ export async function restoreVersionAction(
           data: data as never,
           draft: false,
           overrideAccess: true,
-          user: { id: user.id, collection: "users" },
+          user: asPayloadActor(user),
         });
         revalidateGlobal(slug);
       }
@@ -404,7 +489,7 @@ export async function restoreVersionAction(
           data: data as never,
           draft: false,
           overrideAccess: true,
-          user: { id: user.id, collection: "users" },
+          user: asPayloadActor(user),
         });
         revalidateCollection(slug);
       }
@@ -445,7 +530,7 @@ export async function resetGlobalToSiteCopyAction(
       data: copy as never,
       draft: false,
       overrideAccess: true,
-      user: { id: user.id, collection: "users" },
+      user: asPayloadActor(user),
     });
     await writeAdminAudit(payload, user, {
       action: "global.reset",
@@ -459,6 +544,30 @@ export async function resetGlobalToSiteCopyAction(
     return {
       ok: false,
       error: error instanceof Error ? error.message : "Reset failed.",
+    };
+  }
+}
+
+export async function importSiteContentAction(): Promise<ActionResult> {
+  const user = await requireAdminUser();
+  const blocked = deny(user, "publish");
+  if (blocked) return { ok: false, error: blocked };
+  try {
+    const payload = await getAdminPayload();
+    const imported = await seedSiteContent(payload);
+    await writeAdminAudit(payload, user, {
+      action: "site.import",
+      collection: "site-settings",
+      summary: "Imported original site catalog and page copy",
+      meta: imported,
+    });
+    revalidatePath("/", "layout");
+    revalidatePath("/admin", "layout");
+    return { ok: true, data: imported };
+  } catch (error) {
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "Import failed.",
     };
   }
 }

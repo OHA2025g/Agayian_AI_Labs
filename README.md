@@ -96,7 +96,8 @@ Set these in the Vercel project for **Production** (and Preview if you want form
 | `TURNSTILE_SECRET_KEY` | Required (fail-closed) |
 | `UPSTASH_REDIS_REST_URL` | Required for multi-instance |
 | `UPSTASH_REDIS_REST_TOKEN` | Required for multi-instance |
-| `DATABASE_URI` | Required (MongoDB connection string) |
+| `MONGO_URL` | Required (Mongo host URL from EasyPanel) |
+| `DB_NAME` | Required (database created for this site) |
 | `PAYLOAD_SECRET` | Required |
 | `PREVIEW_SECRET` | Required for draft preview |
 | `CRON_SECRET` | Required for scheduled publish cron |

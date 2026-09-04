@@ -1,9 +1,11 @@
+import { databaseUriMissingName, publicWebsiteUrl } from "@/lib/admin/seed-site";
 import { getAdminPayload } from "@/lib/payload";
 
 export type DashboardCounts = {
   published: number;
   drafts: number;
   scheduled: number;
+  catalogRecords: number;
   newEnquiries: number;
   media: number;
   missingAlt: number;
@@ -12,6 +14,7 @@ export type DashboardCounts = {
   lastUpdated: string | null;
   databaseOk: boolean;
   formsOk: boolean;
+  databaseNameMissing: boolean;
 };
 
 const COUNTED = [
@@ -41,9 +44,11 @@ export async function getDashboardData(): Promise<DashboardCounts> {
     let published = 0;
     let drafts = 0;
     let scheduled = 0;
+    let catalogRecords = 0;
     let missingSeo = 0;
 
     for (const collection of COUNTED) {
+      catalogRecords += await countWhere(payload, collection);
       published += await countWhere(payload, collection, {
         status: { equals: "published" },
       });
@@ -111,26 +116,30 @@ export async function getDashboardData(): Promise<DashboardCounts> {
       media,
       missingAlt: missingAltResult.docs.length,
       missingSeo,
-      siteUrl: String(settings.websiteUrl ?? ""),
+      catalogRecords,
+      siteUrl: String(settings.websiteUrl || publicWebsiteUrl()),
       lastUpdated: recent.docs[0]
         ? String(recent.docs[0].createdAt ?? "")
         : null,
       databaseOk: true,
       formsOk: Boolean(process.env.RESEND_API_KEY),
+      databaseNameMissing: databaseUriMissingName(),
     };
   } catch {
     return {
       published: 0,
       drafts: 0,
       scheduled: 0,
+      catalogRecords: 0,
       newEnquiries: 0,
       media: 0,
       missingAlt: 0,
       missingSeo: 0,
-      siteUrl: "",
+      siteUrl: publicWebsiteUrl(),
       lastUpdated: null,
       databaseOk: false,
       formsOk: Boolean(process.env.RESEND_API_KEY),
+      databaseNameMissing: databaseUriMissingName(),
     };
   }
 }

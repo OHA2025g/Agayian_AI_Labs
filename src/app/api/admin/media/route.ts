@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { adminCanManageMedia } from "@/lib/admin/rbac";
+import { adminCanManageMedia, asPayloadActor } from "@/lib/admin/rbac";
 import { writeAdminAudit } from "@/lib/admin/audit";
 import { getAdminUser } from "@/lib/admin/session";
 import { getAdminPayload } from "@/lib/payload";
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
         size: file.size,
       },
       overrideAccess: true,
-      user: { id: user.id, collection: "users" },
+      user: asPayloadActor(user),
     });
     await writeAdminAudit(payload, user, {
       action: "media.upload",

@@ -51,6 +51,32 @@ export function asUser(user: AdminUser): UserWithRole {
   return { id: user.id, role: user.role, collection: "users" };
 }
 
+export function asPayloadActor(user: AdminUser) {
+  return {
+    id: user.id,
+    collection: "users" as const,
+    role: user.role,
+    email: user.email,
+    name: user.name,
+  };
+}
+
+export function assignableRoles(actorRole: Role): Role[] {
+  if (actorRole === "super_admin" || actorRole === "administrator") {
+    return [
+      "super_admin",
+      "administrator",
+      "editor",
+      "reviewer",
+      "publisher",
+      "enquiry_manager",
+      "media_manager",
+      "viewer",
+    ];
+  }
+  return [];
+}
+
 export function adminCanPublish(user: AdminUser) {
   return canPublish(asUser(user));
 }

@@ -22,7 +22,7 @@ npm run db:up
 cp .env.example .env
 ```
 
-Set at least `DATABASE_URI`, `PAYLOAD_SECRET`, `PREVIEW_SECRET`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD`.
+Set at least `MONGO_URL`, `DB_NAME`, `PAYLOAD_SECRET`, `PREVIEW_SECRET`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD`.
 
 3. Install, seed, and run:
 

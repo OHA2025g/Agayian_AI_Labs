@@ -25,6 +25,8 @@ ENV NODE_ENV=production \
     SKIP_PAYLOAD=1 \
     PAYLOAD_SECRET=build-time-placeholder-not-used-in-runtime \
     DATABASE_URI=mongodb://127.0.0.1:27017/agrayian-build-skip \
+    MONGO_URL=mongodb://127.0.0.1:27017 \
+    DB_NAME=agrayian-build-skip \
     NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 
 # Cache Next compile output between EasyPanel rebuilds when BuildKit is on

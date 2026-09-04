@@ -42,6 +42,7 @@ import {
   TermsOfUse,
   TrustPage,
 } from "./payload/globals";
+import { resolveMongoUri } from "./lib/cms/mongo-env";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -140,14 +141,10 @@ export default buildConfig({
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   db: mongooseAdapter({
-    url: skipPayloadDb
-      ? "mongodb://127.0.0.1:27017/agrayian-build-skip"
-      : process.env.DATABASE_URI ||
-        process.env.DATABASE_URL ||
-        "mongodb://127.0.0.1:27017/agrayian",
+    url: resolveMongoUri({ skipPayload: skipPayloadDb }),
     connectOptions: {
-      serverSelectionTimeoutMS: skipPayloadDb ? 300 : 1500,
-      connectTimeoutMS: skipPayloadDb ? 300 : 1500,
+      serverSelectionTimeoutMS: skipPayloadDb ? 300 : 8000,
+      connectTimeoutMS: skipPayloadDb ? 300 : 8000,
     },
   }),
   sharp,

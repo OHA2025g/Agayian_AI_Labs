@@ -22,7 +22,8 @@ This app is packaged for EasyPanel (or any Docker host) with:
 | Variable | Example |
 |----------|---------|
 | `PAYLOAD_SECRET` | long random string |
-| `DATABASE_URI` | `mongodb://mongo:27017/agrayian` |
+| `MONGO_URL` | EasyPanel Mongo URL, for example `mongodb://USER:PASSWORD@agrayian_ai_labs_agrayian:27017/?tls=false` |
+| `DB_NAME` | Required. Database this site owns, for example `agrayian` |
 | `NEXT_PUBLIC_SERVER_URL` | `https://your-domain.com` |
 | `PREVIEW_SECRET` | random string |
 | `CRON_SECRET` | random string |
@@ -31,18 +32,21 @@ This app is packaged for EasyPanel (or any Docker host) with:
 
 5. Expose / map the `web` service to port **3000** and attach your domain.
 6. Keep a volume on `/app/public/media` if you are **not** using S3.
-7. After first deploy, seed content once:
+7. After first deploy, seed content once. The Docker image does not seed Mongo.
+
+In `/admin`, an Administrator can click **Import original site content**.
+
+Or run this inside the web container / one-off job:
 
 ```bash
-# Inside the web container / one-off job
 npm run payload:seed
 ```
 
-Or run seed from your laptop against the remote Mongo URI if the network allows.
+Set `MONGO_URL` to the Mongo service URL EasyPanel gives you (no database name needed) and set `DB_NAME` to the database this website should create and use, for example `agrayian`.
 
 8. Open `https://your-domain.com/admin` and sign in.
 
-The Docker image build does **not** talk to Mongo (`SKIP_PAYLOAD=1`). Public pages compile against the static catalog. Payload connects to `DATABASE_URI` only when the container starts.
+The Docker image build does **not** talk to Mongo (`SKIP_PAYLOAD=1`). Public pages compile against the static catalog. Payload connects to `MONGO_URL` + `DB_NAME` only when the container starts.
 
 ### Faster rebuilds
 
@@ -58,7 +62,8 @@ Tips:
 In EasyPanel, set Mongo init credentials, then use:
 
 ```text
-DATABASE_URI=mongodb://USER:PASSWORD@mongo:27017/agrayian?authSource=admin
+MONGO_URL=mongodb://USER:PASSWORD@mongo:27017/?tls=false
+DB_NAME=agrayian
 ```
 
 ### Optional: S3 media
