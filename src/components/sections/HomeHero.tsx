@@ -1,5 +1,6 @@
 "use client";
 
+import { resolvePrimaryCtaLabel, resolveSecondaryCtaLabel } from "@/config/cta";
 import { brandCopy, positioningPoints } from "@/config/site";
 import { mockupAssets } from "@/config/mockup-assets";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -53,10 +54,10 @@ export function HomeHero({
 
           <div className="mt-6 flex flex-wrap gap-3">
             <PrimaryButton href={primaryCtaHref} className="px-5 xl:px-7">
-              {primaryCta}
+              {resolvePrimaryCtaLabel(primaryCta)}
             </PrimaryButton>
             <SecondaryButton href={secondaryCtaHref} className="px-5 xl:px-7">
-              {secondaryCta}
+              {resolveSecondaryCtaLabel(secondaryCta)}
             </SecondaryButton>
           </div>
           <ul className="mt-5 grid grid-cols-1 gap-x-6 gap-y-1.5 sm:grid-cols-2">

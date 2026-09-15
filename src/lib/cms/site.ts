@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { resolvePrimaryCtaLabel, resolveSecondaryCtaLabel } from "@/config/cta";
 import { brandCopy, siteConfig, type SiteConfig } from "@/config/site";
 import {
   capabilityNav,
@@ -198,8 +199,8 @@ export const getResolvedSite = cache(async (): Promise<ResolvedSite> => {
     brand: {
       headline: asText(brand.headline, brandCopy.headline),
       supporting: asText(brand.supporting, brandCopy.supporting),
-      primaryCta: asText(brand.primaryCta, brandCopy.primaryCta),
-      secondaryCta: asText(brand.secondaryCta, brandCopy.secondaryCta),
+      primaryCta: resolvePrimaryCtaLabel(brand.primaryCta),
+      secondaryCta: resolveSecondaryCtaLabel(brand.secondaryCta),
       trustStatement: brandCopy.trustStatement,
     },
   };
@@ -215,7 +216,7 @@ export const getResolvedNav = cache(async (): Promise<ResolvedNav> => {
       mergeRequiredNav(mapLinks(doc?.main, mainNavigation), mainNavigation),
     ),
     headerCta: {
-      label: asText(cta.label, defaultHeaderCta.label),
+      label: resolvePrimaryCtaLabel(cta.label),
       href: isSafeHref(href) ? href : defaultHeaderCta.href,
     },
     footerCapabilities: withoutResourcePages(

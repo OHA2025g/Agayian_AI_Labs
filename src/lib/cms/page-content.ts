@@ -1,5 +1,9 @@
 import { cache } from "react";
-import { CTA } from "@/config/cta";
+import {
+  CTA,
+  resolvePrimaryCtaLabel,
+  resolveSecondaryCtaLabel,
+} from "@/config/cta";
 import { brandCopy, positioningPoints } from "@/config/site";
 import { companyIntro, companyValues } from "@/data/company";
 import { consultationFlow } from "@/lib/contact-schema";
@@ -137,9 +141,9 @@ export const getHomePageContent = cache(async (): Promise<HomePageContent> => {
           ? resolvedHeadlineLines
           : [...brandCopy.headlineLines],
       supporting: asText(hero.supporting, brandCopy.supporting),
-      primaryCtaLabel: asText(hero.primaryCtaLabel, brandCopy.primaryCta),
+      primaryCtaLabel: resolvePrimaryCtaLabel(hero.primaryCtaLabel),
       primaryCtaHref: asText(hero.primaryCtaHref, CTA.primary.href),
-      secondaryCtaLabel: asText(hero.secondaryCtaLabel, brandCopy.secondaryCta),
+      secondaryCtaLabel: resolveSecondaryCtaLabel(hero.secondaryCtaLabel),
       secondaryCtaHref: asText(hero.secondaryCtaHref, CTA.secondary.href),
       trustLine: asText(hero.trustLine, brandCopy.trustStatement),
       supportingPoints: asStringList(hero.supportingPoints, [...positioningPoints]),
@@ -330,7 +334,7 @@ export const getCoePageContent = cache(async (): Promise<CoePageContent> => {
         hero.description ?? doc?.description,
         "We help institutions stand up a governed CoE that sets standards, funds the right work and enables delivery teams to move from pilot to production.",
       ),
-      primaryCtaLabel: asText(hero.primaryCtaLabel, CTA.primary.label),
+      primaryCtaLabel: resolvePrimaryCtaLabel(hero.primaryCtaLabel),
       primaryCtaHref: asText(hero.primaryCtaHref, CTA.primary.href),
       secondaryCtaLabel: asText(hero.secondaryCtaLabel, "Explore the Operating Model"),
       secondaryCtaHref: asText(hero.secondaryCtaHref, "#operating-model"),
@@ -545,7 +549,7 @@ export const getGovernancePageContent = cache(
           hero.description ?? doc?.description,
           "Inventory AI systems, classify risk, enforce lifecycle controls and preserve evidence for leadership and audit.",
         ),
-        primaryCtaLabel: asText(hero.primaryCtaLabel, CTA.primary.label),
+        primaryCtaLabel: resolvePrimaryCtaLabel(hero.primaryCtaLabel),
         primaryCtaHref: asText(hero.primaryCtaHref, CTA.primary.href),
         secondaryCtaLabel: asText(hero.secondaryCtaLabel, "Explore Governance"),
         secondaryCtaHref: asText(hero.secondaryCtaHref, "#pillars"),
@@ -803,12 +807,9 @@ export const getCapabilitiesPageContent = cache(
           hero.body,
           "Seven integrated capability layers connect ambition, data foundations, AI modalities, governance, engineering and managed operations.",
         ),
-        primaryCtaLabel: asText(hero.primaryCtaLabel, CTA.primary.label),
+        primaryCtaLabel: resolvePrimaryCtaLabel(hero.primaryCtaLabel),
         primaryCtaHref: asText(hero.primaryCtaHref, CTA.primary.href),
-        secondaryCtaLabel: asText(
-          hero.secondaryCtaLabel,
-          CTA.secondary.label,
-        ),
+        secondaryCtaLabel: resolveSecondaryCtaLabel(hero.secondaryCtaLabel),
         secondaryCtaHref: asText(hero.secondaryCtaHref, "/products"),
       },
       journeyLabels: asObjectArray(

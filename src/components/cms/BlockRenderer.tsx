@@ -3,6 +3,7 @@ import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import { Section } from "@/components/layout/Section";
 import { themeClass } from "@/lib/cms-presets";
+import { resolvePrimaryCtaLabel } from "@/config/cta";
 import { cn } from "@/lib/utils";
 
 type Block = {
@@ -32,7 +33,7 @@ export function BlockRenderer({ blocks }: { blocks?: Block[] | null }) {
                   <div className="flex flex-wrap gap-3">
                     {block.primaryCtaHref ? (
                       <PrimaryButton href={String(block.primaryCtaHref)}>
-                        {String(block.primaryCtaLabel ?? "Learn more")}
+                        {resolvePrimaryCtaLabel(block.primaryCtaLabel)}
                       </PrimaryButton>
                     ) : null}
                     {block.secondaryCtaHref ? (

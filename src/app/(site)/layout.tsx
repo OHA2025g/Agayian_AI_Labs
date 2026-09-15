@@ -9,6 +9,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/navigation/SiteHeader";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { ConsentAnalytics } from "@/components/analytics/ConsentAnalytics";
+import { resolvePrimaryCtaLabel } from "@/config/cta";
 import { matchRedirect } from "@/lib/cms/redirects";
 import { getResolvedNav, getResolvedSite } from "@/lib/cms/site";
 import { buildMetadata, organisationSchema, websiteSchema } from "@/lib/seo";
@@ -92,7 +93,9 @@ export default async function SiteLayout({
         <AnnouncementBar announcement={site.announcement} />
         <SiteHeader
           items={nav.main}
-          ctaLabel={nav.headerCta.label || site.brand.primaryCta}
+          ctaLabel={resolvePrimaryCtaLabel(
+            nav.headerCta.label || site.brand.primaryCta,
+          )}
           ctaHref={nav.headerCta.href}
         />
         <main id="main-content" className="flex-1">
