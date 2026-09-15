@@ -350,7 +350,7 @@ export async function seedSiteContent(payload: Payload) {
       status: "published",
       featuredProducts: flagshipProducts
         .map((item) => featuredBySlug.get(item.slug))
-        .filter((id): id is string | number => id !== undefined),
+        .filter((id): id is string => id !== undefined),
     },
     draft: false,
     overrideAccess: true,
