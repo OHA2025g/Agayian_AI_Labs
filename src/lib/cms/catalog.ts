@@ -18,6 +18,20 @@ import { findPublished, findPublishedBySlug } from "./published";
 
 type CmsDoc = Record<string, unknown> & { id?: string | number; slug?: string };
 
+function asMediaUrl(value: unknown): string | undefined {
+  if (typeof value === "string" && value.trim()) return value.trim();
+  if (value && typeof value === "object" && "url" in value) {
+    const url = (value as { url?: unknown }).url;
+    return typeof url === "string" && url.trim() ? url.trim() : undefined;
+  }
+  return undefined;
+}
+
+function seoImage(doc: CmsDoc): string | undefined {
+  const seo = doc.seo as Record<string, unknown> | undefined;
+  return asMediaUrl(seo?.ogImage);
+}
+
 function asStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
   return value.map((item) => {
@@ -32,7 +46,12 @@ function asStringArray(value: unknown): string[] {
 export async function getProducts(): Promise<Product[]> {
   const docs = await findPublished<CmsDoc>("products");
   if (!docs.length) return staticProducts;
-  return docs.map(mapProduct);
+  const mapped = docs.map(mapProduct);
+  const publishedSlugs = new Set(mapped.map((item) => item.slug));
+  return [
+    ...mapped,
+    ...staticProducts.filter((item) => !publishedSlugs.has(item.slug)),
+  ];
 }
 
 export async function getProduct(slug: string): Promise<Product | undefined> {
@@ -121,6 +140,7 @@ function mapProduct(doc: CmsDoc): Product {
     shortDescription: String(doc.shortDescription ?? ""),
     valueProposition: String(doc.valueProposition ?? ""),
     businessProblem: String(doc.businessProblem ?? ""),
+    whyProcessesFail: String(doc.whyProcessesFail ?? ""),
     solutionOverview: String(doc.solutionOverview ?? ""),
     targetUsers: asStringArray(doc.targetUsers),
     modules: Array.isArray(doc.modules)
@@ -130,15 +150,28 @@ function mapProduct(doc: CmsDoc): Product {
     workflow: Array.isArray(doc.workflow)
       ? (doc.workflow as Product["workflow"])
       : [],
+    agents: asStringArray(doc.agents),
+    humanApprovalPoints: asStringArray(doc.humanApprovalPoints),
+    integrations: asStringArray(doc.integrations),
     dataSources: asStringArray(doc.dataSources),
     aiCapabilities: asStringArray(doc.aiCapabilities),
     governance: asStringArray(doc.governance),
     architecture: asStringArray(doc.architecture),
     deploymentOptions: asStringArray(doc.deploymentOptions),
     outcomes: asStringArray(doc.outcomes),
+    outcomeHeadline: String(doc.outcomeHeadline ?? ""),
+    primaryUser: String(doc.primaryUser ?? ""),
+    primaryWorkflow: String(doc.primaryWorkflow ?? ""),
+    benefits: asStringArray(doc.benefits),
     featured: Boolean(doc.featured),
-    status: String(doc.productStatus ?? "Available for demonstration"),
+    maturity: (doc.maturity as Product["maturity"]) ?? undefined,
+    status: String(
+      doc.productStatus ??
+        doc.maturity ??
+        "Demonstration",
+    ),
     relatedCapabilities: asStringArray(doc.relatedCapabilities),
+    ogImage: seoImage(doc),
   };
 }
 
@@ -173,12 +206,19 @@ function mapIndustry(doc: CmsDoc): Industry {
     challenges: asStringArray(doc.challenges).length
       ? asStringArray(doc.challenges)
       : (fallback?.challenges ?? []),
+    priorityProblems: asStringArray(doc.priorityProblems).length
+      ? asStringArray(doc.priorityProblems)
+      : fallback?.priorityProblems,
     opportunities: asStringArray(doc.opportunities).length
       ? asStringArray(doc.opportunities)
       : (fallback?.opportunities ?? []),
-    capabilities: asStringArray(doc.capabilities),
+    capabilities: asStringArray(doc.capabilities).length
+      ? asStringArray(doc.capabilities)
+      : (fallback?.capabilities ?? []),
     relevantCapabilities: fallback?.relevantCapabilities ?? [],
-    products: asStringArray(doc.products),
+    products: asStringArray(doc.products).length
+      ? asStringArray(doc.products)
+      : (fallback?.products ?? []),
     productCards: fallback?.productCards,
     workflows: Array.isArray(doc.workflows) && doc.workflows.length
       ? (doc.workflows as Industry["workflows"])
@@ -189,6 +229,7 @@ function mapIndustry(doc: CmsDoc): Industry {
     outcomes: asStringArray(doc.outcomes).length
       ? asStringArray(doc.outcomes)
       : (fallback?.outcomes ?? []),
+    ogImage: seoImage(doc) ?? fallback?.ogImage,
   };
 }
 
@@ -202,6 +243,8 @@ function mapStory(doc: CmsDoc): ImpactStory {
     capability: String(doc.capability ?? ""),
     solutionType: String(doc.solutionType ?? ""),
     outcomeCategory: String(doc.outcomeCategory ?? ""),
+    deliveryStage:
+      (doc.deliveryStage as ImpactStory["deliveryStage"]) ?? "Demonstration",
     challenge: String(doc.challenge ?? ""),
     context: String(doc.context ?? ""),
     approach: String(doc.approach ?? ""),
@@ -210,6 +253,7 @@ function mapStory(doc: CmsDoc): ImpactStory {
     outcomes: asStringArray(doc.outcomes),
     relatedProducts: asStringArray(doc.relatedProducts),
     relatedCapabilities: asStringArray(doc.relatedCapabilities),
+    ogImage: seoImage(doc),
   };
 }
 
@@ -236,6 +280,7 @@ function mapInsight(doc: CmsDoc): Insight {
     readingTime: String(doc.readingTime ?? "1 min"),
     featured: Boolean(doc.featured),
     body: paragraphs,
+    ogImage: seoImage(doc),
   };
 }
 

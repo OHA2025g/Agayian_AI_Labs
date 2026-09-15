@@ -26,6 +26,13 @@ export const industries: Industry[] = [
       "Compliance, transparency and auditability: across multiple regulations.",
       "Digital adoption gaps: across geographies and stakeholder groups.",
     ],
+    priorityProblems: [
+      "Fragmented programme data: departments cannot see the same citizen or scheme record.",
+      "Slow document review: eligibility and legal-intent checks stay manual.",
+      "Revenue leakage: collection and recovery lack timely, reviewable intelligence.",
+      "Poor field visibility: commissioners cannot see last-mile delivery in time to act.",
+      "Weak audit trails: public-sector AI and automation cannot be evidenced.",
+    ],
     opportunities: [
       "Smart service delivery: Improve last-mile reach and experience",
       "Resource optimisation: Allocate funds and assets where impact is highest",
@@ -45,9 +52,10 @@ export const industries: Industry[] = [
     relevantCapabilities: governmentRelevant,
     products: [
       "wcd-intelligence",
-      "ai-governance-command-centre",
-      "enterprise-decision-intelligence",
-      "document-intelligence-copilot",
+      "maha-geo-rr",
+      "pmu-eit-ai-dashboard",
+      "revenue-intelligence",
+      "legal-intent-stamp-duty-integrity",
     ],
     productCards: [
       {
@@ -129,6 +137,13 @@ export const industries: Industry[] = [
       "Model and GenAI use expands faster than inventory, approval and monitoring discipline.",
       "Regulators and boards expect explainability, control evidence and clear accountability.",
     ],
+    priorityProblems: [
+      "Manual audit and assurance: evidence and exceptions stay in disconnected systems.",
+      "Slow document review: credit, legal and compliance files delay decisions.",
+      "Fraud risk: signals arrive too late for controlled intervention.",
+      "Revenue leakage: fee, recovery and exception workflows lack timely intelligence.",
+      "Weak AI oversight: models and GenAI expand faster than inventory and approval.",
+    ],
     opportunities: [
       "Create command centres that unify risk signals, evidence and remediation workflows.",
       "Apply document intelligence to accelerate controlled review without losing oversight.",
@@ -156,9 +171,9 @@ export const industries: Industry[] = [
     ],
     products: [
       "onetouch-audit",
+      "legal-intent-stamp-duty-integrity",
       "ai-governance-command-centre",
       "document-intelligence-copilot",
-      "enterprise-decision-intelligence",
     ],
     workflows: [
       {
@@ -211,6 +226,12 @@ export const industries: Industry[] = [
       "Workforce data is scattered across ATS, assessment and HRIS systems.",
       "Bias, privacy and consent risks rise when AI enters recruitment without controls.",
     ],
+    priorityProblems: [
+      "High-volume screening: recruiters cannot review applicants consistently.",
+      "Opaque shortlisting: hiring decisions lack a reviewable rationale.",
+      "Fragmented talent data: ATS, assessments and HRIS do not share one view.",
+      "Bias and privacy risk: AI enters recruitment without controls.",
+    ],
     opportunities: [
       "Match candidates to role requirements with explainable scoring and human override.",
       "Give recruiters interview and assessment intelligence grounded in structured criteria.",
@@ -235,7 +256,7 @@ export const industries: Industry[] = [
       { title: "Funnel Analytics", icon: "monitoring" },
       { title: "ATS Interoperability", icon: "interop" },
     ],
-    products: ["smart-hiring", "document-intelligence-copilot", "ai-governance-command-centre"],
+    products: ["smart-hiring", "bhritak-ai", "chayanix-ai"],
     workflows: [
       {
         title: "Role Intake",
@@ -286,6 +307,12 @@ export const industries: Industry[] = [
       "Frontline and programme teams lack a shared view of risk and intervention status.",
       "Sensitive beneficiary data requires strict privacy and purpose limitation.",
       "Siloed systems make coordinated case and programme action difficult.",
+    ],
+    priorityProblems: [
+      "Late outcome indicators: districts and schemes cannot be compared in time.",
+      "Fragmented beneficiary records: programme teams lack a shared case view.",
+      "Slow document review: eligibility and case files stay manual.",
+      "Privacy and purpose limitation: sensitive data needs strict access control.",
     ],
     opportunities: [
       "Build decision-intelligence platforms for scheme performance and early risk detection.",
@@ -368,6 +395,12 @@ export const industries: Industry[] = [
       "Leadership needs earlier signals on enrolment, progression and service quality.",
       "AI tools appear in teaching and administration without institutional governance.",
     ],
+    priorityProblems: [
+      "Fragmented institutional data: leadership lacks a unified operations view.",
+      "Slow knowledge access: staff search policy and process documents by hand.",
+      "Weak early signals: enrolment, progression and service quality arrive late.",
+      "Ungoverned AI use: teaching and admin tools appear without institutional control.",
+    ],
     opportunities: [
       "Create decision dashboards for academic and operational leadership.",
       "Deploy governed knowledge assistants for staff and student services teams.",
@@ -396,7 +429,7 @@ export const industries: Industry[] = [
     products: [
       "enterprise-decision-intelligence",
       "document-intelligence-copilot",
-      "ai-governance-command-centre",
+      "voice-agent",
     ],
     workflows: [
       {
@@ -449,6 +482,12 @@ export const industries: Industry[] = [
       "Document-heavy quality and compliance processes slow response times.",
       "AI pilots rarely connect to shop-floor ownership and operating procedures.",
     ],
+    priorityProblems: [
+      "Fragmented operations: plant, quality and supply data sit in separate tools.",
+      "Slow exception handling: issues escalate through tribal knowledge.",
+      "Document-heavy quality: SOP and compliance review delays response.",
+      "Poor cross-unit visibility: leadership cannot see the same operating picture.",
+    ],
     opportunities: [
       "Surface operational exceptions with decision dashboards linked to accountable roles.",
       "Use document intelligence for SOPs, quality records and supplier documentation.",
@@ -475,10 +514,10 @@ export const industries: Industry[] = [
       { title: "MES/ERP Interoperability", icon: "interop" },
     ],
     products: [
+      "autonomous-revenue-os",
       "enterprise-decision-intelligence",
       "document-intelligence-copilot",
-      "onetouch-audit",
-      "ai-governance-command-centre",
+      "sales-engine",
     ],
     workflows: [
       {
@@ -531,6 +570,12 @@ export const industries: Industry[] = [
       "Assurance and finance teams need better evidence visibility without more manual effort.",
       "Boards expect AI governance that spans the whole enterprise, not isolated projects.",
     ],
+    priorityProblems: [
+      "Parallel AI experiments: functions lack a shared operating model.",
+      "Document overload: finance, legal and audit work stays manual.",
+      "Weak evidence visibility: assurance teams cannot see findings in one place.",
+      "No enterprise governance: boards cannot oversee AI across the organisation.",
+    ],
     opportunities: [
       "Establish an AI CoE that standardises intake, prioritisation and reuse.",
       "Deploy governance command centres for inventory, risk and lifecycle oversight.",
@@ -559,10 +604,10 @@ export const industries: Industry[] = [
       { title: "Platform Interoperability", icon: "interop" },
     ],
     products: [
-      "ai-governance-command-centre",
-      "onetouch-audit",
-      "document-intelligence-copilot",
-      "enterprise-decision-intelligence",
+      "autonomous-revenue-os",
+      "marketing-engine",
+      "sales-engine",
+      "voice-agent",
       "smart-hiring",
     ],
     workflows: [

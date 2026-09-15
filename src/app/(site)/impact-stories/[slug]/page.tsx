@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: PageProps) {
     title: story.title,
     description: story.challenge,
     path: `/impact-stories/${story.slug}`,
+    image: story.ogImage,
   });
 }
 

@@ -15,6 +15,15 @@ export type ProductWorkflowStep = {
   description: string;
 };
 
+export const PRODUCT_MATURITY = [
+  "Product",
+  "Pilot",
+  "Demonstration",
+  "Roadmap",
+] as const;
+
+export type ProductMaturity = (typeof PRODUCT_MATURITY)[number];
+
 export type Product = {
   id: string;
   name: string;
@@ -26,20 +35,30 @@ export type Product = {
   shortDescription: string;
   valueProposition: string;
   businessProblem: string;
+  whyProcessesFail?: string;
   solutionOverview: string;
   targetUsers: string[];
   modules: ProductModule[];
   capabilities: string[];
   workflow: ProductWorkflowStep[];
+  agents?: string[];
+  humanApprovalPoints?: string[];
+  integrations?: string[];
   dataSources?: string[];
   aiCapabilities?: string[];
   governance?: string[];
   architecture?: string[];
   deploymentOptions?: string[];
   outcomes: string[];
+  outcomeHeadline?: string;
+  primaryUser?: string;
+  primaryWorkflow?: string;
+  benefits?: string[];
   featured: boolean;
   status: string;
+  maturity?: ProductMaturity;
   relatedCapabilities?: string[];
+  ogImage?: string;
 };
 
 export type Capability = {
@@ -88,6 +107,7 @@ export type Industry = {
   name: string;
   summary: string;
   challenges: string[];
+  priorityProblems?: string[];
   opportunities: string[];
   capabilities: string[];
   relevantCapabilities: IndustryCapabilityItem[];
@@ -96,7 +116,17 @@ export type Industry = {
   workflows: { title: string; description: string }[];
   governance: string[];
   outcomes: string[];
+  ogImage?: string;
 };
+
+export const IMPACT_DELIVERY_STAGES = [
+  "Completed deployment",
+  "Pilot",
+  "Demonstration",
+  "Proposed concept",
+] as const;
+
+export type ImpactDeliveryStage = (typeof IMPACT_DELIVERY_STAGES)[number];
 
 export type ImpactStory = {
   id: string;
@@ -107,6 +137,7 @@ export type ImpactStory = {
   capability: string;
   solutionType: string;
   outcomeCategory: string;
+  deliveryStage?: ImpactDeliveryStage;
   challenge: string;
   context: string;
   approach: string;
@@ -115,6 +146,7 @@ export type ImpactStory = {
   outcomes: string[];
   relatedProducts: string[];
   relatedCapabilities: string[];
+  ogImage?: string;
 };
 
 export type Insight = {
@@ -129,6 +161,7 @@ export type Insight = {
   readingTime: string;
   featured?: boolean;
   body: string[];
+  ogImage?: string;
 };
 
 export type ResourceFile = {

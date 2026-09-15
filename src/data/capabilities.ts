@@ -4,11 +4,11 @@ export const capabilities: Capability[] = [
   {
     id: "strategy",
     slug: "strategy",
-    name: "AI Strategy and Consulting",
-    shortName: "Strategy",
+    name: "AI Strategy",
+    shortName: "AI Strategy",
     icon: "Compass",
     summary:
-      "Clarify where AI creates value, what the organisation is ready for, and how to sequence investment into a governed, executable roadmap.",
+      "Turn a complex operational problem into a sequenced, measurable AI programme that leadership can fund and audit.",
     description:
       "We help leadership teams translate AI ambition into a practical operating agenda. Engagements combine maturity assessment, business capability mapping, use-case discovery and prioritisation, data readiness review, target architecture options, investment planning and operating-model design so programmes move from scattered pilots to a coherent portfolio.",
     businessChallenge:
@@ -71,7 +71,7 @@ export const capabilities: Capability[] = [
     shortName: "AI CoE",
     icon: "Building2",
     summary:
-      "Stand up an AI Centre of Excellence that sets standards, accelerates delivery and keeps value realisation under clear ownership.",
+      "A formal advisory and enablement service that makes AI repeatable — intake, standards, talent and delivery under one operating model.",
     description:
       "We design and operationalise AI Centres of Excellence with a clear mandate, operating model and shared services. Whether centralised, federated or hybrid, the CoE becomes the mechanism for a use-case factory, shared platforms, talent frameworks, benefits realisation and, where needed, build-operate-transfer or managed CoE models.",
     businessChallenge:
@@ -130,11 +130,11 @@ export const capabilities: Capability[] = [
   {
     id: "governance",
     slug: "governance",
-    name: "AI Governance and Responsible AI",
-    shortName: "Governance",
+    name: "AI Governance",
+    shortName: "AI Governance",
     icon: "Shield",
     summary:
-      "Put policy, risk classification, approval, oversight and audit evidence around AI so systems remain accountable as they scale.",
+      "Make AI audit-ready with privacy, access control, human approval, audit trails, explainability, monitoring, data residency, vendor risk and incident management.",
     description:
       "We implement AI governance as an operating system, not a policy document alone. That includes AI policy, use-case registries, risk classification, model approval workflows, explainability expectations, bias and fairness controls, human oversight, incident management, ongoing monitoring and audit-ready evidence trails suitable for enterprise and government contexts.",
     businessChallenge:
@@ -195,11 +195,11 @@ export const capabilities: Capability[] = [
   {
     id: "generative-ai",
     slug: "generative-ai",
-    name: "Generative AI",
+    name: "Generative AI and RAG",
     shortName: "Generative AI",
     icon: "Sparkles",
     summary:
-      "Design and deliver copilots, document intelligence and knowledge assistants with retrieval, evaluation and guardrails built in.",
+      "Ground generative systems in enterprise knowledge so answers, drafts and document intelligence stay cited, reviewable and production-ready.",
     description:
       "We build generative AI systems that support real work — copilots, document intelligence, knowledge assistants and multilingual experiences — grounded through RAG, private model options where required, structured evaluation and operational guardrails so outputs remain useful, controlled and reviewable.",
     businessChallenge:
@@ -258,11 +258,11 @@ export const capabilities: Capability[] = [
   {
     id: "agentic-ai",
     slug: "agentic-ai",
-    name: "Agentic AI",
+    name: "Agentic Workflow Automation",
     shortName: "Agentic AI",
     icon: "Bot",
     summary:
-      "Build workflow agents and multi-agent systems with tool integration, human approval, memory, monitoring and audit trails.",
+      "Put agents inside high-value workflows so work moves with human approval, tool control and a complete audit trail.",
     description:
       "We design agentic AI for operational workflows where systems can plan, use tools and coordinate steps under governance. Engagements cover workflow agents, multi-agent orchestration, human approval points, tool integration, agent monitoring, memory design, exception handling and audit trails so autonomy remains bounded and accountable.",
     businessChallenge:
@@ -321,11 +321,11 @@ export const capabilities: Capability[] = [
   {
     id: "data",
     slug: "data",
-    name: "Data and Analytics",
+    name: "Data Modernisation",
     shortName: "Data",
     icon: "Database",
     summary:
-      "Build the data strategy, platforms and analytics foundations that make AI and executive decision-making reliable.",
+      "Modernise fragmented data so predictive analytics, programme dashboards and AI systems run on trusted, workflow-integrated sources.",
     description:
       "We strengthen the data layer behind AI and management decisions — from data strategy and lakehouse foundations to integration, quality, master data management, KPI frameworks, predictive analytics, geospatial insight and executive dashboards that leadership can trust.",
     businessChallenge:
@@ -385,11 +385,11 @@ export const capabilities: Capability[] = [
   {
     id: "product-engineering",
     slug: "product-engineering",
-    name: "AI Product Engineering",
+    name: "Product Engineering",
     shortName: "Product Engineering",
     icon: "Boxes",
     summary:
-      "Discover, design, build and operate AI products with production engineering, MLOps/LLMOps and support disciplines.",
+      "Engineer production-ready AI products — including document intelligence and decision systems — that operations teams can run.",
     description:
       "We engineer AI products end to end — discovery, UX, AI architecture, full-stack delivery, system integration, MLOps and LLMOps, deployment, testing and support — so intelligent capabilities become dependable products rather than fragile prototypes.",
     businessChallenge:
@@ -453,7 +453,7 @@ export const capabilities: Capability[] = [
     shortName: "Managed Services",
     icon: "Headset",
     summary:
-      "Operate AI platforms and models with monitoring, evaluation, cost control, security response and governed improvement.",
+      "Keep production AI measurable after go-live with monitoring, evaluation, cost control, incident response and governed change.",
     description:
       "We provide managed services for AI platforms and products in production — platform operations, monitoring, model evaluation, cost optimisation, security monitoring, incident response, governance reporting and retraining cycles — so value continues after launch rather than degrading quietly.",
     businessChallenge:

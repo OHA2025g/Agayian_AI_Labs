@@ -14,6 +14,7 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
+import { PRODUCT_CATEGORY_BUYERS } from "@/lib/products/categories";
 import { products as staticProducts } from "@/data/products";
 import { OneTouchDashboard } from "@/components/products/OneTouchDashboard";
 import { ProductSculpture } from "@/components/products/ProductSculptures";
@@ -32,11 +33,10 @@ import type { Product } from "@/types";
 
 const categoryIcons: Record<ProductCategory, LucideIcon> = {
   All: Sparkles,
-  Government: Landmark,
-  "Financial Services": Building2,
-  Talent: Users,
-  Governance: Scale,
-  "Decision Intelligence": Sparkles,
+  "Audit, Risk and Compliance": Scale,
+  "Government Intelligence": Landmark,
+  "Enterprise Revenue and Operations": Building2,
+  "Talent and Workforce": Users,
 };
 
 const featureIcons = [Scale, Search, Sparkles, Building2] as const;
@@ -264,6 +264,11 @@ export function ProductsLaboratory({
             );
           })}
         </div>
+        {active !== "All" ? (
+          <p className="products-category-buyer mt-3 text-sm text-muted-light">
+            Primary buyers: {PRODUCT_CATEGORY_BUYERS[active]}
+          </p>
+        ) : null}
 
         {spotlight ? (
           <section
@@ -380,6 +385,13 @@ export function ProductsLaboratory({
                 <article key={product.slug} className="products-card">
                   <ProductSculpture type={product.visual} name={product.name} />
                   <div className="products-card-body">
+                    {liveBySlug.get(product.slug)?.maturity ||
+                    liveBySlug.get(product.slug)?.status ? (
+                      <p className="products-card-maturity text-xs font-semibold uppercase tracking-[0.14em] text-tech-blue">
+                        {liveBySlug.get(product.slug)?.maturity ??
+                          liveBySlug.get(product.slug)?.status}
+                      </p>
+                    ) : null}
                     <h3>{product.name}</h3>
                     <p>{product.description}</p>
                     <div className="products-card-links">

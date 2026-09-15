@@ -28,8 +28,10 @@ import { companySculptures } from "@/config/company-sculptures";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { LightCtaBar } from "@/components/ui/DarkCtaBand";
+import { CTA } from "@/config/cta";
 import { ProcessFlow } from "@/components/ui/ProcessFlow";
 import { getCareers, getTeamMembers } from "@/lib/cms/catalog";
+import { companyFacts } from "@/data/company";
 import { getCompanyPageContent } from "@/lib/cms/page-content";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 import { cn } from "@/lib/utils";
@@ -293,12 +295,12 @@ export default async function CompanyPage() {
         subtitle="Responsible intelligence for stronger organisations and public systems."
         description={intro.introduction}
         primaryCta={{
-          href: "/contact?interest=consultation",
-          label: "Book a Consultation",
+          href: CTA.primary.href,
+          label: CTA.primary.label,
         }}
         secondaryCta={{
-          href: "/capabilities",
-          label: "Explore what we do",
+          href: CTA.secondary.href,
+          label: CTA.secondary.label,
         }}
         visual={<CompanyHubVisual />}
       />
@@ -337,6 +339,75 @@ export default async function CompanyPage() {
               </GlassCard>
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      <section className="relative border-t border-[var(--border-soft)] py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal>
+            <h2 className="font-heading text-[clamp(1.75rem,3.2vw,2.5rem)] font-semibold tracking-tight text-navy">
+              Company information
+            </h2>
+          </Reveal>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            <GlassCard className="p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-tech-blue">
+                Who we are
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-light">
+                {companyFacts.whoWeAre}
+              </p>
+              <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-tech-blue">
+                What we do
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-light">
+                {companyFacts.whatWeDo}
+              </p>
+            </GlassCard>
+            <GlassCard className="p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-tech-blue">
+                Who we serve
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-light">
+                {companyFacts.whoWeServe}
+              </p>
+              <p className="mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-tech-blue">
+                Why us
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-light">
+                {companyFacts.whyUs}
+              </p>
+            </GlassCard>
+            <GlassCard className="p-6 md:col-span-2">
+              <dl className="grid gap-4 sm:grid-cols-3">
+                <div>
+                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-tech-blue">
+                    Registered name
+                  </dt>
+                  <dd className="mt-2 text-sm text-navy">{companyFacts.legalName}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-tech-blue">
+                    Location
+                  </dt>
+                  <dd className="mt-2 text-sm text-navy">{companyFacts.location}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-tech-blue">
+                    Official contact
+                  </dt>
+                  <dd className="mt-2 text-sm text-navy">
+                    <a
+                      href={`mailto:${companyFacts.officialEmail}`}
+                      className="font-semibold text-tech-blue hover:text-navy"
+                    >
+                      {companyFacts.officialEmail}
+                    </a>
+                  </dd>
+                </div>
+              </dl>
+            </GlassCard>
+          </div>
         </div>
       </section>
 

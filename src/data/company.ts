@@ -1,3 +1,4 @@
+import { messagingLayers } from "@/config/site";
 import type { CompanyValue } from "@/types";
 
 export const companyIntro = {
@@ -28,6 +29,17 @@ export const companyIntro = {
   partnerEcosystem:
     "Named partner alliances and logos are not published until agreements allow public reference. We collaborate with technology and delivery partners under client-specific engagement models; formal ecosystem details will be added here when confirmed.",
 };
+
+export const companyFacts = {
+  legalName: "Agrayian AI Labs",
+  whoWeAre: messagingLayers.whoWeAre,
+  whatWeDo: messagingLayers.whatWeDo,
+  whoWeServe: messagingLayers.whoWeServe,
+  whyUs: messagingLayers.whyUs,
+  location: "India",
+  officialEmail: "hello@agrayian.ai",
+  officialEnquiry: "/contact",
+} as const;
 
 export const companyValues: CompanyValue[] = [
   {

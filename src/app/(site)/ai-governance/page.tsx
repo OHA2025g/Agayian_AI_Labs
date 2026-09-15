@@ -94,9 +94,9 @@ const pillars: { title: string; description: string; icon: LucideIcon }[] = [
     icon: UserCheck,
   },
   {
-    title: "Privacy & security",
+    title: "Privacy, access and residency",
     description:
-      "Protect data and models with privacy-by-design and robust security controls.",
+      "Protect data with privacy-by-design, role-based access control and explicit data-residency choices.",
     icon: Lock,
   },
   {

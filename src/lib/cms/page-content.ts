@@ -1,5 +1,6 @@
 import { cache } from "react";
-import { brandCopy } from "@/config/site";
+import { CTA } from "@/config/cta";
+import { brandCopy, positioningPoints } from "@/config/site";
 import { companyIntro, companyValues } from "@/data/company";
 import { consultationFlow } from "@/lib/contact-schema";
 import {
@@ -73,22 +74,33 @@ export type HomePageContent = {
   hero: {
     eyebrow: string;
     headline: string;
+    headlineLines: string[];
     supporting: string;
     primaryCtaLabel: string;
     primaryCtaHref: string;
     secondaryCtaLabel: string;
     secondaryCtaHref: string;
     trustLine: string;
+    supportingPoints: string[];
   };
   sections: {
-    ambition: string;
+    trust: string;
+    problems: string;
+    pillars: string;
     products: string;
     industries: string;
+    method: string;
+    proof: string;
     responsible: string;
     insights: string;
   };
+  trustItems: string[];
+  problemItems: string[];
+  pillars: { title: string; body: string }[];
+  methodSteps: { title: string; body: string }[];
   featuredProductSlugs: string[];
   featuredInsightSlugs: string[];
+  featuredStorySlugs: string[];
   cta: { title: string; description: string };
   flagshipOverrides: {
     slug: string;
@@ -110,41 +122,120 @@ export const getHomePageContent = cache(async (): Promise<HomePageContent> => {
   const hero = (doc?.hero as Record<string, unknown> | undefined) ?? {};
   const sections = (doc?.sections as Record<string, unknown> | undefined) ?? {};
   const cta = (doc?.finalCta as Record<string, unknown> | undefined) ?? {};
-  const headline = [hero.headlineLine1, hero.headlineLine2]
-    .filter((part): part is string => Boolean(asOptional(part)))
-    .join(" ");
+  const resolvedHeadlineLines = [hero.headlineLine1, hero.headlineLine2]
+    .map((part) => asOptional(part))
+    .filter((part): part is string => Boolean(part));
+  const headline =
+    resolvedHeadlineLines.join(" ") || asText(hero.headline, brandCopy.headline);
 
   return {
     hero: {
       eyebrow: asText(hero.eyebrow, brandCopy.eyebrow),
-      headline: headline || asText(hero.headline, brandCopy.headline),
-      supporting: asText(
-        hero.supporting,
-        "We help enterprises and governments turn complex data into responsible AI systems, measurable decisions and action.",
-      ),
+      headline,
+      headlineLines:
+        resolvedHeadlineLines.length > 0
+          ? resolvedHeadlineLines
+          : [...brandCopy.headlineLines],
+      supporting: asText(hero.supporting, brandCopy.supporting),
       primaryCtaLabel: asText(hero.primaryCtaLabel, brandCopy.primaryCta),
-      primaryCtaHref: asText(hero.primaryCtaHref, "/contact?interest=consultation"),
+      primaryCtaHref: asText(hero.primaryCtaHref, CTA.primary.href),
       secondaryCtaLabel: asText(hero.secondaryCtaLabel, brandCopy.secondaryCta),
-      secondaryCtaHref: asText(hero.secondaryCtaHref, "/capabilities"),
+      secondaryCtaHref: asText(hero.secondaryCtaHref, CTA.secondary.href),
       trustLine: asText(hero.trustLine, brandCopy.trustStatement),
+      supportingPoints: asStringList(hero.supportingPoints, [...positioningPoints]),
     },
     sections: {
-      ambition: asText(sections.ambition, "From ambition to accountable intelligence"),
-      products: asText(sections.products, "Flagship products"),
-      industries: asText(sections.industries, "Industries we empower"),
+      trust: asText(sections.trust, "Built for high-complexity institutions"),
+      problems: asText(sections.problems, "The operational problems we take on"),
+      pillars: asText(sections.pillars, "How we convert workflows into AI systems"),
+      products: asText(sections.products, "Featured products"),
+      industries: asText(sections.industries, "Industries we serve"),
+      method: asText(sections.method, "Discover, Design, Pilot, Scale"),
+      proof: asText(sections.proof, "Proof, labelled by delivery status"),
       responsible: asText(sections.responsible, "Responsible AI by design"),
       insights: asText(sections.insights, "Insights that inspire"),
     },
+    trustItems: asStringList(doc?.trustItems, [
+      "Government and public sector",
+      "Banking and financial services",
+      "Enterprise operations",
+      "Data, AI and automation",
+      "Secure and governed AI",
+    ]),
+    problemItems: asStringList(doc?.problemItems, [
+      "Manual audit",
+      "Fragmented operations",
+      "Slow document review",
+      "Revenue leakage",
+      "Fraud risk",
+      "Poor cross-department visibility",
+    ]),
+    pillars: asObjectArray(
+      doc?.pillars,
+      [
+        {
+          title: "AI Strategy and Advisory",
+          body: "Define the operational problem, the decision that must improve and the governed path from pilot to production.",
+        },
+        {
+          title: "Agentic Process Automation",
+          body: "Deploy workflow-integrated agents that act inside high-value processes with human approval at the critical steps.",
+        },
+        {
+          title: "Data and Decision Intelligence",
+          body: "Turn fragmented operational data into timely, reviewable intelligence for executives and programme owners.",
+        },
+        {
+          title: "AI Governance, Risk and Compliance",
+          body: "Make AI audit-ready with access control, explainability, monitoring, data residency and incident management.",
+        },
+      ],
+      (item) => {
+        const title = asOptional(item.title);
+        if (!title) return null;
+        return { title, body: asText(item.body, "") };
+      },
+    ),
+    methodSteps: asObjectArray(
+      doc?.methodSteps,
+      [
+        {
+          title: "Discover",
+          body: "Identify the operational workflow, buyers, constraints and the evidence needed to act.",
+        },
+        {
+          title: "Design",
+          body: "Specify the system, human approval points, data sources and measurable outcomes.",
+        },
+        {
+          title: "Pilot",
+          body: "Prove the workflow in a bounded production-like setting with reviewable results.",
+        },
+        {
+          title: "Scale",
+          body: "Move from a governed pilot to a production system with monitoring and ownership.",
+        },
+      ],
+      (item) => {
+        const title = asOptional(item.title);
+        if (!title) return null;
+        return { title, body: asText(item.body, "") };
+      },
+    ),
     featuredProductSlugs: relationSlugs(doc?.featuredProducts),
     featuredInsightSlugs: (() => {
       const slugs = relationSlugs(doc?.featuredInsights);
       return slugs.length ? slugs : defaultHomeInsightSlugs;
     })(),
+    featuredStorySlugs: relationSlugs(doc?.featuredStories),
     cta: {
-      title: asText(cta.title, "Ready to build governed intelligence?"),
+      title: asText(
+        cta.title,
+        "Have a complex process that needs to be redesigned with AI?",
+      ),
       description: asText(
         cta.description,
-        "Strategy to scale. Governance by design. Human accountability throughout.",
+        "Submit the operational challenge. We will map the workflow, the buyers and the governed path from discovery to production.",
       ),
     },
     flagshipOverrides: asObjectArray(
@@ -233,14 +324,14 @@ export const getCoePageContent = cache(async (): Promise<CoePageContent> => {
       eyebrow: asText(hero.eyebrow, "AI Centre of Excellence"),
       title: asText(
         hero.title ?? doc?.title,
-        "AI Centre of Excellence — An operating model that makes AI repeatable",
+        "AI Centre of Excellence — a formal advisory and enablement service",
       ),
       description: asText(
         hero.description ?? doc?.description,
-        "Connect strategy, governance, platforms, talent and delivery so every use case stops restarting from zero.",
+        "We help institutions stand up a governed CoE that sets standards, funds the right work and enables delivery teams to move from pilot to production.",
       ),
-      primaryCtaLabel: asText(hero.primaryCtaLabel, "Book a Consultation"),
-      primaryCtaHref: asText(hero.primaryCtaHref, "/contact?interest=consultation"),
+      primaryCtaLabel: asText(hero.primaryCtaLabel, CTA.primary.label),
+      primaryCtaHref: asText(hero.primaryCtaHref, CTA.primary.href),
       secondaryCtaLabel: asText(hero.secondaryCtaLabel, "Explore the Operating Model"),
       secondaryCtaHref: asText(hero.secondaryCtaHref, "#operating-model"),
     },
@@ -248,7 +339,7 @@ export const getCoePageContent = cache(async (): Promise<CoePageContent> => {
     whatTitle: asText(doc?.whatTitle, "What an AI CoE is"),
     whatBody: asText(
       doc?.whatBody,
-      "A cross-functional capability that sets direction, enables standards, funds the right work and accelerates delivery across the enterprise.",
+      "A formal advisory and enablement service: a cross-functional operating model that sets direction, enables standards, funds the right work and accelerates delivery across the enterprise.",
     ),
     whyTitle: asText(doc?.whyTitle, "Why organisations need an AI CoE"),
     whyBody: asText(
@@ -454,8 +545,8 @@ export const getGovernancePageContent = cache(
           hero.description ?? doc?.description,
           "Inventory AI systems, classify risk, enforce lifecycle controls and preserve evidence for leadership and audit.",
         ),
-        primaryCtaLabel: asText(hero.primaryCtaLabel, "Book a Consultation"),
-        primaryCtaHref: asText(hero.primaryCtaHref, "/contact?interest=consultation"),
+        primaryCtaLabel: asText(hero.primaryCtaLabel, CTA.primary.label),
+        primaryCtaHref: asText(hero.primaryCtaHref, CTA.primary.href),
         secondaryCtaLabel: asText(hero.secondaryCtaLabel, "Explore Governance"),
         secondaryCtaHref: asText(hero.secondaryCtaHref, "#pillars"),
       },
@@ -674,7 +765,7 @@ export const getContactPageContent = cache(
         title: asText(doc?.title, "Contact"),
         description: asText(
           doc?.description,
-          "Book a consultation with Agrayian AI Labs for AI strategy, CoE design, governance, products and enterprise or government programmes.",
+          "Discuss your AI initiative with Agrayian AI Labs for strategy, CoE design, governance, products and enterprise or government programmes.",
         ),
       }),
     };
@@ -712,14 +803,11 @@ export const getCapabilitiesPageContent = cache(
           hero.body,
           "Seven integrated capability layers connect ambition, data foundations, AI modalities, governance, engineering and managed operations.",
         ),
-        primaryCtaLabel: asText(hero.primaryCtaLabel, "Book a Consultation"),
-        primaryCtaHref: asText(
-          hero.primaryCtaHref,
-          "/contact?interest=consultation",
-        ),
+        primaryCtaLabel: asText(hero.primaryCtaLabel, CTA.primary.label),
+        primaryCtaHref: asText(hero.primaryCtaHref, CTA.primary.href),
         secondaryCtaLabel: asText(
           hero.secondaryCtaLabel,
-          "Explore Related Products",
+          CTA.secondary.label,
         ),
         secondaryCtaHref: asText(hero.secondaryCtaHref, "/products"),
       },

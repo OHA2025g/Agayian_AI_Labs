@@ -22,10 +22,22 @@ import { capabilities as staticCapabilities } from "@/data/capabilities";
 import { impactStories as staticStories } from "@/data/impactStories";
 import { industries as staticIndustries } from "@/data/industries";
 import { products as staticProducts } from "@/data/products";
-import type { Capability, ImpactStory, Industry, Product } from "@/types";
+import {
+  IMPACT_DELIVERY_STAGES,
+  type Capability,
+  type ImpactStory,
+  type Industry,
+  type Product,
+} from "@/types";
 import { cn } from "@/lib/utils";
 
-type FilterId = "all" | "talent" | "government" | "audit" | "governance";
+type FilterId =
+  | "all"
+  | "talent"
+  | "government"
+  | "audit"
+  | "governance"
+  | (typeof IMPACT_DELIVERY_STAGES)[number];
 
 const filterPills: {
   id: FilterId;
@@ -72,6 +84,12 @@ const filterPills: {
       s.slug.includes("governance") ||
       s.industry === "banking",
   },
+  ...IMPACT_DELIVERY_STAGES.map((stage) => ({
+    id: stage,
+    label: stage,
+    icon: Route,
+    match: (s: ImpactStory) => (s.deliveryStage ?? "Demonstration") === stage,
+  })),
 ];
 
 function storyIcon(story: ImpactStory): LucideIcon {
@@ -307,6 +325,7 @@ export function ImpactStoriesCinematic({
                         {summary}
                       </p>
                       <p className="mt-3 text-[0.62rem] font-medium uppercase tracking-wider text-muted-light">
+                        {story.deliveryStage ?? "Demonstration"} ·{" "}
                         {industryLabel(story.industry)} · {story.clientLabel}
                       </p>
                       <Link

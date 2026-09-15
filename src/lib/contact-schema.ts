@@ -5,6 +5,7 @@ export const interestOptions = [
   "AI CoE",
   "AI governance",
   "Product demonstration",
+  "Business challenge",
   "Generative AI",
   "Agentic AI",
   "Data & Analytics",
@@ -37,6 +38,11 @@ export const interestCardOptions = [
     description: "See platforms in context",
   },
   {
+    value: "Business challenge",
+    label: "Business Challenge",
+    description: "Submit a process to redesign with AI",
+  },
+  {
     value: "Generative AI",
     label: "Generative AI",
     description: "Assistive systems with controls",
@@ -58,6 +64,22 @@ export const interestCardOptions = [
 }>;
 
 export const contactMethodOptions = ["Email", "Phone", "Either"] as const;
+
+export const timelineOptions = [
+  "Immediate (0-1 month)",
+  "1-3 months",
+  "3-6 months",
+  "6-12 months",
+  "Exploring",
+] as const;
+
+export const projectSizeOptions = [
+  "Proof of concept",
+  "Single department",
+  "Multi-department",
+  "Enterprise-wide",
+  "Not yet defined",
+] as const;
 
 export const contactSchema = z.object({
   fullName: z
@@ -98,6 +120,16 @@ export const contactSchema = z.object({
     .trim()
     .min(20, "Please share a short project summary (at least 20 characters)")
     .max(4000, "Project summary is too long"),
+  industry: z
+    .string()
+    .trim()
+    .min(2, "Select an industry"),
+  timeline: z.enum(timelineOptions, {
+    errorMap: () => ({ message: "Select a timeline" }),
+  }),
+  projectSize: z.enum(projectSizeOptions, {
+    errorMap: () => ({ message: "Select a project size" }),
+  }),
   preferredContactMethod: z.enum(contactMethodOptions, {
     errorMap: () => ({ message: "Select a preferred contact method" }),
   }),
@@ -107,7 +139,6 @@ export const contactSchema = z.object({
   /** Honeypot field — ignored when empty; non-empty values trigger a silent success. */
   website: z.string().optional(),
   product: z.string().trim().max(120).optional(),
-  industry: z.string().trim().max(160).optional(),
   utmSource: z.string().trim().max(120).optional(),
   utmMedium: z.string().trim().max(120).optional(),
   utmCampaign: z.string().trim().max(160).optional(),
@@ -131,6 +162,8 @@ const interestQueryMap: Record<string, ContactInterest> = {
   demo: "Product demonstration",
   demonstration: "Product demonstration",
   "product-demonstration": "Product demonstration",
+  challenge: "Business challenge",
+  "business-challenge": "Business challenge",
   "generative-ai": "Generative AI",
   genai: "Generative AI",
   "agentic-ai": "Agentic AI",

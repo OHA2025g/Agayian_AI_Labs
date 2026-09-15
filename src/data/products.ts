@@ -1,3 +1,4 @@
+import { DEFAULT_PRODUCT_CATEGORIES } from "@/lib/products/categories";
 import type { Product } from "@/types";
 
 export const productTypeFilters = [
@@ -165,7 +166,8 @@ export const products: Product[] = [
       "Improved visibility into hiring pipeline health for talent leadership",
     ],
     featured: true,
-    status: "Available for demonstration",
+    status: "Demonstration",
+    maturity: "Demonstration",
     relatedCapabilities: [
       "ai-strategy",
       "responsible-ai",
@@ -296,7 +298,8 @@ export const products: Product[] = [
       "Stronger evidence base for planning, monitoring and accountability forums",
     ],
     featured: true,
-    status: "Available for demonstration",
+    status: "Demonstration",
+    maturity: "Demonstration",
     relatedCapabilities: [
       "government-ai",
       "data-platforms",
@@ -427,7 +430,8 @@ export const products: Product[] = [
       "Reduced effort to prepare committee-ready assurance narratives",
     ],
     featured: true,
-    status: "Available for demonstration",
+    status: "Demonstration",
+    maturity: "Demonstration",
     relatedCapabilities: [
       "responsible-ai",
       "enterprise-ai",
@@ -558,7 +562,8 @@ export const products: Product[] = [
       "Board- and committee-ready governance reporting without manual assembly",
     ],
     featured: true,
-    status: "Available for demonstration",
+    status: "Demonstration",
+    maturity: "Demonstration",
     relatedCapabilities: [
       "responsible-ai",
       "ai-strategy",
@@ -684,7 +689,8 @@ export const products: Product[] = [
       "Clearer ownership and follow-through from decision to closure",
     ],
     featured: false,
-    status: "Available for demonstration",
+    status: "Demonstration",
+    maturity: "Demonstration",
     relatedCapabilities: [
       "analytics",
       "data-platforms",
@@ -815,7 +821,8 @@ export const products: Product[] = [
       "Clearer reviewer accountability before operational systems are updated",
     ],
     featured: false,
-    status: "Available for demonstration",
+    status: "Demonstration",
+    maturity: "Demonstration",
     relatedCapabilities: [
       "document-intelligence",
       "generative-ai",
@@ -823,7 +830,176 @@ export const products: Product[] = [
       "responsible-ai",
     ],
   },
+  ...buildPlaceholderProducts(),
 ];
+
+function placeholderProduct(input: {
+  slug: string;
+  name: string;
+  shortDescription: string;
+  industries: string[];
+  category: string;
+  outcomeHeadline: string;
+  primaryUser: string;
+  primaryWorkflow: string;
+}): Product {
+  return {
+    id: input.slug,
+    name: input.name,
+    slug: input.slug,
+    category: input.category,
+    categories: DEFAULT_PRODUCT_CATEGORIES[input.slug],
+    industries: input.industries,
+    technologies: ["Generative AI", "Agentic AI", "Data Analytics"],
+    shortDescription: input.shortDescription,
+    valueProposition: input.shortDescription,
+    businessProblem:
+      "Existing processes in this workflow remain manual, fragmented and hard to evidence. Full problem, modules and outcomes will be added when product details are confirmed.",
+    whyProcessesFail:
+      "Teams rely on disconnected tools, late reviews and incomplete audit trails, so exceptions surface after the operational window has closed.",
+    solutionOverview:
+      `${input.name} is being documented as a governed product for this workflow. This page currently holds the title, category and buyer context so it can appear in the portfolio while detailed content is completed.`,
+    targetUsers: [input.primaryUser],
+    modules: [],
+    capabilities: [],
+    workflow: [],
+    agents: [],
+    humanApprovalPoints: [],
+    integrations: [],
+    outcomes: [],
+    outcomeHeadline: input.outcomeHeadline,
+    primaryUser: input.primaryUser,
+    primaryWorkflow: input.primaryWorkflow,
+    benefits: [
+      "Maps a real operational workflow",
+      "Designed for governed, reviewable use",
+      "Ready for detailed product content",
+    ],
+    featured: [
+      "maha-geo-rr",
+      "legal-intent-stamp-duty-integrity",
+      "autonomous-revenue-os",
+    ].includes(input.slug),
+    status: "Roadmap",
+    maturity: "Roadmap",
+    relatedCapabilities: [],
+  };
+}
+
+function buildPlaceholderProducts(): Product[] {
+  return [
+  placeholderProduct({
+    slug: "legal-intent-stamp-duty-integrity",
+    name: "Agentic Legal-Intent and Stamp-Duty Integrity System",
+    shortDescription:
+      "Governed legal-intent and stamp-duty integrity for high-volume document and revenue workflows.",
+    industries: ["Government", "Finance", "Audit and Compliance"],
+    category: "Audit, Risk and Compliance",
+    outcomeHeadline: "Protect legal intent and stamp-duty integrity at scale",
+    primaryUser: "Compliance and government revenue leaders",
+    primaryWorkflow: "Legal-intent and stamp-duty review",
+  }),
+  placeholderProduct({
+    slug: "maha-geo-rr",
+    name: "Maha Geo-RR",
+    shortDescription:
+      "Geospatial intelligence for government programme visibility and field execution.",
+    industries: ["Government"],
+    category: "Government Intelligence",
+    outcomeHeadline: "See programme delivery on the ground",
+    primaryUser: "Department heads and programme offices",
+    primaryWorkflow: "Geospatial programme monitoring",
+  }),
+  placeholderProduct({
+    slug: "pmu-eit-ai-dashboard",
+    name: "PMU and EIT&AI Dashboard",
+    shortDescription:
+      "Programme and EIT&AI dashboards for department heads and commissioners.",
+    industries: ["Government"],
+    category: "Government Intelligence",
+    outcomeHeadline: "Give PMU and EIT leadership one operating view",
+    primaryUser: "Commissioners and programme offices",
+    primaryWorkflow: "Programme monitoring and exception review",
+  }),
+  placeholderProduct({
+    slug: "revenue-intelligence",
+    name: "Revenue Intelligence",
+    shortDescription:
+      "Government revenue intelligence for leakage, recovery and collection oversight.",
+    industries: ["Government", "Finance"],
+    category: "Government Intelligence",
+    outcomeHeadline: "Reduce leakage and recover government revenue",
+    primaryUser: "Government revenue leaders",
+    primaryWorkflow: "Revenue leakage and collection oversight",
+  }),
+  placeholderProduct({
+    slug: "autonomous-revenue-os",
+    name: "Autonomous Revenue OS",
+    shortDescription:
+      "An operating system for revenue teams to plan, execute and govern growth workflows.",
+    industries: ["Finance", "Enterprise Operations"],
+    category: "Enterprise Revenue and Operations",
+    outcomeHeadline: "Run revenue operations as a governed system",
+    primaryUser: "Revenue and transformation leaders",
+    primaryWorkflow: "Revenue planning and execution",
+  }),
+  placeholderProduct({
+    slug: "marketing-engine",
+    name: "Marketing Engine",
+    shortDescription:
+      "Governed marketing intelligence that connects campaigns to measurable pipeline.",
+    industries: ["Enterprise Operations"],
+    category: "Enterprise Revenue and Operations",
+    outcomeHeadline: "Connect campaigns to measurable pipeline",
+    primaryUser: "Marketing and growth leaders",
+    primaryWorkflow: "Campaign planning and attribution",
+  }),
+  placeholderProduct({
+    slug: "sales-engine",
+    name: "Sales Engine",
+    shortDescription:
+      "Sales workflow intelligence for forecasting, coaching and execution control.",
+    industries: ["Enterprise Operations"],
+    category: "Enterprise Revenue and Operations",
+    outcomeHeadline: "Make sales execution reviewable and forecastable",
+    primaryUser: "Sales and operations leaders",
+    primaryWorkflow: "Pipeline review and forecast control",
+  }),
+  placeholderProduct({
+    slug: "voice-agent",
+    name: "Voice Agent",
+    shortDescription:
+      "Human-controlled voice agents for high-volume operational conversations.",
+    industries: ["Enterprise Operations", "Government"],
+    category: "Enterprise Revenue and Operations",
+    outcomeHeadline: "Handle high-volume conversations with human control",
+    primaryUser: "Operations and service leaders",
+    primaryWorkflow: "Inbound and outbound operational conversations",
+  }),
+  placeholderProduct({
+    slug: "bhritak-ai",
+    name: "Bhritak.ai",
+    shortDescription:
+      "Workforce intelligence for staffing, capability mapping and workforce planning.",
+    industries: ["Human Resources"],
+    category: "Talent and Workforce",
+    outcomeHeadline: "Plan and staff the workforce with evidence",
+    primaryUser: "HR and business leadership",
+    primaryWorkflow: "Workforce planning and staffing",
+  }),
+  placeholderProduct({
+    slug: "chayanix-ai",
+    name: "chayanix.ai",
+    shortDescription:
+      "Selection intelligence that supports consistent, reviewable hiring decisions.",
+    industries: ["Human Resources"],
+    category: "Talent and Workforce",
+    outcomeHeadline: "Make selection decisions consistent and reviewable",
+    primaryUser: "Talent acquisition leaders",
+    primaryWorkflow: "Candidate selection and approval",
+  }),
+  ];
+}
 
 export function getProductBySlug(slug: string): Product | undefined {
   return products.find((product) => product.slug === slug);

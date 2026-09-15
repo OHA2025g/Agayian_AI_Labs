@@ -1,4 +1,5 @@
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { CTA } from "@/config/cta";
 
 export function IndustryCta() {
   return (
@@ -30,9 +31,7 @@ export function IndustryCta() {
         <br />
         AI programme with Agrayian.
       </h2>
-      <PrimaryButton href="/contact?interest=consultation">
-        Book a Consultation
-      </PrimaryButton>
+      <PrimaryButton href={CTA.primary.href}>{CTA.primary.label}</PrimaryButton>
     </section>
   );
 }

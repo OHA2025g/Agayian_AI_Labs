@@ -5,26 +5,50 @@ import { mockupAssets } from "@/config/mockup-assets";
 const ORIGINAL_SIZE = { width: 1536, height: 1024 } as const;
 
 function resolveOriginalPng(slug: string): string | null {
-  if (slug.includes("audit") || slug.includes("onetouch")) {
+  if (
+    slug.includes("audit") ||
+    slug.includes("onetouch") ||
+    slug.includes("legal") ||
+    slug.includes("stamp")
+  ) {
     return mockupAssets.flagshipOriginalAudit;
   }
   if (
     slug.includes("hiring") ||
     slug.includes("vedhire") ||
-    slug.includes("talent")
+    slug.includes("talent") ||
+    slug.includes("bhritak") ||
+    slug.includes("chayanix")
   ) {
     return mockupAssets.flagshipOriginalVedhire;
   }
-  if (slug.includes("wcd") || slug.includes("women") || slug.includes("child")) {
+  if (
+    slug.includes("wcd") ||
+    slug.includes("women") ||
+    slug.includes("child") ||
+    slug.includes("maha") ||
+    slug.includes("geo")
+  ) {
     return mockupAssets.flagshipOriginalWcd;
   }
   if (slug.includes("governance") || slug.includes("command")) {
     return mockupAssets.flagshipOriginalGovernance;
   }
-  if (slug.includes("decision") || slug.includes("enterprise-decision")) {
+  if (
+    slug.includes("decision") ||
+    slug.includes("enterprise-decision") ||
+    slug.includes("revenue") ||
+    slug.includes("pmu") ||
+    slug.includes("sales") ||
+    slug.includes("marketing")
+  ) {
     return mockupAssets.productDecisionRing;
   }
-  if (slug.includes("document") || slug.includes("copilot")) {
+  if (
+    slug.includes("document") ||
+    slug.includes("copilot") ||
+    slug.includes("voice")
+  ) {
     return mockupAssets.productDocumentStack;
   }
   return null;
@@ -40,19 +64,43 @@ type Kind =
   | "document";
 
 function resolveKind(slug: string, variant?: "home" | "products"): Kind {
-  if (slug.includes("audit") || slug.includes("onetouch")) return "audit";
+  if (
+    slug.includes("audit") ||
+    slug.includes("onetouch") ||
+    slug.includes("legal") ||
+    slug.includes("stamp")
+  ) {
+    return "audit";
+  }
   if (
     slug.includes("hiring") ||
     slug.includes("vedhire") ||
-    slug.includes("talent")
+    slug.includes("talent") ||
+    slug.includes("bhritak") ||
+    slug.includes("chayanix")
   ) {
     return "hiring";
   }
-  if (slug.includes("wcd") || slug.includes("women") || slug.includes("child")) {
+  if (
+    slug.includes("wcd") ||
+    slug.includes("women") ||
+    slug.includes("child") ||
+    slug.includes("maha") ||
+    slug.includes("geo")
+  ) {
     return variant === "products" ? "wcd-rings" : "wcd-heart";
   }
-  if (slug.includes("document") || slug.includes("copilot")) return "document";
-  if (slug.includes("decision") || slug.includes("enterprise-decision")) {
+  if (slug.includes("document") || slug.includes("copilot") || slug.includes("voice")) {
+    return "document";
+  }
+  if (
+    slug.includes("decision") ||
+    slug.includes("enterprise-decision") ||
+    slug.includes("revenue") ||
+    slug.includes("pmu") ||
+    slug.includes("sales") ||
+    slug.includes("marketing")
+  ) {
     return "decision";
   }
   return "governance";

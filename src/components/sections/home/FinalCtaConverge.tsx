@@ -3,6 +3,7 @@
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import { Reveal } from "@/components/motion/Reveal";
+import { CTA } from "@/config/cta";
 
 export function FinalCtaConverge() {
   return (
@@ -45,15 +46,17 @@ export function FinalCtaConverge() {
             intelligence programme
           </h2>
           <p className="mt-4 text-muted-dark">
-            Book a consultation to explore strategy, CoE design, governance or a
-            product demonstration — without invented claims or placeholder
-            metrics.
+            Discuss your AI initiative to explore strategy, CoE design,
+            governance or a product demonstration — without invented claims or
+            placeholder metrics.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <PrimaryButton href="/contact?interest=consultation">
-              Book a Consultation
+            <PrimaryButton href={CTA.primary.href}>
+              {CTA.primary.label}
             </PrimaryButton>
-            <SecondaryButton href="/products">Explore Products</SecondaryButton>
+            <SecondaryButton href={CTA.secondary.href}>
+              {CTA.secondary.label}
+            </SecondaryButton>
           </div>
         </Reveal>
       </div>

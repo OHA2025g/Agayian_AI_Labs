@@ -281,21 +281,35 @@ export interface Product {
    * A product can belong to more than one filter on the Products page.
    */
   categories: (
-    | 'Government'
-    | 'Financial Services'
-    | 'Talent'
-    | 'Governance'
-    | 'Decision Intelligence'
+    | 'Audit, Risk and Compliance'
+    | 'Government Intelligence'
+    | 'Enterprise Revenue and Operations'
+    | 'Talent and Workforce'
   )[];
   /**
    * Optional badge label. Leave blank to use the first selected category.
    */
   category?: string | null;
   shortDescription: string;
+  /**
+   * Primary user-facing outcome shown on product cards.
+   */
+  outcomeHeadline?: string | null;
+  primaryUser?: string | null;
+  primaryWorkflow?: string | null;
+  /**
+   * Three to five card benefits.
+   */
+  benefits?: string[] | null;
   featured?: boolean | null;
+  maturity?: ('Product' | 'Pilot' | 'Demonstration' | 'Roadmap') | null;
+  /**
+   * Optional override. Leave blank to use the maturity label.
+   */
   productStatus?: string | null;
   valueProposition?: string | null;
   businessProblem?: string | null;
+  whyProcessesFail?: string | null;
   solutionOverview?: string | null;
   industries?: string[] | null;
   technologies?: string[] | null;
@@ -303,6 +317,9 @@ export interface Product {
   outcomes?: string[] | null;
   dataSources?: string[] | null;
   aiCapabilities?: string[] | null;
+  agents?: string[] | null;
+  humanApprovalPoints?: string[] | null;
+  integrations?: string[] | null;
   governance?: string[] | null;
   architecture?: string[] | null;
   deploymentOptions?: string[] | null;
@@ -382,6 +399,7 @@ export interface Industry {
   name: string;
   summary: string;
   challenges?: string[] | null;
+  priorityProblems?: string[] | null;
   opportunities?: string[] | null;
   governance?: string[] | null;
   outcomes?: string[] | null;
@@ -422,6 +440,7 @@ export interface ImpactStory {
   capability?: string | null;
   solutionType?: string | null;
   outcomeCategory?: string | null;
+  deliveryStage?: ('Completed deployment' | 'Pilot' | 'Demonstration' | 'Proposed concept') | null;
   challenge?: string | null;
   context?: string | null;
   approach?: string | null;
@@ -719,6 +738,9 @@ export interface Enquiry {
   designation?: string | null;
   country?: string | null;
   areaOfInterest?: string | null;
+  industry?: string | null;
+  timeline?: string | null;
+  projectSize?: string | null;
   projectSummary?: string | null;
   preferredContactMethod?: string | null;
   product?: string | null;
@@ -1003,12 +1025,19 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface ProductsSelect<T extends boolean = true> {
   name?: T;
+  categories?: T;
   category?: T;
   shortDescription?: T;
+  outcomeHeadline?: T;
+  primaryUser?: T;
+  primaryWorkflow?: T;
+  benefits?: T;
   featured?: T;
+  maturity?: T;
   productStatus?: T;
   valueProposition?: T;
   businessProblem?: T;
+  whyProcessesFail?: T;
   solutionOverview?: T;
   industries?: T;
   technologies?: T;
@@ -1016,6 +1045,9 @@ export interface ProductsSelect<T extends boolean = true> {
   outcomes?: T;
   dataSources?: T;
   aiCapabilities?: T;
+  agents?: T;
+  humanApprovalPoints?: T;
+  integrations?: T;
   governance?: T;
   architecture?: T;
   deploymentOptions?: T;
@@ -1091,6 +1123,7 @@ export interface IndustriesSelect<T extends boolean = true> {
   name?: T;
   summary?: T;
   challenges?: T;
+  priorityProblems?: T;
   opportunities?: T;
   governance?: T;
   outcomes?: T;
@@ -1129,6 +1162,7 @@ export interface ImpactStoriesSelect<T extends boolean = true> {
   capability?: T;
   solutionType?: T;
   outcomeCategory?: T;
+  deliveryStage?: T;
   challenge?: T;
   context?: T;
   approach?: T;
@@ -1341,6 +1375,9 @@ export interface EnquiriesSelect<T extends boolean = true> {
   designation?: T;
   country?: T;
   areaOfInterest?: T;
+  industry?: T;
+  timeline?: T;
+  projectSize?: T;
   projectSummary?: T;
   preferredContactMethod?: T;
   product?: T;
@@ -1577,16 +1614,38 @@ export interface HomePage {
     secondaryCtaLabel?: string | null;
     secondaryCtaHref?: string | null;
     trustLine?: string | null;
+    supportingPoints?: string[] | null;
   };
   sections?: {
-    ambition?: string | null;
+    trust?: string | null;
+    problems?: string | null;
+    pillars?: string | null;
     products?: string | null;
     industries?: string | null;
+    method?: string | null;
+    proof?: string | null;
     responsible?: string | null;
     insights?: string | null;
   };
   featuredProducts?: (string | Product)[] | null;
   featuredInsights?: (string | Insight)[] | null;
+  featuredStories?: (string | ImpactStory)[] | null;
+  trustItems?: string[] | null;
+  problemItems?: string[] | null;
+  pillars?:
+    | {
+        title: string;
+        body?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  methodSteps?:
+    | {
+        title: string;
+        body?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   finalCta?: {
     title?: string | null;
     description?: string | null;
@@ -3002,18 +3061,40 @@ export interface HomePageSelect<T extends boolean = true> {
         secondaryCtaLabel?: T;
         secondaryCtaHref?: T;
         trustLine?: T;
+        supportingPoints?: T;
       };
   sections?:
     | T
     | {
-        ambition?: T;
+        trust?: T;
+        problems?: T;
+        pillars?: T;
         products?: T;
         industries?: T;
+        method?: T;
+        proof?: T;
         responsible?: T;
         insights?: T;
       };
   featuredProducts?: T;
   featuredInsights?: T;
+  featuredStories?: T;
+  trustItems?: T;
+  problemItems?: T;
+  pillars?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        id?: T;
+      };
+  methodSteps?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        id?: T;
+      };
   finalCta?:
     | T
     | {

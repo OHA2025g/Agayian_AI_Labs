@@ -23,6 +23,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { LightCtaBar } from "@/components/ui/DarkCtaBand";
 import { OnThisPageNav } from "@/components/ui/OnThisPageNav";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { CTA } from "@/config/cta";
 import { ProcessFlow } from "@/components/ui/ProcessFlow";
 import { GlassOrb } from "@/components/visualisations/glass/GlassOrb";
 import { KnowledgeBookHero } from "@/components/visualisations/glass/KnowledgeBookHero";
@@ -553,10 +554,10 @@ export function InsightArticleView({
                   </p>
                   <div className="mt-3">
                     <PrimaryButton
-                      href="/contact?interest=consultation"
+                      href={CTA.primary.href}
                       className="h-10 px-4 text-xs"
                     >
-                      Book a Consultation
+                      {CTA.primary.label}
                     </PrimaryButton>
                   </div>
                 </div>

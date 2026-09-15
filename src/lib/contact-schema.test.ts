@@ -11,6 +11,9 @@ const valid = {
   areaOfInterest: "AI consultation" as const,
   projectSummary:
     "We need help designing a governed AI roadmap for enterprise operations.",
+  industry: "Banking and Financial Services",
+  timeline: "1-3 months" as const,
+  projectSize: "Single department" as const,
   preferredContactMethod: "Email" as const,
   consent: true,
   website: "",
@@ -40,5 +43,6 @@ describe("resolveInterestFromQuery", () => {
   it("maps query aliases", () => {
     expect(resolveInterestFromQuery("coe")).toBe("AI CoE");
     expect(resolveInterestFromQuery("demo")).toBe("Product demonstration");
+    expect(resolveInterestFromQuery("challenge")).toBe("Business challenge");
   });
 });

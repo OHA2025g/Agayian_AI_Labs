@@ -10,6 +10,7 @@ export const impactStories: ImpactStory[] = [
     capability: "product-engineering",
     solutionType: "AI Products",
     outcomeCategory: "Talent and Workforce Decisions",
+    deliveryStage: "Demonstration",
     challenge:
       "Recruitment teams faced high applicant volumes and inconsistent shortlisting. Hiring managers lacked transparent rationales for candidate progression, and talent leadership had limited visibility into funnel quality across roles.",
     context:
@@ -38,6 +39,7 @@ export const impactStories: ImpactStory[] = [
     capability: "data",
     solutionType: "Government Solutions",
     outcomeCategory: "Public Programme Oversight",
+    deliveryStage: "Pilot",
     challenge:
       "Programme leadership needed timely visibility across districts and schemes, but indicators were fragmented, reporting cycles were delayed and intervention priorities were difficult to compare on a shared evidence base.",
     context:
@@ -66,6 +68,7 @@ export const impactStories: ImpactStory[] = [
     capability: "governance",
     solutionType: "Enterprise Solutions",
     outcomeCategory: "Audit and Control Visibility",
+    deliveryStage: "Demonstration",
     challenge:
       "Assurance teams struggled to maintain a unified view of findings, evidence and remediation ownership. Document-heavy reviews slowed cycles, and leadership lacked a reliable command picture of open exceptions.",
     context:
@@ -94,6 +97,7 @@ export const impactStories: ImpactStory[] = [
     capability: "governance",
     solutionType: "Governance",
     outcomeCategory: "Responsible AI Oversight",
+    deliveryStage: "Proposed concept",
     challenge:
       "AI and generative use cases were emerging across functions faster than the institution could inventory, classify and oversee them. Boards and control teams needed a practical governance operating model, not only policy language.",
     context:

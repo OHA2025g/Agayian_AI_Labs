@@ -14,6 +14,7 @@ import { InsightsHeroSearch } from "@/components/insights/InsightsHeroSearch";
 import { InsightsExplorer } from "@/components/sections/InsightsExplorer";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { CTA } from "@/config/cta";
 import { InsightsFeaturedVisual } from "@/components/visualisations/glass/InsightsFeaturedVisual";
 import { InsightsGlowSculpture } from "@/components/visualisations/insights/InsightsGlowSculpture";
 import { insightSculptures } from "@/config/insight-sculptures";
@@ -231,10 +232,10 @@ export default async function InsightsPage() {
               </p>
               <div className="mt-7">
                 <PrimaryButton
-                  href="/contact?interest=consultation"
+                  href={CTA.primary.href}
                   className="bg-white text-navy shadow-none hover:bg-white/90"
                 >
-                  Book a consultation
+                  {CTA.primary.label}
                 </PrimaryButton>
               </div>
             </div>

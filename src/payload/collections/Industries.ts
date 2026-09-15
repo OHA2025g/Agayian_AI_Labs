@@ -37,6 +37,12 @@ export const Industries: CollectionConfig = {
           label: "Content",
           fields: [
             { name: "challenges", type: "text", hasMany: true },
+            {
+              name: "priorityProblems",
+              type: "text",
+              hasMany: true,
+              label: "Priority problems",
+            },
             { name: "opportunities", type: "text", hasMany: true },
             { name: "governance", type: "text", hasMany: true },
             { name: "outcomes", type: "text", hasMany: true },

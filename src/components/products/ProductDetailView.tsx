@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { Separator } from "@/components/ui/separator";
 import { DashboardPreview } from "@/components/visualisations/DashboardPreview";
+import { CTA } from "@/config/cta";
 import { cn } from "@/lib/utils";
 
 export function ProductDetailView({
@@ -34,7 +35,7 @@ export function ProductDetailView({
               {label}
             </Badge>
           ))}
-        <Badge>{product.status}</Badge>
+        <Badge>{product.maturity ?? product.status}</Badge>
         {product.industries.map((industry) => (
           <Badge key={industry} variant="violet">
             {industry}
@@ -52,94 +53,122 @@ export function ProductDetailView({
       </div>
 
       <DetailBlock title="Business problem" body={product.businessProblem} />
+      {product.whyProcessesFail ? (
+        <DetailBlock
+          title="Why existing processes fail"
+          body={product.whyProcessesFail}
+        />
+      ) : null}
       <DetailBlock title="Solution overview" body={product.solutionOverview} />
 
-      <div>
-        <h2 className="font-heading text-base font-semibold text-navy">
-          Target users
-        </h2>
-        <ul className="mt-2 grid gap-2 sm:grid-cols-2">
-          {product.targetUsers.map((user) => (
-            <li
-              key={user}
-              className="rounded-md border border-[var(--border-soft)] bg-[#f5f8fb] px-3 py-2 text-muted-light"
-            >
-              {user}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <h2 className="font-heading text-base font-semibold text-navy">
-          Major modules
-        </h2>
-        <div className="mt-3 grid gap-3 md:grid-cols-2">
-          {product.modules.map((module) => (
-            <div
-              key={module.title}
-              className="rounded-lg border border-[var(--border-soft)] bg-[#f5f8fb] p-4"
-            >
-              <p className="font-medium text-navy">{module.title}</p>
-              <p className="mt-1 text-muted-light">{module.description}</p>
-            </div>
-          ))}
+      {product.targetUsers.length ? (
+        <div>
+          <h2 className="font-heading text-base font-semibold text-navy">
+            Target users
+          </h2>
+          <ul className="mt-2 grid gap-2 sm:grid-cols-2">
+            {product.targetUsers.map((user) => (
+              <li
+                key={user}
+                className="rounded-md border border-[var(--border-soft)] bg-[#f5f8fb] px-3 py-2 text-muted-light"
+              >
+                {user}
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+      ) : null}
 
-      <TagBlock title="Key capabilities" items={product.capabilities} />
-
-      <div>
-        <h2 className="font-heading text-base font-semibold text-navy">
-          Product workflow
-        </h2>
-        <ol className="mt-3 space-y-3">
-          {product.workflow.map((step, index) => (
-            <li key={step.title} className="flex gap-3">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-cyan/30 bg-cyan/10 text-xs font-semibold text-cyan">
-                {index + 1}
-              </span>
-              <div>
-                <p className="font-medium text-navy">{step.title}</p>
-                <p className="text-muted-light">{step.description}</p>
+      {product.modules.length ? (
+        <div>
+          <h2 className="font-heading text-base font-semibold text-navy">
+            Major modules
+          </h2>
+          <div className="mt-3 grid gap-3 md:grid-cols-2">
+            {product.modules.map((module) => (
+              <div
+                key={module.title}
+                className="rounded-lg border border-[var(--border-soft)] bg-[#f5f8fb] p-4"
+              >
+                <p className="font-medium text-navy">{module.title}</p>
+                <p className="mt-1 text-muted-light">{module.description}</p>
               </div>
-            </li>
-          ))}
-        </ol>
-      </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
-      {product.dataSources && (
+      {product.capabilities.length ? (
+        <TagBlock title="Key capabilities" items={product.capabilities} />
+      ) : null}
+
+      {product.workflow.length ? (
+        <div>
+          <h2 className="font-heading text-base font-semibold text-navy">
+            Product workflow
+          </h2>
+          <ol className="mt-3 space-y-3">
+            {product.workflow.map((step, index) => (
+              <li key={step.title} className="flex gap-3">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-cyan/30 bg-cyan/10 text-xs font-semibold text-cyan">
+                  {index + 1}
+                </span>
+                <div>
+                  <p className="font-medium text-navy">{step.title}</p>
+                  <p className="text-muted-light">{step.description}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : null}
+
+      {product.dataSources?.length ? (
         <TagBlock title="Data sources" items={product.dataSources} />
-      )}
-      {product.aiCapabilities && (
+      ) : null}
+      {product.aiCapabilities?.length ? (
         <TagBlock title="AI capabilities" items={product.aiCapabilities} />
-      )}
-      {product.governance && (
+      ) : null}
+      {product.agents?.length ? (
+        <TagBlock title="Agents" items={product.agents} />
+      ) : null}
+      {product.humanApprovalPoints?.length ? (
+        <TagBlock
+          title="Human approval points"
+          items={product.humanApprovalPoints}
+        />
+      ) : null}
+      {product.integrations?.length ? (
+        <TagBlock title="Integrations" items={product.integrations} />
+      ) : null}
+      {product.governance?.length ? (
         <TagBlock title="Governance controls" items={product.governance} />
-      )}
-      {product.architecture && (
+      ) : null}
+      {product.architecture?.length ? (
         <TagBlock title="Technology architecture" items={product.architecture} />
-      )}
-      {product.deploymentOptions && (
+      ) : null}
+      {product.deploymentOptions?.length ? (
         <TagBlock
           title="Deployment options"
           items={product.deploymentOptions}
         />
-      )}
+      ) : null}
 
-      <div>
-        <h2 className="font-heading text-base font-semibold text-navy">
-          Expected outcomes
-        </h2>
-        <ul className="mt-2 space-y-2">
-          {product.outcomes.map((outcome) => (
-            <li key={outcome} className="flex gap-2 text-muted-light">
-              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
-              {outcome}
-            </li>
-          ))}
-        </ul>
-      </div>
+      {product.outcomes.length ? (
+        <div>
+          <h2 className="font-heading text-base font-semibold text-navy">
+            Expected outcomes
+          </h2>
+          <ul className="mt-2 space-y-2">
+            {product.outcomes.map((outcome) => (
+              <li key={outcome} className="flex gap-2 text-muted-light">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
+                {outcome}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
 
       <div>
         <h2 className="font-heading text-base font-semibold text-navy">
@@ -160,8 +189,8 @@ export function ProductDetailView({
       <Separator />
 
       <div className="flex flex-wrap gap-3">
-        <PrimaryButton href={`/contact?interest=demo&product=${product.slug}`}>
-          Request a demo
+        <PrimaryButton href={`${CTA.demo.href}&product=${product.slug}`}>
+          {CTA.demo.label}
         </PrimaryButton>
       </div>
     </div>

@@ -12,13 +12,16 @@ import {
   Lock,
   Shield,
   Sparkles,
+  Target,
   type LucideIcon,
 } from "lucide-react";
 import {
   contactSchema,
   interestCardOptions,
   interestOptions,
+  projectSizeOptions,
   resolveInterestFromQuery,
+  timelineOptions,
   type ContactFormValues,
   type ContactInterest,
 } from "@/lib/contact-schema";
@@ -47,6 +50,7 @@ const interestIcons: Record<string, LucideIcon> = {
   "AI CoE": Building2,
   "AI governance": Shield,
   "Product demonstration": LayoutDashboard,
+  "Business challenge": Target,
   "Generative AI": Sparkles,
   "Agentic AI": Bot,
   "Data & Analytics": Database,
@@ -165,6 +169,8 @@ export function ContactForm({
       website: "",
       product: defaultProduct ?? "",
       industry: "",
+      timeline: "Exploring",
+      projectSize: "Not yet defined",
       utmSource: utm?.source ?? "",
       utmMedium: utm?.medium ?? "",
       utmCampaign: utm?.campaign ?? "",
@@ -220,6 +226,8 @@ export function ContactForm({
         website: "",
         product: defaultProduct ?? "",
         industry: "",
+        timeline: "Exploring",
+        projectSize: "Not yet defined",
       });
     } catch (error) {
       setStatus("error");
@@ -444,26 +452,29 @@ export function ContactForm({
           </Field>
         ) : null}
 
-        <Field id="industry" label="Industry">
+        <Field
+          id="industry"
+          label="Industry"
+          error={form.formState.errors.industry?.message}
+        >
           <Select
-            value={industryValue || "__none"}
+            value={industryValue || undefined}
             onValueChange={(value) =>
-              form.setValue("industry", value === "__none" ? "" : value, {
+              form.setValue("industry", value, {
                 shouldDirty: true,
+                shouldValidate: true,
               })
             }
           >
             <SelectTrigger
               id="industry"
               aria-label="Industry"
+              aria-invalid={Boolean(form.formState.errors.industry)}
               className={fieldControlClass}
             >
               <SelectValue placeholder="Select your industry" />
             </SelectTrigger>
             <SelectContent className="border-[var(--border-light)] bg-white text-navy">
-              <SelectItem value="__none" className="focus:bg-tech-blue/10">
-                Prefer not to say
-              </SelectItem>
               {industries.map((industry) => (
                 <SelectItem
                   key={industry.slug}
@@ -471,6 +482,78 @@ export function ContactForm({
                   className="focus:bg-tech-blue/10"
                 >
                   {industry.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+
+        <Field
+          id="timeline"
+          label="Timeline"
+          error={form.formState.errors.timeline?.message}
+        >
+          <Select
+            defaultValue={form.getValues("timeline")}
+            onValueChange={(value) =>
+              form.setValue("timeline", value as ContactFormValues["timeline"], {
+                shouldValidate: true,
+              })
+            }
+          >
+            <SelectTrigger
+              id="timeline"
+              aria-label="Timeline"
+              aria-invalid={Boolean(form.formState.errors.timeline)}
+              className={fieldControlClass}
+            >
+              <SelectValue placeholder="Select a timeline" />
+            </SelectTrigger>
+            <SelectContent className="border-[var(--border-light)] bg-white text-navy">
+              {timelineOptions.map((option) => (
+                <SelectItem
+                  key={option}
+                  value={option}
+                  className="focus:bg-tech-blue/10"
+                >
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+
+        <Field
+          id="projectSize"
+          label="Project size"
+          error={form.formState.errors.projectSize?.message}
+        >
+          <Select
+            defaultValue={form.getValues("projectSize")}
+            onValueChange={(value) =>
+              form.setValue(
+                "projectSize",
+                value as ContactFormValues["projectSize"],
+                { shouldValidate: true },
+              )
+            }
+          >
+            <SelectTrigger
+              id="projectSize"
+              aria-label="Project size"
+              aria-invalid={Boolean(form.formState.errors.projectSize)}
+              className={fieldControlClass}
+            >
+              <SelectValue placeholder="Select project size" />
+            </SelectTrigger>
+            <SelectContent className="border-[var(--border-light)] bg-white text-navy">
+              {projectSizeOptions.map((option) => (
+                <SelectItem
+                  key={option}
+                  value={option}
+                  className="focus:bg-tech-blue/10"
+                >
+                  {option}
                 </SelectItem>
               ))}
             </SelectContent>

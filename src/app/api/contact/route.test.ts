@@ -34,6 +34,9 @@ const baseBody = {
   areaOfInterest: "AI consultation",
   projectSummary:
     "We need help designing a governed AI roadmap for enterprise operations.",
+  industry: "Banking and Financial Services",
+  timeline: "1-3 months",
+  projectSize: "Single department",
   preferredContactMethod: "Email",
   consent: true,
   website: "",

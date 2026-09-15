@@ -33,7 +33,7 @@ import { buildMetadata } from "@/lib/seo";
 const contactFallback = {
   title: "Contact",
   description:
-    "Book a consultation with Agrayian AI Labs for AI strategy, CoE design, governance, products and enterprise or government programmes.",
+    "Discuss your AI initiative with Agrayian AI Labs for strategy, CoE design, governance, products and enterprise or government programmes.",
 };
 
 export async function generateMetadata() {
@@ -179,7 +179,7 @@ export default async function ContactPage({
     <>
       <PageHero
         title={page.title}
-        subtitle="Book a consultation"
+        subtitle="Discuss your AI initiative"
         description={heroDescription}
         visual={<ContactNetworkHero />}
       />

@@ -1,4 +1,4 @@
-import { brandCopy } from "@/config/site";
+import { CTA } from "@/config/cta";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -7,10 +7,10 @@ import { DarkCtaBand, LightCtaBar } from "@/components/ui/DarkCtaBand";
 export function CTASection({
   title = "Ready to build governed intelligence?",
   description,
-  primaryHref = "/contact",
-  primaryLabel = brandCopy.primaryCta,
-  secondaryHref = "/products",
-  secondaryLabel = "Explore Our Products",
+  primaryHref = CTA.primary.href,
+  primaryLabel = CTA.primary.label,
+  secondaryHref = CTA.secondary.href,
+  secondaryLabel = CTA.secondary.label,
   variant = "light",
 }: {
   title?: string;

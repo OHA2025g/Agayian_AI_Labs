@@ -16,51 +16,39 @@ const industries: {
   {
     slug: "government",
     label: "Government",
-    blurb: "Modernize public systems with responsible AI and data trust.",
+    blurb: "Secure, measurable AI for public programmes, revenue and field operations.",
     icon: IconGovernment,
   },
   {
-    slug: "enterprise",
-    label: "Public Sector Undertakings",
-    blurb: "Drive operational excellence and citizen outcomes.",
-    icon: IconPsu,
-  },
-  {
     slug: "banking",
-    label: "Financial Services",
-    blurb: "Strengthen risk, compliance and customer experiences with AI.",
+    label: "Banking",
+    blurb: "Audit-ready AI for risk, compliance, fraud and customer operations.",
     icon: IconFinance,
   },
   {
-    slug: "healthcare-social",
-    label: "Healthcare",
-    blurb: "Improve access, outcomes and operational efficiency.",
-    icon: IconHealth,
-  },
-  {
     slug: "manufacturing",
-    label: "Manufacturing",
-    blurb: "Optimize operations, predict outcomes and build resiliency.",
+    label: "Manufacturing and conglomerates",
+    blurb: "Workflow-integrated AI for operations, quality and cross-unit visibility.",
     icon: IconManufacture,
   },
   {
     slug: "education",
-    label: "Education",
-    blurb: "Personalize learning and improve institutional effectiveness.",
+    label: "Education and public institutions",
+    blurb: "Governed intelligence for institutional effectiveness and public service delivery.",
     icon: IconEducation,
   },
 ];
 
 export function HomeIndustryCards() {
   return (
-    <RevealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+    <RevealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {industries.map((item) => {
         const Icon = item.icon;
         const industry = getIndustryBySlug(item.slug);
         return (
           <RevealItem key={item.label} className="h-full">
             <Link href={`/industries/${item.slug}`} className="block h-full">
-              <MockupCard className="flex h-full min-h-[22rem] flex-col px-4 pb-4 pt-4 hover:translate-y-0 xl:min-h-[24rem]">
+              <MockupCard className="flex h-full min-h-[22rem] flex-col px-4 pb-4 pt-4 hover:translate-y-0">
                 <div
                   className="relative mb-5 flex min-h-[10.5rem] flex-[1.15] items-center justify-center overflow-hidden rounded-xl"
                   style={{

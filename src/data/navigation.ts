@@ -1,3 +1,4 @@
+import { CTA } from "@/config/cta";
 import type { NavItem } from "@/types";
 
 /** Primary chrome — Contact is the red header CTA, not a text link. */
@@ -23,8 +24,8 @@ export const headerContactItem: NavItem = {
 };
 
 export const defaultHeaderCta = {
-  label: "Book a Consultation",
-  href: "/contact?interest=consultation",
+  label: CTA.primary.label,
+  href: CTA.primary.href,
 } as const;
 
 export const capabilityRibbon = [
@@ -60,8 +61,9 @@ export const footerCapabilities: NavItem[] = [
 
 export const footerProducts: NavItem[] = [
   { label: "OneTouch Audit", href: "/products/onetouch-audit" },
+  { label: "Maha Geo-RR", href: "/products/maha-geo-rr" },
+  { label: "Autonomous Revenue OS", href: "/products/autonomous-revenue-os" },
   { label: "vedhire.ai", href: "/products/smart-hiring" },
-  { label: "Governance Command Centre", href: "/products/ai-governance-command-centre" },
   { label: "All products", href: "/products" },
 ];
 
@@ -94,8 +96,9 @@ export const footerExplore: NavItem[] = [
 ];
 
 export const footerContact: NavItem[] = [
-  { label: "Book a Consultation", href: "/contact?interest=consultation" },
-  { label: "Request a Demo", href: "/contact?interest=demo" },
+  { label: CTA.primary.label, href: CTA.primary.href },
+  { label: CTA.demo.label, href: CTA.demo.href },
+  { label: CTA.challenge.label, href: CTA.challenge.href },
   { label: "General Enquiry", href: "/contact?interest=general" },
 ];
 

@@ -15,6 +15,7 @@ import {
   getIndustry,
   getProducts,
 } from "@/lib/cms/catalog";
+import { CTA } from "@/config/cta";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 import type { Capability, IndustryCapabilityIcon, IndustryCapabilityItem } from "@/types";
 
@@ -53,6 +54,7 @@ export async function generateMetadata({ params }: PageProps) {
     title: industry.name,
     description: industry.summary,
     path: `/industries/${industry.slug}`,
+    image: industry.ogImage,
   });
 }
 
@@ -104,8 +106,8 @@ export default async function IndustryDetailPage({ params }: PageProps) {
         title={industry.name}
         description={industry.summary}
         primaryCta={{
-          href: "/contact?interest=consultation",
-          label: "Book a Consultation",
+          href: CTA.primary.href,
+          label: CTA.primary.label,
         }}
         secondaryCta={{
           href: `/industries?industry=${industry.slug}`,
@@ -120,7 +122,13 @@ export default async function IndustryDetailPage({ params }: PageProps) {
       </p>
 
       <section className="industries-overview industries-main">
-        <PriorityChallenges items={industry.challenges} />
+        <PriorityChallenges
+          items={
+            industry.priorityProblems?.length
+              ? industry.priorityProblems
+              : industry.challenges
+          }
+        />
         <OpportunityMap items={industry.opportunities} />
       </section>
 

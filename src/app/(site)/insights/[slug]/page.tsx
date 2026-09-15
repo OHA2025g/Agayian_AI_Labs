@@ -30,6 +30,7 @@ export async function generateMetadata({ params }: PageProps) {
     description: insight.excerpt,
     path: `/insights/${insight.slug}`,
     type: "article",
+    image: insight.ogImage,
   });
 }
 

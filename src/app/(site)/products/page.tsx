@@ -5,6 +5,7 @@ import { ProductsArchitecture } from "@/components/products/ProductsArchitecture
 import { ProductsLaboratory } from "@/components/sections/ProductsLaboratory";
 import { LoadingState } from "@/components/states/LoadingState";
 import { LightCtaBar } from "@/components/ui/DarkCtaBand";
+import { CTA } from "@/config/cta";
 import { getProducts } from "@/lib/cms/catalog";
 import { getProductsPageContent } from "@/lib/cms/page-content";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
@@ -65,8 +66,8 @@ export default async function ProductsPage() {
 
         <LightCtaBar
           title="Ready to see the right product in action for your organisation?"
-          href="/contact?interest=demo"
-          label="Request a Product Demonstration"
+          href={CTA.demo.href}
+          label={CTA.demo.label}
         />
       </div>
     </>

@@ -9,12 +9,12 @@ export const CAPABILITIES_STACK_ACTIVITIES = [
 ] as const;
 
 export const CAPABILITIES_JOURNEY_LABELS = [
-  { label: "AI Strategy & Consulting", href: "#strategy" },
-  { label: "Data & Analytics", href: "#data" },
-  { label: "Generative AI", href: "#generative-ai" },
-  { label: "Agentic AI", href: "#agentic-ai" },
+  { label: "AI Strategy", href: "#strategy" },
+  { label: "Data Modernisation", href: "#data" },
+  { label: "Generative AI and RAG", href: "#generative-ai" },
+  { label: "Agentic Workflow Automation", href: "#agentic-ai" },
   { label: "AI Governance", href: "#governance" },
-  { label: "AI Product Engineering", href: "#product-engineering" },
+  { label: "Product Engineering", href: "#product-engineering" },
   { label: "AI Managed Services", href: "#managed-services" },
 ] as const;
 
@@ -24,10 +24,10 @@ export const CAPABILITIES_PAGE_COPY = {
     title: "Capabilities",
     subheadLine1: "From strategy to governed",
     subheadLine2: "production systems",
-    body: "Seven integrated capability layers connect ambition, data foundations, AI modalities, governance, engineering and managed operations.",
-    primaryCtaLabel: "Book a Consultation",
+    body: "Delivery capability explained through business outcomes: AI strategy, data modernisation, generative AI and RAG, agentic workflow automation, document intelligence, predictive analytics, AI governance and product engineering.",
+    primaryCtaLabel: "Discuss Your AI Initiative",
     primaryCtaHref: "/contact?interest=consultation",
-    secondaryCtaLabel: "Explore Related Products",
+    secondaryCtaLabel: "Explore Our Solutions",
     secondaryCtaHref: "/products",
   },
   journeyLabels: CAPABILITIES_JOURNEY_LABELS.map((item) => ({ ...item })),

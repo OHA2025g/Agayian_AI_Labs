@@ -18,7 +18,7 @@ export const siteConfig: SiteConfig = {
   name: "Agrayian AI Labs",
   shortName: "Agrayian",
   description:
-    "Agrayian AI Labs helps enterprises and governments design, govern and deploy responsible AI systems that transform data into decisions, automation and measurable impact.",
+    "Agrayian AI Labs converts complex government, banking and enterprise workflows into secure, intelligent and measurable AI systems.",
   websiteUrl: "https://agrayian.ai",
   contactEmail: "hello@agrayian.ai",
   contactPhone: undefined,
@@ -33,26 +33,50 @@ export const siteConfig: SiteConfig = {
 
 export const brandCopy = {
   positioning:
-    "Agrayian AI Labs helps enterprises and governments establish AI capabilities, govern intelligent systems and build products that transform complex data into decisions and action.",
+    "Agrayian AI Labs converts complex government, banking and enterprise workflows into secure, intelligent and measurable AI systems.",
   tagline: "Growth reimagined with AI",
-  eyebrow: "ENTERPRISE AI · GOVERNMENT AI · RESPONSIBLE INTELLIGENCE",
-  headline: "Enterprise intelligence, governed by design.",
-  headlineLines: ["Enterprise intelligence,", "governed by design."] as const,
+  eyebrow: "GOVERNMENT · BANKING · ENTERPRISE AI",
+  headline:
+    "Build AI systems that improve decisions, control risk and accelerate execution.",
+  headlineLines: [
+    "Build AI systems that improve decisions,",
+    "control risk and accelerate execution.",
+  ] as const,
   supporting:
-    "Agrayian AI Labs helps enterprises and governments establish AI capabilities, govern intelligent systems and build products that transform complex data into decisions and action.",
-  primaryCta: "Book a Consultation",
-  secondaryCta: "Explore Capabilities",
-  productsCta: "Explore Our AI Portfolio",
+    "Agrayian AI Labs helps governments, banks and enterprises deploy practical AI, agentic automation and data intelligence into high-value operational workflows.",
+  primaryCta: "Discuss Your AI Initiative",
+  secondaryCta: "Explore Our Solutions",
+  productsCta: "Explore Our Solutions",
   trustStatement:
-    "Strategy to scale. Governance by design. Human accountability throughout.",
+    "Designed around real operational problems. Governed for enterprise and public-sector use. Built to move from pilot to production.",
   announcement:
-    "Building Responsible AI Systems for Enterprises and Government",
+    "Secure, intelligent and measurable AI systems for government, banking and enterprise workflows",
 } as const;
+
+/** Report page 3 — one narrative used across Company, About and sales material. */
+export const messagingLayers = {
+  whoWeAre: "An applied AI company for high-complexity institutions.",
+  whatWeDo:
+    "Design, build and deploy governed AI and agentic workflow systems.",
+  whoWeServe:
+    "Government, banking and financial services, manufacturing, conglomerates and public institutions.",
+  whyUs:
+    "Business-led problem definition, production-grade engineering, measurable outcomes and human-controlled AI.",
+} as const;
+
+export const positioningPoints = [
+  "Designed around real operational problems",
+  "Governed for enterprise and public-sector use",
+  "Built to move from pilot to production",
+  "Human-controlled and evidence-oriented",
+  "Focused on measurable outcomes",
+] as const;
 
 /** Featured product laboratory set (all products remain in catalog/filters). */
 export const laboratoryProductSlugs = [
-  "smart-hiring",
-  "wcd-intelligence",
   "onetouch-audit",
-  "ai-governance-command-centre",
+  "maha-geo-rr",
+  "legal-intent-stamp-duty-integrity",
+  "autonomous-revenue-os",
+  "smart-hiring",
 ] as const;

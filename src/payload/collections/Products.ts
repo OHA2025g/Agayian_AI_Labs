@@ -81,11 +81,44 @@ export const Products: CollectionConfig = {
               },
             },
             { name: "shortDescription", type: "textarea", required: true },
+            {
+              name: "outcomeHeadline",
+              type: "text",
+              label: "Outcome headline",
+              admin: {
+                description: "Primary user-facing outcome shown on product cards.",
+              },
+            },
+            { name: "primaryUser", type: "text", label: "Primary user" },
+            { name: "primaryWorkflow", type: "text", label: "Primary workflow" },
+            {
+              name: "benefits",
+              type: "text",
+              hasMany: true,
+              label: "Benefits",
+              admin: { description: "Three to five card benefits." },
+            },
             { name: "featured", type: "checkbox", defaultValue: false },
+            {
+              name: "maturity",
+              type: "select",
+              label: "Maturity",
+              defaultValue: "Demonstration",
+              options: [
+                { label: "Product", value: "Product" },
+                { label: "Pilot", value: "Pilot" },
+                { label: "Demonstration", value: "Demonstration" },
+                { label: "Roadmap", value: "Roadmap" },
+              ],
+            },
             {
               name: "productStatus",
               type: "text",
               label: "Product Availability",
+              admin: {
+                description:
+                  "Optional override. Leave blank to use the maturity label.",
+              },
             },
           ],
         },
@@ -94,6 +127,11 @@ export const Products: CollectionConfig = {
           fields: [
             { name: "valueProposition", type: "textarea" },
             { name: "businessProblem", type: "textarea" },
+            {
+              name: "whyProcessesFail",
+              type: "textarea",
+              label: "Why existing processes fail",
+            },
             { name: "solutionOverview", type: "textarea" },
             { name: "industries", type: "text", hasMany: true },
             { name: "technologies", type: "text", hasMany: true },
@@ -101,6 +139,14 @@ export const Products: CollectionConfig = {
             { name: "outcomes", type: "text", hasMany: true },
             { name: "dataSources", type: "text", hasMany: true },
             { name: "aiCapabilities", type: "text", hasMany: true },
+            { name: "agents", type: "text", hasMany: true },
+            {
+              name: "humanApprovalPoints",
+              type: "text",
+              hasMany: true,
+              label: "Human approval points",
+            },
+            { name: "integrations", type: "text", hasMany: true },
             { name: "governance", type: "text", hasMany: true },
             { name: "architecture", type: "text", hasMany: true },
             { name: "deploymentOptions", type: "text", hasMany: true },

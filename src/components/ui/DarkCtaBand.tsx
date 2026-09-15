@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { CTA } from "@/config/cta";
 import { cn } from "@/lib/utils";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
@@ -18,8 +19,8 @@ type DarkCtaBandProps = {
 export function DarkCtaBand({
   title,
   description,
-  primaryHref = "/contact?interest=consultation",
-  primaryLabel = "Book a Consultation",
+  primaryHref = CTA.primary.href,
+  primaryLabel = CTA.primary.label,
   secondaryHref,
   secondaryLabel,
   className,
@@ -77,8 +78,8 @@ type LightCtaPanelProps = LightCtaBarProps;
 /** Contained rounded CTA matching the capabilities mockup. */
 export function LightCtaPanel({
   title,
-  href = "/contact?interest=consultation",
-  label = "Book a Consultation",
+  href = CTA.primary.href,
+  label = CTA.primary.label,
   className,
 }: LightCtaPanelProps) {
   return (
@@ -141,8 +142,8 @@ function CtaWaveField() {
 export function LightCtaBar({
   title,
   description,
-  href = "/contact?interest=consultation",
-  label = "Book a Consultation",
+  href = CTA.primary.href,
+  label = CTA.primary.label,
   className,
 }: LightCtaBarProps) {
   return (

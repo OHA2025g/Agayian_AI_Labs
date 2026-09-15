@@ -15,7 +15,9 @@ import {
   footerResources,
   mainNavigation,
 } from "@/data/navigation";
-import { brandCopy, siteConfig } from "@/config/site";
+import { flagshipProducts } from "@/config/flagship-products";
+import { CTA } from "@/config/cta";
+import { brandCopy, positioningPoints, siteConfig } from "@/config/site";
 import { mongoUrlMissingDatabasePath, rawMongoUrl } from "@/lib/cms/mongo-env";
 import { normalizeProductCategories } from "@/lib/products/categories";
 import { consultationFlow } from "@/lib/contact-schema";
@@ -39,6 +41,7 @@ async function upsertBySlug(
     collection,
     where: { slug: { equals: slug } },
     limit: 1,
+    draft: false,
     overrideAccess: true,
   });
   if (existing.docs[0]) {
@@ -46,6 +49,7 @@ async function upsertBySlug(
       collection,
       id: existing.docs[0].id,
       data,
+      draft: false,
       overrideAccess: true,
     } as Parameters<Payload["update"]>[0]);
     return;
@@ -82,6 +86,7 @@ export async function seedSiteContent(payload: Payload) {
       shortDescription: product.shortDescription,
       valueProposition: product.valueProposition,
       businessProblem: product.businessProblem,
+      whyProcessesFail: product.whyProcessesFail,
       solutionOverview: product.solutionOverview,
       industries: product.industries,
       technologies: product.technologies,
@@ -89,14 +94,22 @@ export async function seedSiteContent(payload: Payload) {
       capabilities: product.capabilities,
       modules: product.modules,
       workflow: product.workflow,
+      agents: product.agents,
+      humanApprovalPoints: product.humanApprovalPoints,
+      integrations: product.integrations,
       dataSources: product.dataSources,
       aiCapabilities: product.aiCapabilities,
       governance: product.governance,
       architecture: product.architecture,
       deploymentOptions: product.deploymentOptions,
       outcomes: product.outcomes,
+      outcomeHeadline: product.outcomeHeadline,
+      primaryUser: product.primaryUser,
+      primaryWorkflow: product.primaryWorkflow,
+      benefits: product.benefits,
       relatedCapabilities: product.relatedCapabilities,
       featured: product.featured,
+      maturity: product.maturity ?? "Demonstration",
       productStatus: product.status,
       status: "published",
       publishedAt: new Date().toISOString(),
@@ -128,6 +141,7 @@ export async function seedSiteContent(payload: Payload) {
       name: industry.name,
       summary: industry.summary,
       challenges: industry.challenges,
+      priorityProblems: industry.priorityProblems,
       opportunities: industry.opportunities,
       capabilities: industry.capabilities,
       products: industry.products,
@@ -147,6 +161,7 @@ export async function seedSiteContent(payload: Payload) {
       capability: story.capability,
       solutionType: story.solutionType,
       outcomeCategory: story.outcomeCategory,
+      deliveryStage: story.deliveryStage ?? "Demonstration",
       challenge: story.challenge,
       context: story.context,
       approach: story.approach,
@@ -211,6 +226,7 @@ export async function seedSiteContent(payload: Payload) {
         secondaryCta: brandCopy.secondaryCta,
       },
     },
+    draft: false,
     overrideAccess: true,
   });
 
@@ -229,6 +245,7 @@ export async function seedSiteContent(payload: Payload) {
       footerResources,
       footerLegal,
     },
+    draft: false,
     overrideAccess: true,
   });
 
@@ -247,13 +264,14 @@ export async function seedSiteContent(payload: Payload) {
       values: companyValues,
       status: "published",
     },
+    draft: false,
     overrideAccess: true,
   });
 
   await payload.updateGlobal({
     slug: "contact-page",
     data: {
-      title: "Book a consultation",
+      title: "Discuss your AI initiative",
       description:
         "Tell us about your AI ambition, governance needs or product interest.",
       enquiryThemes: [
@@ -270,6 +288,7 @@ export async function seedSiteContent(payload: Payload) {
       })),
       status: "published",
     },
+    draft: false,
     overrideAccess: true,
   });
 
@@ -283,16 +302,17 @@ export async function seedSiteContent(payload: Payload) {
         eyebrow: brandCopy.eyebrow,
         headlineLine1: brandCopy.headlineLines[0],
         headlineLine2: brandCopy.headlineLines[1] ?? "",
-        supporting:
-          "We help enterprises and governments turn complex data into responsible AI systems, measurable decisions and action.",
+        supporting: brandCopy.supporting,
         primaryCtaLabel: brandCopy.primaryCta,
-        primaryCtaHref: "/contact?interest=consultation",
+        primaryCtaHref: CTA.primary.href,
         secondaryCtaLabel: brandCopy.secondaryCta,
-        secondaryCtaHref: "/capabilities",
+        secondaryCtaHref: CTA.secondary.href,
         trustLine: brandCopy.trustStatement,
+        supportingPoints: [...positioningPoints],
       },
       layout: [],
     },
+    draft: false,
     overrideAccess: true,
   });
 
@@ -305,16 +325,42 @@ export async function seedSiteContent(payload: Payload) {
         sections: doc.sections,
         status: "published",
       },
+      draft: false,
       overrideAccess: true,
     });
   }
 
   await importHardcodedPageCopy(payload);
 
+  const flagshipDocs = await payload.find({
+    collection: "products",
+    where: {
+      slug: { in: flagshipProducts.map((item) => item.slug) },
+    },
+    limit: flagshipProducts.length,
+    draft: false,
+    overrideAccess: true,
+  });
+  const featuredBySlug = new Map(
+    flagshipDocs.docs.map((doc) => [String(doc.slug), doc.id]),
+  );
+  await payload.updateGlobal({
+    slug: "home-page",
+    data: {
+      status: "published",
+      featuredProducts: flagshipProducts
+        .map((item) => featuredBySlug.get(item.slug))
+        .filter((id): id is string | number => id !== undefined),
+    },
+    draft: false,
+    overrideAccess: true,
+  });
+
   const campaignExisting = await payload.find({
     collection: "campaigns",
     where: { code: { equals: "consult-linkedin" } },
     limit: 1,
+    draft: false,
     overrideAccess: true,
   });
   if (!campaignExisting.docs[0]) {
@@ -339,6 +385,7 @@ export async function seedSiteContent(payload: Payload) {
     collection: "content-calendar",
     where: { title: { equals: "Responsible AI operating model" } },
     limit: 1,
+    draft: false,
     overrideAccess: true,
   });
   if (!calendarExisting.docs[0]) {

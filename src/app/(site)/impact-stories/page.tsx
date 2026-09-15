@@ -9,6 +9,7 @@ import {
   getIndustries,
   getProducts,
 } from "@/lib/cms/catalog";
+import { CTA } from "@/config/cta";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -58,11 +59,11 @@ export default async function ImpactStoriesPage() {
               response, governance approach and outcome pathway.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <PrimaryButton href="/contact?interest=consultation">
-                Book a Consultation
+              <PrimaryButton href={CTA.primary.href}>
+                {CTA.primary.label}
               </PrimaryButton>
-              <SecondaryButton href="/capabilities">
-                Explore Capabilities
+              <SecondaryButton href={CTA.secondary.href}>
+                {CTA.secondary.label}
               </SecondaryButton>
             </div>
           </div>

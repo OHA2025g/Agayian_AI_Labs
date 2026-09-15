@@ -1,6 +1,7 @@
 import type { Payload } from "payload";
 import { flagshipProducts } from "../config/flagship-products";
-import { brandCopy } from "../config/site";
+import { CTA } from "../config/cta";
+import { brandCopy, positioningPoints } from "../config/site";
 import { CAPABILITIES_PAGE_COPY } from "../lib/cms/canonical-copy";
 import {
   faqItems,
@@ -19,6 +20,7 @@ export async function importHardcodedPageCopy(payload: Payload) {
   await payload.updateGlobal({
     slug: "capabilities-page",
     data: CAPABILITIES_PAGE_COPY,
+    draft: false,
     overrideAccess: true,
   });
 
@@ -44,6 +46,7 @@ export async function importHardcodedPageCopy(payload: Payload) {
           "Explore Agrayian AI Labs' enterprise platforms, government solutions, governance systems and AI-powered decision tools.",
       },
     },
+    draft: false,
     overrideAccess: true,
   });
 
@@ -104,7 +107,7 @@ export async function importHardcodedPageCopy(payload: Payload) {
         },
       ],
       ctaTitle: "Talk to us about responsible delivery",
-      ctaLabel: "Book a Consultation",
+      ctaLabel: "Discuss Your AI Initiative",
       ctaHref: "/contact?interest=consultation",
       seo: {
         title: "Trust & Legal Centre",
@@ -112,6 +115,7 @@ export async function importHardcodedPageCopy(payload: Payload) {
           "How Agrayian AI Labs approaches accountability, transparency, privacy, fairness and continuous oversight for responsible AI systems.",
       },
     },
+    draft: false,
     overrideAccess: true,
   });
 
@@ -128,19 +132,87 @@ export async function importHardcodedPageCopy(payload: Payload) {
         eyebrow: brandCopy.eyebrow,
         headlineLine1: brandCopy.headlineLines[0],
         headlineLine2: brandCopy.headlineLines[1] ?? "",
-        supporting:
-          "We help enterprises and governments turn complex data into responsible AI systems, measurable decisions and action.",
+        supporting: brandCopy.supporting,
         primaryCtaLabel: brandCopy.primaryCta,
-        primaryCtaHref: "/contact?interest=consultation",
+        primaryCtaHref: CTA.primary.href,
         secondaryCtaLabel: brandCopy.secondaryCta,
-        secondaryCtaHref: "/capabilities",
+        secondaryCtaHref: CTA.secondary.href,
         trustLine: brandCopy.trustStatement,
+        supportingPoints: [...positioningPoints],
+      },
+      sections: {
+        trust: "Built for high-complexity institutions",
+        problems: "The operational problems we take on",
+        pillars: "How we convert workflows into AI systems",
+        products: "Featured products",
+        industries: "Industries we serve",
+        method: "Discover, Design, Pilot, Scale",
+        proof: "Proof, labelled by delivery status",
+        responsible: "Responsible AI by design",
+        insights: "Insights that inspire",
+      },
+      trustItems: [
+        "Government and public sector",
+        "Banking and financial services",
+        "Enterprise operations",
+        "Data, AI and automation",
+        "Secure and governed AI",
+      ],
+      problemItems: [
+        "Manual audit",
+        "Fragmented operations",
+        "Slow document review",
+        "Revenue leakage",
+        "Fraud risk",
+        "Poor cross-department visibility",
+      ],
+      pillars: [
+        {
+          title: "AI Strategy and Advisory",
+          body: "Define the operational problem, the decision that must improve and the governed path from pilot to production.",
+        },
+        {
+          title: "Agentic Process Automation",
+          body: "Deploy workflow-integrated agents that act inside high-value processes with human approval at the critical steps.",
+        },
+        {
+          title: "Data and Decision Intelligence",
+          body: "Turn fragmented operational data into timely, reviewable intelligence for executives and programme owners.",
+        },
+        {
+          title: "AI Governance, Risk and Compliance",
+          body: "Make AI audit-ready with access control, explainability, monitoring, data residency and incident management.",
+        },
+      ],
+      methodSteps: [
+        {
+          title: "Discover",
+          body: "Identify the operational workflow, buyers, constraints and the evidence needed to act.",
+        },
+        {
+          title: "Design",
+          body: "Specify the system, human approval points, data sources and measurable outcomes.",
+        },
+        {
+          title: "Pilot",
+          body: "Prove the workflow in a bounded production-like setting with reviewable results.",
+        },
+        {
+          title: "Scale",
+          body: "Move from a governed pilot to a production system with monitoring and ownership.",
+        },
+      ],
+      finalCta: {
+        title: "Have a complex process that needs to be redesigned with AI?",
+        description:
+          "Submit the operational challenge. We will map the workflow, the buyers and the governed path from discovery to production.",
       },
       seo: {
         title: "Home",
         description: brandCopy.supporting,
       },
     },
+    draft: false,
     overrideAccess: true,
   });
 
@@ -148,6 +220,18 @@ export async function importHardcodedPageCopy(payload: Payload) {
     slug: "coe-page",
     data: {
       status: "published",
+      hero: {
+        eyebrow: "AI Centre of Excellence",
+        title: "AI Centre of Excellence — a formal advisory and enablement service",
+        description:
+          "We help institutions stand up a governed CoE that sets standards, funds the right work and enables delivery teams to move from pilot to production.",
+        primaryCtaLabel: CTA.primary.label,
+        primaryCtaHref: CTA.primary.href,
+        secondaryCtaLabel: "Explore the Operating Model",
+        secondaryCtaHref: "#operating-model",
+      },
+      whatBody:
+        "A formal advisory and enablement service: a cross-functional operating model that sets direction, enables standards, funds the right work and accelerates delivery across the enterprise.",
       layers: layers.map((item) => ({ ...item })),
       outcomes: [...outcomes],
       whatFeatures: whatFeatures.map((item) => ({ ...item })),
@@ -173,6 +257,7 @@ export async function importHardcodedPageCopy(payload: Payload) {
       })),
       faqItems: faqItems.map((item) => ({ ...item })),
     },
+    draft: false,
     overrideAccess: true,
   });
 
@@ -337,6 +422,7 @@ export async function importHardcodedPageCopy(payload: Payload) {
         },
       ],
     },
+    draft: false,
     overrideAccess: true,
   });
 }

@@ -10,6 +10,9 @@ type EnquiryPersistInput = {
   designation?: string;
   country?: string;
   areaOfInterest?: string;
+  industry?: string;
+  timeline?: string;
+  projectSize?: string;
   projectSummary?: string;
   preferredContactMethod?: string;
   product?: string;

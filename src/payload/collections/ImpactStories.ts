@@ -35,6 +35,17 @@ export const ImpactStories: CollectionConfig = {
             { name: "capability", type: "text" },
             { name: "solutionType", type: "text" },
             { name: "outcomeCategory", type: "text" },
+            {
+              name: "deliveryStage",
+              type: "select",
+              label: "Delivery status",
+              options: [
+                { label: "Completed deployment", value: "Completed deployment" },
+                { label: "Pilot", value: "Pilot" },
+                { label: "Demonstration", value: "Demonstration" },
+                { label: "Proposed concept", value: "Proposed concept" },
+              ],
+            },
           ],
         },
         {

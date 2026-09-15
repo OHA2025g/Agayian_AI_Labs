@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ProductDetailView } from "@/components/products/ProductDetailView";
 import { LightCtaBar } from "@/components/ui/DarkCtaBand";
+import { CTA } from "@/config/cta";
 import { products } from "@/data/products";
 import { getProduct } from "@/lib/cms/catalog";
 import { breadcrumbSchema, buildMetadata } from "@/lib/seo";
@@ -27,6 +28,7 @@ export async function generateMetadata({ params }: PageProps) {
     title: product.name,
     description: product.shortDescription || product.valueProposition,
     path: `/products/${product.slug}`,
+    image: product.ogImage,
   });
 }
 
@@ -52,8 +54,8 @@ export default async function ProductDetailPage({ params }: PageProps) {
       <ProductDetailView product={product} />
       <LightCtaBar
         title="See this product in your operating context"
-        href={`/contact?interest=demo&product=${product.slug}`}
-        label="Request a Product Demonstration"
+        href={`${CTA.demo.href}&product=${product.slug}`}
+        label={CTA.demo.label}
       />
     </>
   );

@@ -1,5 +1,6 @@
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
+import { CTA } from "@/config/cta";
 
 export function IndustriesHeroContent() {
   return (
@@ -17,11 +18,9 @@ export function IndustriesHeroContent() {
         outcomes that shape each engagement.
       </p>
       <div className="industries-ctas">
-        <PrimaryButton href="/contact?interest=consultation">
-          Book a Consultation
-        </PrimaryButton>
-        <SecondaryButton href="/capabilities">
-          Explore Capabilities
+        <PrimaryButton href={CTA.primary.href}>{CTA.primary.label}</PrimaryButton>
+        <SecondaryButton href={CTA.secondary.href}>
+          {CTA.secondary.label}
         </SecondaryButton>
       </div>
     </div>

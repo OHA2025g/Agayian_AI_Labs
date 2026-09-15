@@ -1,5 +1,6 @@
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
+import { CTA } from "@/config/cta";
 import {
   CapabilityGlassStack,
   type StackLabel,
@@ -10,10 +11,10 @@ export function CapabilitiesHero({
   subheadLine1 = "From strategy to governed",
   subheadLine2 = "production systems",
   body = "Seven integrated capability layers connect ambition, data foundations, AI modalities, governance, engineering and managed operations.",
-  primaryCtaLabel = "Book a Consultation",
-  primaryCtaHref = "/contact?interest=consultation",
-  secondaryCtaLabel = "Explore Related Products",
-  secondaryCtaHref = "/products",
+  primaryCtaLabel = CTA.primary.label,
+  primaryCtaHref = CTA.primary.href,
+  secondaryCtaLabel = CTA.secondary.label,
+  secondaryCtaHref = CTA.secondary.href,
   stackLabels,
 }: {
   title?: string;
