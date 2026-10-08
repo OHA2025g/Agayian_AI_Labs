@@ -10,6 +10,7 @@ import {
   Lock,
   Mail,
   MessageSquare,
+  Phone,
   Shield,
   Sparkles,
   Users,
@@ -238,6 +239,27 @@ export default async function ContactPage({
                   </p>
                 </GlassCard>
               </RevealItem>
+
+              {site.contactPhone ? (
+                <RevealItem>
+                  <GlassCard className="p-6">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/80 bg-white/80 text-tech-blue shadow-sm">
+                        <Phone className="h-5 w-5" aria-hidden />
+                      </span>
+                      <h2 className="font-heading text-lg font-semibold text-navy">
+                        Phone
+                      </h2>
+                    </div>
+                    <a
+                      className="mt-4 block text-tech-blue hover:underline"
+                      href={`tel:${site.contactPhone.replace(/\s+/g, "")}`}
+                    >
+                      {site.contactPhone}
+                    </a>
+                  </GlassCard>
+                </RevealItem>
+              ) : null}
 
               <RevealItem>
                 <GlassCard className="p-6">

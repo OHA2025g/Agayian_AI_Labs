@@ -3,7 +3,7 @@ import { __resetMemoryRateLimitForTests } from "@/lib/rate-limit";
 
 vi.mock("@/lib/mail", () => ({
   getResendClient: () => null,
-  getContactToEmail: () => "hello@agrayian.ai",
+  getContactToEmail: () => "aghoreshwar@agrayianailabs.com",
   getMailFromAddress: () => "test@example.com",
   deliveryNotConfiguredResponse: () => ({
     success: false,

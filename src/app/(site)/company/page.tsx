@@ -403,6 +403,12 @@ export default async function CompanyPage() {
                     >
                       {companyFacts.officialEmail}
                     </a>
+                    <a
+                      href={`tel:${companyFacts.officialPhone.replace(/\s+/g, "")}`}
+                      className="mt-1 block font-semibold text-tech-blue hover:text-navy"
+                    >
+                      {companyFacts.officialPhone}
+                    </a>
                   </dd>
                 </div>
               </dl>

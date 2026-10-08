@@ -3,7 +3,12 @@ import { siteConfig, type SiteConfig } from "@/config/site";
 
 type SiteLike = Pick<
   SiteConfig,
-  "name" | "websiteUrl" | "description" | "contactEmail" | "socialLinks"
+  | "name"
+  | "websiteUrl"
+  | "description"
+  | "contactEmail"
+  | "contactPhone"
+  | "socialLinks"
 >;
 
 type BuildMetadataInput = {
@@ -61,6 +66,7 @@ export function organisationSchema(site: SiteLike = siteConfig) {
     url: site.websiteUrl,
     description: site.description,
     email: site.contactEmail,
+    telephone: site.contactPhone,
     sameAs: Object.values(site.socialLinks).filter(Boolean),
   };
 }

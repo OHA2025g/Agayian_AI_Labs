@@ -4,7 +4,7 @@ import { contactSchema, resolveInterestFromQuery } from "@/lib/contact-schema";
 const valid = {
   fullName: "Ada Lovelace",
   workEmail: "ada@example.com",
-  phone: "+91 98765 43210",
+  phone: "+91 99211 47068",
   organisation: "Analytical Engines",
   designation: "Director",
   country: "India",

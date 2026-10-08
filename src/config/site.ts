@@ -20,8 +20,8 @@ export const siteConfig: SiteConfig = {
   description:
     "Agrayian AI Labs converts complex government, banking and enterprise workflows into secure, intelligent and measurable AI systems.",
   websiteUrl: "https://agrayian.ai",
-  contactEmail: "hello@agrayian.ai",
-  contactPhone: undefined,
+  contactEmail: "aghoreshwar@agrayianailabs.com",
+  contactPhone: "+91 99211 47068",
   address: undefined,
   socialLinks: {
     linkedin: undefined,

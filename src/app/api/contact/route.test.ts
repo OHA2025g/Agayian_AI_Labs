@@ -3,7 +3,7 @@ import { __resetMemoryRateLimitForTests } from "@/lib/rate-limit";
 
 vi.mock("@/lib/mail", () => ({
   getResendClient: () => null,
-  getContactToEmail: () => "hello@agrayian.ai",
+  getContactToEmail: () => "aghoreshwar@agrayianailabs.com",
   getMailFromAddress: () => "test@example.com",
   deliveryNotConfiguredResponse: () => ({
     success: false,
@@ -27,7 +27,7 @@ import { POST } from "@/app/api/contact/route";
 const baseBody = {
   fullName: "Ada Lovelace",
   workEmail: "ada@example.com",
-  phone: "+91 98765 43210",
+  phone: "+91 99211 47068",
   organisation: "Analytical Engines",
   designation: "Director",
   country: "India",

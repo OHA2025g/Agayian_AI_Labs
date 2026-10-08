@@ -757,7 +757,7 @@ export const getContactPageContent = cache(
         ),
         errorMessage: asText(
           form.errorMessage,
-          "We could not submit your request. Please try again or email hello@agrayian.ai.",
+          "We could not submit your request. Please try again or email aghoreshwar@agrayianailabs.com.",
         ),
         consentText: asText(
           form.consentText,
