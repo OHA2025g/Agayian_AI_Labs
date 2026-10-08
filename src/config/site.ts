@@ -31,6 +31,13 @@ export const siteConfig: SiteConfig = {
   },
 };
 
+/** Saved CMS copy may still contain the retired placeholder address. */
+export function replaceRetiredContactEmail(value: string) {
+  const official = siteConfig.contactEmail;
+  if (!official) return value;
+  return value.replace(/hello@agrayian\.ai/gi, official);
+}
+
 export const brandCopy = {
   positioning:
     "Agrayian AI Labs converts complex government, banking and enterprise workflows into secure, intelligent and measurable AI systems.",

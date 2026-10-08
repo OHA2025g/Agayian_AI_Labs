@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { replaceRetiredContactEmail } from "@/config/site";
 import type { LegalDocument } from "@/data/legal";
 import { getPublishedGlobal } from "@/lib/cms/published";
 import { getResolvedNav } from "@/lib/cms/site";
@@ -26,12 +27,18 @@ export async function LegalDocumentView({
     sections?: { heading: string; body: string }[];
   }>(slug);
 
-  const title = doc?.title || fallback.title;
-  const description = doc?.description || fallback.description;
-  const sections =
+  const title = replaceRetiredContactEmail(doc?.title || fallback.title);
+  const description = replaceRetiredContactEmail(
+    doc?.description || fallback.description || "",
+  );
+  const sourceSections =
     Array.isArray(doc?.sections) && doc.sections.length > 0
       ? doc.sections
       : fallback.sections;
+  const sections = sourceSections.map((section) => ({
+    heading: section.heading,
+    body: replaceRetiredContactEmail(section.body),
+  }));
 
   const nav = await getResolvedNav();
   const legalLinks = nav.footerLegal;

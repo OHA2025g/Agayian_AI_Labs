@@ -1,6 +1,11 @@
 import { cache } from "react";
 import { resolvePrimaryCtaLabel, resolveSecondaryCtaLabel } from "@/config/cta";
-import { brandCopy, siteConfig, type SiteConfig } from "@/config/site";
+import {
+  brandCopy,
+  replaceRetiredContactEmail,
+  siteConfig,
+  type SiteConfig,
+} from "@/config/site";
 import {
   capabilityNav,
   capabilityRibbon,
@@ -163,7 +168,10 @@ export const getResolvedSite = cache(async (): Promise<ResolvedSite> => {
     shortName: asText(doc?.shortName, siteConfig.shortName),
     description: asText(doc?.description, siteConfig.description),
     websiteUrl: asText(doc?.websiteUrl, siteConfig.websiteUrl),
-    contactEmail: asText(doc?.contactEmail, siteConfig.contactEmail ?? "") || undefined,
+    contactEmail:
+      replaceRetiredContactEmail(
+        asText(doc?.contactEmail, siteConfig.contactEmail ?? ""),
+      ) || undefined,
     contactPhone: asText(doc?.contactPhone, siteConfig.contactPhone ?? "") || undefined,
     address: asText(doc?.address, siteConfig.address ?? "") || undefined,
     socialLinks: {

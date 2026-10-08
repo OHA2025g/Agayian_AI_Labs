@@ -4,7 +4,11 @@ import {
   resolvePrimaryCtaLabel,
   resolveSecondaryCtaLabel,
 } from "@/config/cta";
-import { brandCopy, positioningPoints } from "@/config/site";
+import {
+  brandCopy,
+  positioningPoints,
+  replaceRetiredContactEmail,
+} from "@/config/site";
 import { companyIntro, companyValues } from "@/data/company";
 import { consultationFlow } from "@/lib/contact-schema";
 import {
@@ -755,9 +759,11 @@ export const getContactPageContent = cache(
           form.successMessage,
           "Our team will review your requirement and follow up using your preferred contact method.",
         ),
-        errorMessage: asText(
-          form.errorMessage,
-          "We could not submit your request. Please try again or email aghoreshwar@agrayianailabs.com.",
+        errorMessage: replaceRetiredContactEmail(
+          asText(
+            form.errorMessage,
+            "We could not submit your request. Please try again or email aghoreshwar@agrayianailabs.com.",
+          ),
         ),
         consentText: asText(
           form.consentText,

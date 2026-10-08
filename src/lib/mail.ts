@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { siteConfig } from "@/config/site";
+import { replaceRetiredContactEmail, siteConfig } from "@/config/site";
 
 const ONBOARDING_FROM = "Agrayian AI Labs <onboarding@resend.dev>";
 
@@ -17,11 +17,10 @@ export function getResendClient() {
 }
 
 export function getContactToEmail() {
-  return (
-    process.env.CONTACT_TO_EMAIL?.trim() ||
-    siteConfig.contactEmail ||
-    null
-  );
+  const configured =
+    process.env.CONTACT_TO_EMAIL?.trim() || siteConfig.contactEmail || "";
+  const email = replaceRetiredContactEmail(configured);
+  return email || null;
 }
 
 export function getMailFromAddress() {
