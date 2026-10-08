@@ -40,6 +40,6 @@ export function deliveryNotConfiguredResponse() {
   return {
     success: false as const,
     message:
-      "Enquiry delivery is not configured yet. Please email aghoreshwar@agrayianailabs.com directly, or try again once mail delivery is enabled.",
+      "Enquiry delivery is not configured yet. Please email info@agrayianailabs.com directly, or try again once mail delivery is enabled.",
   };
 }

@@ -37,7 +37,7 @@ export const companyFacts = {
   whoWeServe: messagingLayers.whoWeServe,
   whyUs: messagingLayers.whyUs,
   location: "India",
-  officialEmail: "aghoreshwar@agrayianailabs.com",
+  officialEmail: "info@agrayianailabs.com",
   officialPhone: "+91 99211 47068",
   officialEnquiry: "/contact",
 } as const;

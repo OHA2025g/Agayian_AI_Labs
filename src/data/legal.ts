@@ -139,7 +139,7 @@ export const accessibilityStatement: LegalDocument = {
   sections: [
     {
       heading: "Commitment",
-      body: `We aim to conform with WCAG 2.2 Level AA where practicable. Contact ${siteConfig.contactEmail ?? "aghoreshwar@agrayianailabs.com"} to report accessibility barriers.`,
+      body: `We aim to conform with WCAG 2.2 Level AA where practicable. Contact ${siteConfig.contactEmail ?? "info@agrayianailabs.com"} to report accessibility barriers.`,
     },
     {
       heading: "Feedback",

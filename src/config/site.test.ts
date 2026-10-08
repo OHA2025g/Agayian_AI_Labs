@@ -9,6 +9,9 @@ describe("replaceRetiredContactEmail", () => {
     expect(
       replaceRetiredContactEmail("Email hello@agrayian.ai for help."),
     ).toBe(`Email ${siteConfig.contactEmail} for help.`);
+    expect(replaceRetiredContactEmail("aghoreshwar@agrayianailabs.com")).toBe(
+      siteConfig.contactEmail,
+    );
   });
 
   it("leaves any other address unchanged", () => {

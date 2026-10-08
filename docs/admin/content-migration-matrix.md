@@ -9,7 +9,7 @@ Legend: **M** = migration/import, **C** = public connected to published record, 
 | `*` | Site name | `site.ts` | Agrayian AI Labs | Settings | `site-settings.name` | planned | planned | |
 | `*` | Website URL | `site.ts` | https://agrayian.ai | Settings | `site-settings.websiteUrl` | planned | planned | |
 | `*` | Description | `site.ts` | enterprise/gov AI… | Settings | `site-settings.description` | planned | planned | |
-| `*` | Contact email | `site.ts` | aghoreshwar@agrayianailabs.com | Settings | `site-settings.contactEmail` | planned | planned | |
+| `*` | Contact email | `site.ts` | info@agrayianailabs.com | Settings | `site-settings.contactEmail` | planned | planned | |
 | `*` | Socials | `site.ts` | empty | Settings | `site-settings.socialLinks` | planned | planned | |
 | `*` | Announcement | `brandCopy.announcement` | Building Responsible AI… | Settings | `site-settings.announcement` | planned | planned | |
 | `*` | Cookie copy | Site Settings / banner | consent text | Settings | `site-settings.cookie` | planned | planned | |

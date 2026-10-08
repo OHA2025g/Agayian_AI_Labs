@@ -172,7 +172,7 @@ export async function POST(request: Request) {
         {
           success: false,
           message:
-            "We could not deliver your enquiry right now. Please email aghoreshwar@agrayianailabs.com or try again shortly.",
+            "We could not deliver your enquiry right now. Please email info@agrayianailabs.com or try again shortly.",
         },
         { status: 502 },
       );
@@ -198,7 +198,7 @@ export async function POST(request: Request) {
       {
         success: false,
         message:
-          "We could not deliver your enquiry right now. Please email aghoreshwar@agrayianailabs.com or try again shortly.",
+          "We could not deliver your enquiry right now. Please email info@agrayianailabs.com or try again shortly.",
       },
       { status: 502 },
     );

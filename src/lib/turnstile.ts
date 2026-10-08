@@ -29,7 +29,7 @@ export async function verifyTurnstileToken(
       return {
         ok: false,
         message:
-          "Security check is not configured. Please try again later or email aghoreshwar@agrayianailabs.com.",
+          "Security check is not configured. Please try again later or email info@agrayianailabs.com.",
       };
     }
     return { ok: true };

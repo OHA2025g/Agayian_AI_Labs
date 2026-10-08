@@ -20,7 +20,7 @@ export const siteConfig: SiteConfig = {
   description:
     "Agrayian AI Labs converts complex government, banking and enterprise workflows into secure, intelligent and measurable AI systems.",
   websiteUrl: "https://agrayian.ai",
-  contactEmail: "aghoreshwar@agrayianailabs.com",
+  contactEmail: "info@agrayianailabs.com",
   contactPhone: "+91 99211 47068",
   address: undefined,
   socialLinks: {
@@ -35,7 +35,10 @@ export const siteConfig: SiteConfig = {
 export function replaceRetiredContactEmail(value: string) {
   const official = siteConfig.contactEmail;
   if (!official) return value;
-  return value.replace(/hello@agrayian\.ai/gi, official);
+  return value.replace(
+    /hello@agrayian\.ai|aghoreshwar@agrayianailabs\.com/gi,
+    official,
+  );
 }
 
 export const brandCopy = {

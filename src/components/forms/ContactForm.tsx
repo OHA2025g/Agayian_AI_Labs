@@ -235,7 +235,7 @@ export function ContactForm({
         error instanceof Error
           ? error.message
           : copy?.errorMessage ||
-            "We could not submit your request. Please try again or email aghoreshwar@agrayianailabs.com.",
+            "We could not submit your request. Please try again or email info@agrayianailabs.com.",
       );
     }
   });
